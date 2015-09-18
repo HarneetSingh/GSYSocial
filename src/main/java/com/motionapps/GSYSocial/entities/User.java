@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnoreType;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 @XmlRootElement
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class User implements Serializable{
 	
 	private String userName;

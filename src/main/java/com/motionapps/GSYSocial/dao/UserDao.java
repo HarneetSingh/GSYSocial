@@ -14,4 +14,6 @@ public interface UserDao {
 	public String getSessionId(String emailId);
 	
 	public String getPassword(String emailId);
+	
+	public Long updateSessionId(User user);
 }

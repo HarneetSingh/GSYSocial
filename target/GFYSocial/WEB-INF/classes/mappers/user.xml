@@ -22,8 +22,8 @@
 			user_name = #{userName},
 			password = #{password},
 			date_of_birth = #{dateOfBirth},
-			mobile_number = #{mobileNumber};
-			
+			mobile_number = #{mobileNumber},
+			session_id=#{sessionId};
  	</insert>   
 	<!-- ************** READ ************** -->
     <select id="getUsers" resultMap="userMap">
@@ -53,5 +53,14 @@
         WHERE      
         	email_id=#{value}; 	            	
     </select>
-
+	     	
+ 	<!-- ************** UPDATE ************** -->
+ 	<update id="updateSessionId" parameterType="User">
+		UPDATE 
+			user
+		SET 
+			session_id = #{sessionId}
+		WHERE
+			email_id = #{emailId}
+ 	</update>   	
 </mapper>

@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.services;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import com.motionapps.GSYSocial.entities.User;
 
 
 @Controller
+@DependsOn("userDao")
 @Path("/user")
 public class UserService {
 	
@@ -46,11 +49,14 @@ public class UserService {
 	@Transactional
 	public Response createUser(User user) {
 		
+		String sessionId=UUID.randomUUID().toString();
+		user.setSessionId(sessionId);
 		Long abc=userDao.createUser(user);
 		if(abc==1)
 		{
-			String sessionId=userDao.getSessionId(user.getEmailId());
-			return Response.status(201).entity(sessionId).build();
+			User tempUser=new User();
+			tempUser.setSessionId(sessionId);
+			return Response.status(201).entity(tempUser).type(MediaType.APPLICATION_JSON).build();
 		}
 		else
 		return Response.status(400).entity("Internal Server Error").build();	
@@ -78,13 +84,19 @@ public class UserService {
 		String password =userDao.getPassword(user.getEmailId());
 		if(password.equals(user.getPassword()))
 		{
-			String sessionId=userDao.getSessionId(user.getEmailId());
-			return Response.status(201).entity(sessionId).build();
+			String sessionId=UUID.randomUUID().toString();
+			User tempUser=new User();
+			tempUser.setSessionId(sessionId);
+			userDao.updateSessionId(tempUser);
+			return Response.status(201).entity(tempUser).type(MediaType.APPLICATION_JSON).build();
 		}
 		else
 		return Response.status(401).entity("Authentication Failed").build();	
 		
 	}	
+	
+	
+	
 	
 	
 }
