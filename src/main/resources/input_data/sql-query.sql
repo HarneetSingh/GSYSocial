@@ -1,0 +1,8 @@
+CREATE TABLE gsysocial_db.upload (
+id INT NOT NULL,
+name VARCHAR(100) NOT NULL,
+type VARCHAR(40),
+size BIGINT(20),
+content MEDIUMBLOB NOT NULL,
+PRIMARY KEY(id)
+);

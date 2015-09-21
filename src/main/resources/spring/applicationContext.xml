@@ -32,6 +32,11 @@
 	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.UserDao" />
 	</bean>
 	
+	<bean id="fileDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
+	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.FileDao" />
+	</bean>
+	
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
@@ -44,8 +49,12 @@
 	</bean> 
 
 	
-    <bean id="userService" class="com.motionapps.GSYSocial.services.UserService" >
+    <bean id="userController" class="com.motionapps.GSYSocial.controller.UserController" >
     	<property name="userDao" ref="userDao"/>
+    </bean>
+    
+    <bean id="fileController" class="com.motionapps.GSYSocial.controller.FileController" >
+    	<property name="fileDao" ref="fileDao"/>
     </bean>
    
 <!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

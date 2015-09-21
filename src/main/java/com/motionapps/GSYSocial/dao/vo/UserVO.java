@@ -1,4 +1,4 @@
-package com.motionapps.GSYSocial.entities;
+package com.motionapps.GSYSocial.dao.vo;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class User implements Serializable{
+public class UserVO implements Serializable{
 	
 	private String userName;
 	
@@ -22,6 +22,10 @@ public class User implements Serializable{
 	private String mobileNumber;
 	
 	private String sessionId;
+	
+	private String profilePicUrl;
+	
+	private String jointAccountId;
 
 	public String getSessionId() {
 		return sessionId;
@@ -71,14 +75,31 @@ public class User implements Serializable{
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public User(String emailId, String password) {
+	public String getProfilePicUrl() {
+		return profilePicUrl;
+	}
+
+	public void setProfilePicUrl(String profilePicUrl) {
+		this.profilePicUrl = profilePicUrl;
+	}
+
+	public String getJointAccountId() {
+		return jointAccountId;
+	}
+
+	public void setJointAccountId(String jointAccountId) {
+		this.jointAccountId = jointAccountId;
+	}
+
+	public UserVO(String emailId, String password) {
 		super();
 		this.emailId = emailId;
 		this.password = password;
 	}
 
-	public User(String userName, String emailId, String password,
-			String dateOfBirth, String mobileNumber, String sessionId) {
+	public UserVO(String userName, String emailId, String password,
+			String dateOfBirth, String mobileNumber, String sessionId,
+			String profilePicUrl, String jointAccountId) {
 		super();
 		this.userName = userName;
 		this.emailId = emailId;
@@ -86,9 +107,11 @@ public class User implements Serializable{
 		this.dateOfBirth = dateOfBirth;
 		this.mobileNumber = mobileNumber;
 		this.sessionId = sessionId;
+		this.profilePicUrl = profilePicUrl;
+		this.jointAccountId = jointAccountId;
 	}
 
-	public User() {
+	public UserVO() {
 	}
 
 

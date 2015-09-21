@@ -10,6 +10,7 @@
         <result column="date_of_birth" property="dateOfBirth"/>
         <result column="mobile_number" property="mobileNumber" />
         <result column="session_id" property="sessionId" />
+        <result column="profile_pic" property="profilePicUrl" />
 	</resultMap>   
  
     
@@ -23,6 +24,7 @@
 			password = #{password},
 			date_of_birth = #{dateOfBirth},
 			mobile_number = #{mobileNumber},
+			profile_pic=#{profilePicUrl}
 			session_id=#{sessionId};
  	</insert>   
 	<!-- ************** READ ************** -->
@@ -33,9 +35,37 @@
         	password,
         	date_of_birth,
         	mobile_number,
+        	profile_pic,
         	session_id
         FROM
             user; 	            	
+    </select>
+    <select id="getUser" resultMap="userMap" parameterType="String">
+        SELECT
+        	email_id,
+        	user_name,
+        	date_of_birth,
+        	mobile_number,
+        	profile_pic,
+        	session_id
+        FROM
+            user
+        WHERE
+        	email_id=#{value};          	
+    </select>
+    <select id="searchUser" resultMap="userMap" parameterType="String">
+        SELECT
+        	email_id,
+        	user_name,
+        	date_of_birth,
+        	mobile_number,
+        	profile_pic
+        FROM
+            user
+        WHERE
+        	email_id LIKE #{value%}
+       	OR
+       		user_name LIKE #{value%};        	
     </select>
     <select id="getSessionId" resultType="String" parameterType="String">
         SELECT
@@ -53,6 +83,25 @@
         WHERE      
         	email_id=#{value}; 	            	
     </select>
+    
+    <select id="checkIfEmailIdAlreadyExists" resultType="Int" parameterType="String">
+        SELECT
+        	count(*)
+        FROM
+            user
+        WHERE      
+        	email_id=#{value}; 	            	
+    </select>
+	
+    <select id="checkIfUserNameAlreadyExists" resultType="Int" parameterType="String">
+        SELECT
+        	count(*)
+        FROM
+            user
+        WHERE      
+        	user_name=#{value}; 	            	
+    </select>
+    
 	     	
  	<!-- ************** UPDATE ************** -->
  	<update id="updateSessionId" parameterType="User">
@@ -62,5 +111,29 @@
 			session_id = #{sessionId}
 		WHERE
 			email_id = #{emailId}
- 	</update>   	
+ 	</update>  
+ 	
+ 	<update id="updateUser" parameterType="User">
+		UPDATE 
+			user
+		SET 
+			email_id = #{emailId}
+			<if test="userName != null">
+				,user_name = #{userName}
+			</if>
+			<if test="dateOfBirth != null">
+				,date_of_birth = #{dateOfBirth}
+			</if>
+			<if test="mobileNumber != null">
+				,mobile_number = #{mobileNumber}
+			</if>
+			<if test="profilePicUrl != null">
+				,profile_pic = #{profilePicUrl}
+			</if>	
+		WHERE
+			email_id = #{emailId}
+ 	</update>  
+ 	
+			
+ 	
 </mapper>

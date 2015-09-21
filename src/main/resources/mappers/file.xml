@@ -1,0 +1,43 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.motionapps.GSYSocial.dao.FileDao">
+
+    <resultMap id="fileMap" type="File" >
+        <id column="id" property="fileId"  />
+        <result column="name" property="fileName"/>
+        <result column="size" property="fileSize" />
+        <result column="type" property="fileType"/>
+        <result column="file_url" property="fileUrl"/>
+        <result column="content" property="fileContent" />
+	</resultMap>   
+ 
+  	<!-- ************** CREATE ************** -->
+ 	<insert id="uploadFile" parameterType="File" useGeneratedKeys="true">
+		INSERT 
+			INTO upload
+		SET 
+			id = #{fileId},
+			name = #{fileName},
+			size = #{fileSize},
+			type = #{fileType},
+			file_url=#{fileUrl},
+			content = #{fileContent};
+ 	</insert>   
+ 		<!-- ************** READ ************** -->
+    <select id="downloadFile" parameterType="String" resultMap="fileMap">
+        SELECT
+			id,
+			name,
+			size,
+			type,
+			content
+        FROM
+            upload
+		WHERE      
+        	id=#{value}; 	            	
+    </select>
+    <delete id="deleteFile" parameterType="String">
+		DELETE FROM upload WHERE file_url = #{value}
+	</delete>
+</mapper>
