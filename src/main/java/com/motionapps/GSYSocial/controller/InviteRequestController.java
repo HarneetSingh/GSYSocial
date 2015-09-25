@@ -39,10 +39,13 @@ public class InviteRequestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response inviteUser(InviteRequestVO inviteRequestVO)
 	{
-		inviteRequestVO.setInviteRequestId(UUID.randomUUID().toString());
+		String inviteRequestId=UUID.randomUUID().toString();
+		inviteRequestVO.setInviteRequestId(inviteRequestId);
 		Long result=inviteRequestDao.inviteUser(inviteRequestVO);
+		InviteRequestVO tempInviteRequestVO=new InviteRequestVO();
+		tempInviteRequestVO.setInviteRequestId(inviteRequestId);
 		if(result==1)
-			return Response.ok().build();
+			return Response.status(200).entity(tempInviteRequestVO).type(MediaType.APPLICATION_JSON).build();
 		else
 			return Response.status(400).build();
 	}

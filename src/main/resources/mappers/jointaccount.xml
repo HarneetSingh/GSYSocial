@@ -23,4 +23,61 @@
 			joint_account_story = #{jointAccountStory};
  	</insert>   
  	
+ 	
+ 		<!-- ************** READ ************** -->
+    <select id="getJointAccounts" resultMap="jointAccountMap">
+        SELECT
+        	joint_account_id,
+        	first_email_id,
+        	second_email_id,
+        	joint_account_name,
+        	joint_account_story
+        FROM
+            joint_account; 	            	
+    </select>
+    <select id="getJointAccount" resultMap="jointAccountMap" parameterType="String">
+        SELECT
+        	joint_account_id,
+        	first_email_id,
+        	second_email_id,
+        	joint_account_name,
+        	joint_account_story
+        FROM
+            joint_account
+        WHERE
+        	joint_account_id=#{value};          	
+    </select>
+    <select id="searchJointAccounts" resultMap="jointAccountMap" parameterType="String">
+        SELECT
+        	joint_account_id,
+        	first_email_id,
+        	second_email_id,
+        	joint_account_name,
+        	joint_account_story
+        FROM
+            joint_account
+        WHERE
+        	first_email_id LIKE #{value}
+       	OR
+       		second_email_id LIKE #{value};        	
+    </select>
+ 	
+ 	
+ 	<!-- ************** UPDATE ************** -->
+ 	
+ 	<update id="updateJointAccountDetails" parameterType="JointAccount">
+		UPDATE 
+			joint_account
+		SET 
+			joint_account_id = #{jointAccountId}
+			<if test="jointAccountName != null">
+				,joint_account_name = #{jointAccountName}
+			</if>
+			<if test="jointAccountStory != null">
+				,joint_account_story = #{jointAccountStory}
+			</if>
+		WHERE
+			joint_account_id = #{jointAccountId}
+ 	</update>  
+ 	
 </mapper> 	

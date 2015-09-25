@@ -58,7 +58,7 @@ public class FileController {
 		FileVO fileVO = new FileVO();
 		fileVO.setFileId(fileId);
 		fileVO.setFileUrl(fileUrl);
-		fileVO.setFileType(fileDetail.getType());
+		fileVO.setFileType("sddsd");
 		fileVO.setFileName(fileDetail.getFileName());
 		try {
 			byte[] fileBytes=IOUtils.toByteArray(uploadedInputStream);
