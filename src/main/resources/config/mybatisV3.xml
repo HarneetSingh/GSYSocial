@@ -7,9 +7,14 @@
     <typeAliases>
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.UserVO" alias="User"/>
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.FileVO" alias="File"/>
+        <typeAlias type="com.motionapps.GSYSocial.dao.vo.ChangePasswordVO" alias="ChangePassword"/>
+        <typeAlias type="com.motionapps.GSYSocial.dao.vo.InviteRequestVO" alias="InviteRequest"/>
+        <typeAlias type="com.motionapps.GSYSocial.dao.vo.JointAccountVO" alias="JointAccount"/>        
     </typeAliases>
     <mappers>
         <mapper resource="mappers/user.xml" />
         <mapper resource="mappers/file.xml" />
+        <mapper resource="mappers/jointaccount.xml" />
+        <mapper resource="mappers/inviterequest.xml" />
     </mappers>
 </configuration>

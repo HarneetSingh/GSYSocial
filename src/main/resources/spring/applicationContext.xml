@@ -37,6 +37,15 @@
 	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.FileDao" />
 	</bean>
 	
+	<bean id="inviteRequestDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
+	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.InviteRequestDao" />
+	</bean>
+	
+	<bean id="jointAccountDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
+	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.JointAccountDao" />
+	</bean>
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
@@ -55,6 +64,16 @@
     
     <bean id="fileController" class="com.motionapps.GSYSocial.controller.FileController" >
     	<property name="fileDao" ref="fileDao"/>
+    </bean>
+    
+    <bean id="inviteRequestController" class="com.motionapps.GSYSocial.controller.InviteRequestController" >
+    	<property name="inviteRequestDao" ref="inviteRequestDao"/>
+    </bean>
+    
+    <bean id="jointAccountController" class="com.motionapps.GSYSocial.controller.JointAccountController" >
+    	<property name="jointAccountDao" ref="jointAccountDao"/>
+    	<property name="userController" ref="userController"/>
+    	
     </bean>
    
 <!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

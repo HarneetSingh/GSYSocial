@@ -10,6 +10,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class ErrorVO implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8750450366783339886L;
 	private String error;
 
 	public String getError() {

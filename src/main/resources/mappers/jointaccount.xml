@@ -1,0 +1,26 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.motionapps.GSYSocial.dao.JointAccountDao">
+
+ 	<resultMap id="jointAccountMap" type="JointAccount" >
+        <id column="joint_account_id" property="jointAccountId"  />
+        <result column="first_email_id" property="firstEmailId"/>
+        <result column="second_email_id" property="secondEmailId" />
+        <result column="joint_account_name" property="jointAccountName"/>
+        <result column="joint_account_story" property="jointAccountStory" />
+	</resultMap>   
+    
+ 	<!-- ************** CREATE ************** -->
+ 	<insert id="createJointAccount" parameterType="JointAccount" useGeneratedKeys="true">
+		INSERT 
+			INTO joint_account
+		SET 
+			joint_account_id = #{jointAccountId},
+			first_email_id = #{firstEmailId},
+			second_email_id = #{secondEmailId},
+			joint_account_name = #{jointAccountName},
+			joint_account_story = #{jointAccountStory};
+ 	</insert>   
+ 	
+</mapper> 	

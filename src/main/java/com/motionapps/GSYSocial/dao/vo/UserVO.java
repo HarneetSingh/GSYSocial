@@ -8,9 +8,13 @@ import org.codehaus.jackson.annotate.JsonIgnoreType;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class UserVO implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2342985461916530714L;
+
 	private String userName;
 	
 	private String emailId;
@@ -26,6 +30,8 @@ public class UserVO implements Serializable{
 	private String profilePicUrl;
 	
 	private String jointAccountId;
+	
+	private String gcmDeviceId;
 
 	public String getSessionId() {
 		return sessionId;
@@ -91,15 +97,17 @@ public class UserVO implements Serializable{
 		this.jointAccountId = jointAccountId;
 	}
 
-	public UserVO(String emailId, String password) {
-		super();
-		this.emailId = emailId;
-		this.password = password;
+	public String getGcmDeviceId() {
+		return gcmDeviceId;
+	}
+
+	public void setGcmDeviceId(String gcmDeviceId) {
+		this.gcmDeviceId = gcmDeviceId;
 	}
 
 	public UserVO(String userName, String emailId, String password,
 			String dateOfBirth, String mobileNumber, String sessionId,
-			String profilePicUrl, String jointAccountId) {
+			String profilePicUrl, String jointAccountId, String gcmDeviceId) {
 		super();
 		this.userName = userName;
 		this.emailId = emailId;
@@ -109,7 +117,16 @@ public class UserVO implements Serializable{
 		this.sessionId = sessionId;
 		this.profilePicUrl = profilePicUrl;
 		this.jointAccountId = jointAccountId;
+		this.gcmDeviceId = gcmDeviceId;
 	}
+
+	public UserVO(String emailId, String password) {
+		super();
+		this.emailId = emailId;
+		this.password = password;
+	}
+
+
 
 	public UserVO() {
 	}

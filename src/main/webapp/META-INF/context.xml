@@ -1,5 +1,5 @@
 <Context>
-<Resource
+<!-- <Resource
 	   name="jdbc/gsysocial_db"
 	   auth="Container"
 	   type="javax.sql.DataSource"
@@ -19,8 +19,8 @@
 	   password="password"
 	   driverClassName="com.mysql.jdbc.Driver"
 	   url="jdbc:mysql://gfysocial.c5l4tznddpos.us-west-2.rds.amazonaws.com:3306/gsysocial_db?allowMultiQueries=true"
-   />   
-<!-- <Resource
+   />    -->
+<Resource
 	   name="jdbc/gsysocial_db"
 	   auth="Container"
 	   type="javax.sql.DataSource"
@@ -40,5 +40,5 @@
 	   password=""
 	   driverClassName="com.mysql.jdbc.Driver"
 	   url="jdbc:mysql://localhost:3306/gsysocial_db?allowMultiQueries=true"
-   />  -->
+   /> 
 </Context>

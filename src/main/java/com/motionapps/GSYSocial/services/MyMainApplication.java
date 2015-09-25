@@ -5,6 +5,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.web.filter.RequestContextFilter;
 
 import com.motionapps.GSYSocial.controller.FileController;
+import com.motionapps.GSYSocial.controller.InviteRequestController;
+import com.motionapps.GSYSocial.controller.JointAccountController;
 import com.motionapps.GSYSocial.controller.UserController;
 
 
@@ -14,6 +16,8 @@ public class MyMainApplication extends ResourceConfig{
 		register(RequestContextFilter.class);
 		register(UserController.class);
 		register(FileController.class);
+		register(InviteRequestController.class);
+		register(JointAccountController.class);
 		register(JacksonFeature.class);		
 	}
 

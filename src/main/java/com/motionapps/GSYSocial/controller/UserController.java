@@ -18,7 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.motionapps.GSYSocial.dao.UserDao;
+import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 @Controller
@@ -57,14 +59,14 @@ public class UserController {
 				ErrorVO errorVO=new ErrorVO("EmailId already registered");
 				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
 			}
-			else{
-				temp=userDao.checkIfUserNameAlreadyExists(user.getUserName());
-				if(temp>=1)
-				{
-					ErrorVO errorVO=new ErrorVO("User Name already registered");
-					return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-				}
-			}
+//			else{
+//				temp=userDao.checkIfUserNameAlreadyExists(user.getUserName());
+//				if(temp>=1)
+//				{
+//					ErrorVO errorVO=new ErrorVO("User Name already registered");
+//					return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+//				}
+//			}
 			
 			String sessionId=UUID.randomUUID().toString();
 			user.setSessionId(sessionId);
@@ -78,10 +80,24 @@ public class UserController {
 				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
 			}
 			else
-			return Response.status(400).entity("Internal Server Error").build();	
+			{
+				ErrorVO errorVO=new ErrorVO("Internal Server Error");
+				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+			}	
 			
 		}	
 		
+		public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
+		{
+			UserVO userVO=new UserVO();
+			userVO.setEmailId(jointAccountVO.getFirstEmailId());
+			userVO.setJointAccountId(jointAccountVO.getJointAccountId());
+			updateUserDetails(userVO);
+			userVO.setEmailId(jointAccountVO.getSecondEmailId());
+			updateUserDetails(userVO);
+			return (long)1;
+		}
+
 		
 		@POST 
 		@Path("/update")
@@ -90,12 +106,12 @@ public class UserController {
 		public Response updateUserDetails(UserVO user) {
 			
 
-			int	temp=userDao.checkIfUserNameAlreadyExists(user.getUserName());
-			if(temp>=1)
-			{
-				ErrorVO errorVO=new ErrorVO("User Name already registered");
-				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-			}
+//			int	temp=userDao.checkIfUserNameAlreadyExists(user.getUserName());
+//			if(temp>=1)
+//			{
+//				ErrorVO errorVO=new ErrorVO("User Name already registered");
+//				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+//			}
 			userDao.updateUser(user);
 //			if(abc==1)
 //			{
@@ -122,30 +138,59 @@ public class UserController {
 		@Path("/search")
 		@Produces(MediaType.APPLICATION_JSON)
 		public List<UserVO> searchUser(@QueryParam("keyword")String keyword) {
-			return userDao.searchUser(keyword+"%");
+			return userDao.searchUser("%"+keyword+"%");
 		}
 		
 		@POST 
 		@Consumes({MediaType.APPLICATION_JSON})
-		@Produces({MediaType.TEXT_HTML})	
 		@Transactional
 		@Path("/login")
 		public Response loginUser(UserVO user) {
 			
 			String emailId=user.getEmailId();
 			String password =userDao.getPassword(emailId);
-			if(password.equals(user.getPassword()))
-			{
+			if(password!=null)
+			{	
+				if(password.equals(user.getPassword()))
+				{
 				String sessionId=UUID.randomUUID().toString();
 				user.setSessionId(sessionId);
 				userDao.updateSessionId(user);
 				user.setPassword(null);
 				user=userDao.getUser(emailId);
-				return Response.status(201).entity(user).type(MediaType.APPLICATION_JSON).build();
+				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
+				}
+				else
+				{
+					ErrorVO errorVO=new ErrorVO("Authentication Failed");
+					return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+				}	
 			}
 			else
-			return Response.status(401).entity("Authentication Failed").build();	
+			{
+				ErrorVO errorVO=new ErrorVO("Authentication Failed");
+				return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+			}	
 			
 		}	
+		
+		@POST 
+		@Consumes({MediaType.APPLICATION_JSON})
+		@Transactional
+		@Path("/changePassword")
+		public Response changePassword(ChangePasswordVO changePasswordVO)
+		{
+			if(changePasswordVO.getOldPassword().equals(userDao.getPassword(changePasswordVO.getEmailId())))
+			{
+				userDao.updatePassword(changePasswordVO);
+				return Response.ok().build();
+			}
+			else{
+				ErrorVO errorVO=new ErrorVO("Authentication Failed");
+				return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+			}
+
+		}
+		
 		
 }	

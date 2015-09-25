@@ -1,0 +1,57 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.motionapps.GSYSocial.dao.InviteRequestDao">
+
+ 	<resultMap id="inviteRequestMap" type="InviteRequest" >
+        <id column="invite_id" property="inviteRequestId"  />
+        <result column="inviter_email_id" property="inviterEmailId"/>
+        <result column="invitee_email_id" property="inviteeEmailId" />
+        <result column="joint_account_name" property="jointAccountName"/>
+	</resultMap>   
+    
+ 	<!-- ************** CREATE ************** -->
+ 	<insert id="inviteUser" parameterType="InviteRequest" useGeneratedKeys="true">
+		INSERT 
+			INTO invite_request
+		SET 
+			invite_id = #{inviteRequestId},
+			inviter_email_id = #{inviterEmailId},
+			invitee_email_id = #{inviteeEmailId},
+			joint_account_name = #{jointAccountName};
+ 	</insert>   
+ 	
+ 	
+ 	<select id="getInviteRequestDetails" parameterType="String" resultMap="inviteRequestMap">
+ 	    SELECT
+ 	    	invite_id,
+ 	    	inviter_email_id,
+ 	    	invitee_email_id,
+ 	    	joint_account_name
+ 	    FROM
+ 	    	invite_request
+ 	    WHERE
+ 	    	invite_id = #{value};
+ 	</select>
+ 	
+ 		     	
+ 	<!-- ************** UPDATE ************** -->
+ 	<update id="inviteAccepted" parameterType="InviteRequest">
+		UPDATE 
+			invite_request
+		SET 
+			invite_accepted = TRUE
+		WHERE
+			invite_id = #{inviteRequestId}
+ 	</update>
+ 	
+ 	<update id="inviteRejected" parameterType="InviteRequest">
+		UPDATE 
+			invite_request
+		SET 
+			invite_rejected = TRUE
+		WHERE
+			invite_id = #{inviteRequestId}
+ 	</update>  
+ </mapper>	
+ 	

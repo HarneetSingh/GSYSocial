@@ -11,6 +11,8 @@
         <result column="mobile_number" property="mobileNumber" />
         <result column="session_id" property="sessionId" />
         <result column="profile_pic" property="profilePicUrl" />
+        <result column="joint_account_id" property="jointAccountId" />
+        <result column="gcm_device_id" property="gcmDeviceId" />
 	</resultMap>   
  
     
@@ -24,7 +26,7 @@
 			password = #{password},
 			date_of_birth = #{dateOfBirth},
 			mobile_number = #{mobileNumber},
-			profile_pic=#{profilePicUrl}
+			profile_pic=#{profilePicUrl},
 			session_id=#{sessionId};
  	</insert>   
 	<!-- ************** READ ************** -->
@@ -36,7 +38,9 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
-        	session_id
+        	session_id,
+        	joint_account_id,
+        	gcm_device_id
         FROM
             user; 	            	
     </select>
@@ -47,7 +51,9 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
-        	session_id
+        	session_id,
+        	joint_account_id,
+        	gcm_device_id
         FROM
             user
         WHERE
@@ -63,9 +69,9 @@
         FROM
             user
         WHERE
-        	email_id LIKE #{value%}
+        	email_id LIKE #{value}
        	OR
-       		user_name LIKE #{value%};        	
+       		user_name LIKE #{value};        	
     </select>
     <select id="getSessionId" resultType="String" parameterType="String">
         SELECT
@@ -93,14 +99,14 @@
         	email_id=#{value}; 	            	
     </select>
 	
-    <select id="checkIfUserNameAlreadyExists" resultType="Int" parameterType="String">
+<!--     <select id="checkIfUserNameAlreadyExists" resultType="Int" parameterType="String">
         SELECT
         	count(*)
         FROM
             user
         WHERE      
         	user_name=#{value}; 	            	
-    </select>
+    </select> -->
     
 	     	
  	<!-- ************** UPDATE ************** -->
@@ -109,6 +115,15 @@
 			user
 		SET 
 			session_id = #{sessionId}
+		WHERE
+			email_id = #{emailId}
+ 	</update>  
+ 	
+ 	<update id="updatePassword" parameterType="ChangePassword">
+		UPDATE 
+			user
+		SET 
+			password = #{newPassword}
 		WHERE
 			email_id = #{emailId}
  	</update>  
@@ -129,6 +144,12 @@
 			</if>
 			<if test="profilePicUrl != null">
 				,profile_pic = #{profilePicUrl}
+			</if>	
+			<if test="jointAccountId != null">
+				,joint_account_id = #{jointAccountId}
+			</if>	
+			<if test="gcmDeviceId != null">
+				,gcm_device_id = #{gcmDeviceId}
 			</if>	
 		WHERE
 			email_id = #{emailId}

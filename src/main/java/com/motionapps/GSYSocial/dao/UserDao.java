@@ -2,6 +2,7 @@ package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
 
+import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 
@@ -20,6 +21,8 @@ public interface UserDao {
 	public String getPassword(String emailId);
 	
 	public Long updateSessionId(UserVO user);
+	
+	public Long updatePassword(ChangePasswordVO changePasswordVO);
 	
 	public int checkIfEmailIdAlreadyExists(String emailId);
 	
