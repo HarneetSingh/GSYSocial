@@ -6,7 +6,9 @@
  	<resultMap id="jointAccountMap" type="JointAccount" >
         <id column="joint_account_id" property="jointAccountId"  />
         <result column="first_email_id" property="firstEmailId"/>
+        <result column="first_user_name" property="firstUserName"/>
         <result column="second_email_id" property="secondEmailId" />
+        <result column="second_user_name" property="secondUserName" />
         <result column="joint_account_name" property="jointAccountName"/>
         <result column="joint_account_story" property="jointAccountStory" />
 	</resultMap>   
@@ -19,6 +21,8 @@
 			joint_account_id = #{jointAccountId},
 			first_email_id = #{firstEmailId},
 			second_email_id = #{secondEmailId},
+			first_user_name=#{firstUserName},
+			second_user_name=#{secondUserName},
 			joint_account_name = #{jointAccountName},
 			joint_account_story = #{jointAccountStory};
  	</insert>   
@@ -30,6 +34,8 @@
         	joint_account_id,
         	first_email_id,
         	second_email_id,
+        	first_user_name,
+        	second_user_name,
         	joint_account_name,
         	joint_account_story
         FROM
@@ -40,6 +46,8 @@
         	joint_account_id,
         	first_email_id,
         	second_email_id,
+        	first_user_name,
+        	second_user_name,
         	joint_account_name,
         	joint_account_story
         FROM
@@ -52,6 +60,8 @@
         	joint_account_id,
         	first_email_id,
         	second_email_id,
+        	first_user_name,
+        	second_user_name,
         	joint_account_name,
         	joint_account_story
         FROM
@@ -59,7 +69,11 @@
         WHERE
         	first_email_id LIKE #{value}
        	OR
-       		second_email_id LIKE #{value};        	
+       		second_email_id LIKE #{value}
+       	OR
+       	    first_user_name LIKE #{value}
+       	OR
+       		second_user_name LIKE #{value};
     </select>
  	
  	

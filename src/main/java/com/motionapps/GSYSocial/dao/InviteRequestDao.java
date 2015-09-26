@@ -10,8 +10,10 @@ public interface InviteRequestDao {
 	
 	public Long inviteAccepted(InviteRequestVO inviteRequestVO);
 	
-	public Long inviteRejected(InviteRequestVO inviteRequestVO);
+	public Long inviteDeleted(InviteRequestVO inviteRequestVO);
 	
 	public InviteRequestVO getInviteRequestDetails(String inviteRequestId);
+	
+	public InviteRequestVO getInviteRequest(String emailId);
 
 }

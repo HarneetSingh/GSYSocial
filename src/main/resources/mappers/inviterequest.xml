@@ -34,6 +34,19 @@
  	    	invite_id = #{value};
  	</select>
  	
+ 	 	<select id="getInviteRequest" parameterType="String" resultMap="inviteRequestMap">
+ 	    SELECT
+ 	    	invite_id,
+ 	    	inviter_email_id,
+ 	    	invitee_email_id,
+ 	    	joint_account_name
+ 	    FROM
+ 	    	invite_request
+ 	    WHERE
+ 	    	inviter_email_id = #{value}
+ 	    OR
+ 	    	invitee_email_id = #{value};
+ 	</select>
  		     	
  	<!-- ************** UPDATE ************** -->
  	<update id="inviteAccepted" parameterType="InviteRequest">
@@ -45,13 +58,12 @@
 			invite_id = #{inviteRequestId}
  	</update>
  	
- 	<update id="inviteRejected" parameterType="InviteRequest">
-		UPDATE 
+ 	<delete id="inviteDeleted" parameterType="InviteRequest">
+		DELETE 
+		FROM 
 			invite_request
-		SET 
-			invite_rejected = TRUE
 		WHERE
 			invite_id = #{inviteRequestId}
- 	</update>  
+ 	</delete>  
  </mapper>	
  	

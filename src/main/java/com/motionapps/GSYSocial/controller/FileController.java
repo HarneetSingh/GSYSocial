@@ -46,77 +46,90 @@ public class FileController {
 	public Response uploadFile(	@FormDataParam("file") InputStream uploadedInputStream,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) 
 	{
-		
-//		String uploadedFileLocation = "/Users/harneet/Documents/Video/" + fileDetail.getFileName();
-//
-//		// save it
-//		writeToFile(uploadedInputStream, uploadedFileLocation);
+		String fileId=UUID.randomUUID().toString();
+		String newFileName=fileId+"-"+fileDetail.getFileName();
+		String uploadedFileLocation = Constants.fileLocation + newFileName;
+		try{
+		// save it
+		writeToFile(uploadedInputStream, uploadedFileLocation);
 //
 //		String output = "File uploaded to : " + uploadedFileLocation;
-		String fileId=UUID.randomUUID().toString();
-		String fileUrl=Constants.fileUrl+fileId;
-		FileVO fileVO = new FileVO();
-		fileVO.setFileId(fileId);
-		fileVO.setFileUrl(fileUrl);
-		fileVO.setFileType("sddsd");
-		fileVO.setFileName(fileDetail.getFileName());
-		try {
-			byte[] fileBytes=IOUtils.toByteArray(uploadedInputStream);
-			fileVO.setFileContent(fileBytes);
-			fileVO.setFileSize(fileBytes.length);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Long temp=fileDao.uploadFile(fileVO);
-		if(temp==1)
-		{
+//		String fileId=UUID.randomUUID().toString();
+//		String fileUrl=Constants.fileUrl+fileId;
+//		FileVO fileVO = new FileVO();
+//		fileVO.setFileId(fileId);
+//		fileVO.setFileUrl(fileUrl);
+//		fileVO.setFileType(fileDetail.getType());
+//		fileVO.setFileName(fileDetail.getFileName());
+//		try {
+//			byte[] fileBytes=IOUtils.toByteArray(uploadedInputStream);
+//			fileVO.setFileContent(fileBytes);
+//			fileVO.setFileSize(fileBytes.length);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		Long temp=fileDao.uploadFile(fileVO);
+//		if(temp==1)
 			FileVO responseFileVO=new FileVO();
-			responseFileVO.setFileUrl(Constants.fileUrl+fileId);
+			responseFileVO.setFileUrl(Constants.fileUrl+newFileName);
 			return Response.status(200).entity(responseFileVO).type(MediaType.APPLICATION_JSON).build();
-		}	
-		else
+		}
+		catch(Exception e){
 			return Response.status(400).build();
+		}
 	}
 	
 	@GET
-	@Path("/download/{fileId}")
-	public Response downloadFile(@PathParam("fileId") String fileId)
+	@Path("/download/{fileName}")
+	public Response downloadFile(@PathParam("fileName") String fileName)
 	{
+//		try
+//		{
+//		FileVO fileVO=fileDao.downloadFile(fileId);
+//	    ResponseBuilder builder = Response.ok(fileVO.getFileContent());
+//	    builder.header("Content-Disposition", "attachment; filename=" + fileVO.getFileName());
+//	    return builder.build();
+//		}
+//		catch(Exception e)
+//		{
+//			return Response.status(404).build();
+//		}
 		try
 		{
-		FileVO fileVO=fileDao.downloadFile(fileId);
-	    ResponseBuilder builder = Response.ok(fileVO.getFileContent());
-	    builder.header("Content-Disposition", "attachment; filename=" + fileVO.getFileName());
+		File file =new File(Constants.fileLocation+fileName);
+	    ResponseBuilder builder = Response.ok((Object)file);
+	    builder.header("Content-Disposition", "attachment; filename=" + fileName);
 	    return builder.build();
 		}
 		catch(Exception e)
 		{
 			return Response.status(404).build();
 		}
+		
 
 	}
 	
-	@POST
-	@Path("/delete")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteFile(FileVO fileVO)
-	{
-		try
-		{
-		String fileURL=fileVO.getFileUrl();
-		Long abc=fileDao.deleteFile(fileURL);
-		if(abc==1)
-			return Response.ok().build();
-		else
-			return Response.status(404).build();
-		}
-		catch(Exception e)
-		{
-			return Response.status(404).build();
-		}
-
-	}
+//	@POST
+//	@Path("/delete")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public Response deleteFile(FileVO fileVO)
+//	{
+//		try
+//		{
+//		String fileURL=fileVO.getFileUrl();
+//		Long abc=fileDao.deleteFile(fileURL);
+//		if(abc==1)
+//			return Response.ok().build();
+//		else
+//			return Response.status(404).build();
+//		}
+//		catch(Exception e)
+//		{
+//			return Response.status(404).build();
+//		}
+//
+//	}
 	
 	private void writeToFile(InputStream uploadedInputStream,
 			String uploadedFileLocation) {

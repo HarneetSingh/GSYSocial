@@ -21,6 +21,7 @@ import com.motionapps.GSYSocial.dao.UserDao;
 import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
+import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 @Controller
@@ -137,10 +138,21 @@ public class UserController {
 		@GET
 		@Path("/search")
 		@Produces(MediaType.APPLICATION_JSON)
-		public List<UserVO> searchUser(@QueryParam("keyword")String keyword) {
-			return userDao.searchUser("%"+keyword+"%");
+		public UserSearchVO searchUser(@QueryParam("keyword")String keyword) {
+			return new UserSearchVO(userDao.searchUser("%"+keyword+"%"));
 		}
 		
+		@GET
+		@Path("/details")
+		@Produces(MediaType.APPLICATION_JSON)
+		public UserVO getUser(@QueryParam("emailId")String emailId) {
+			return userDao.getUser(emailId);
+		}
+		
+//		public UserVO getUserDetails(String emailId) {
+//			return userDao.getUser(emailId);
+//		}
+//		
 		@POST 
 		@Consumes({MediaType.APPLICATION_JSON})
 		@Transactional

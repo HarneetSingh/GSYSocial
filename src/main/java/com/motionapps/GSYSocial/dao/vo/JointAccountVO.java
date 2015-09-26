@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@XmlRootElement
+@XmlRootElement()
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class JointAccountVO implements Serializable{
 	
@@ -22,6 +22,10 @@ public class JointAccountVO implements Serializable{
 	private String jointAccountId;
 	
 	private String firstEmailId;
+	
+	private String firstUserName;
+	
+	private String secondUserName;
 	
 	private String secondEmailId;
 	
@@ -43,6 +47,22 @@ public class JointAccountVO implements Serializable{
 
 	public void setFirstEmailId(String firstEmailId) {
 		this.firstEmailId = firstEmailId;
+	}
+
+	public String getFirstUserName() {
+		return firstUserName;
+	}
+
+	public void setFirstUserName(String firstUserName) {
+		this.firstUserName = firstUserName;
+	}
+
+	public String getSecondUserName() {
+		return secondUserName;
+	}
+
+	public void setSecondUserName(String secondUserName) {
+		this.secondUserName = secondUserName;
 	}
 
 	public String getSecondEmailId() {
@@ -72,17 +92,20 @@ public class JointAccountVO implements Serializable{
 	public JointAccountVO() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public JointAccountVO(String jointAccountId, String firstEmailId,
-			String secondEmailId, String jointAccountName,
-			String jointAccountStory) {
+			String firstUserName, String secondUserName, String secondEmailId,
+			String jointAccountName, String jointAccountStory) {
 		super();
 		this.jointAccountId = jointAccountId;
 		this.firstEmailId = firstEmailId;
+		this.firstUserName = firstUserName;
+		this.secondUserName = secondUserName;
 		this.secondEmailId = secondEmailId;
 		this.jointAccountName = jointAccountName;
 		this.jointAccountStory = jointAccountStory;
 	}
+	
 	
 
 }

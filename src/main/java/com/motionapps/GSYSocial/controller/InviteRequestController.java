@@ -3,8 +3,10 @@ package com.motionapps.GSYSocial.controller;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.motionapps.GSYSocial.dao.InviteRequestDao;
+import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
 
 @Controller
@@ -36,6 +39,7 @@ public class InviteRequestController {
 	
 	@POST
 	@Path("/request")
+	@Transactional
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response inviteUser(InviteRequestVO inviteRequestVO)
 	{
@@ -66,24 +70,38 @@ public class InviteRequestController {
 			else
 				return Response.status(400).build();
 		}else
-			return Response.status(400).build();
+			{
+			ErrorVO errorVO=new ErrorVO("No Pending Request Found");
+			return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+			}
 
 	}
 	
+
+	
 	@POST
-	@Path("/reject")
+	@Path("/{a:reject|cancel}")
 	@Transactional 
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response inviteRejected(InviteRequestVO inviteRequestVO)
 	{
-		inviteRequestVO.setInviteAccepted(Boolean.TRUE);
-		Long result=inviteRequestDao.inviteRejected(inviteRequestVO);
+		Long result=inviteRequestDao.inviteDeleted(inviteRequestVO);
 		if(result==1){
 			return Response.ok().build();
 		}else
-			return Response.status(400).build();
+		{
+			ErrorVO errorVO=new ErrorVO("No Pending Request Found");
+			return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+		}
 
 	}
 	
+	@GET
+	@Path("/pending")
+	public Response pendingRequests(@QueryParam("emailId") String emailId)
+	{
+		InviteRequestVO inviteRequestVO=inviteRequestDao.getInviteRequest(emailId);
+		return Response.status(200).entity(inviteRequestVO).type(MediaType.APPLICATION_JSON).build();
+	}
 	
 }

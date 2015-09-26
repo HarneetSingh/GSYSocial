@@ -12,11 +12,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonValue;
+import org.codehaus.jackson.map.annotate.JsonRootName;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.motionapps.GSYSocial.dao.JointAccountDao;
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
@@ -37,13 +42,19 @@ public class JointAccountController {
 	public void setUserController(UserController userController) {
 		this.userController = userController;
 	}
-
+	
 	public Long createJointAccount(InviteRequestVO inviteRequestVO)
 	{
 		JointAccountVO jointAccountVO=new JointAccountVO();
 		jointAccountVO.setJointAccountId(UUID.randomUUID().toString());
+		System.out.println(inviteRequestVO.getInviterEmailId());
 		jointAccountVO.setFirstEmailId(inviteRequestVO.getInviterEmailId());
+		UserVO firstUser=userController.getUser(inviteRequestVO.getInviterEmailId());
+		System.out.println(firstUser.getUserName());
+		jointAccountVO.setFirstUserName(firstUser.getUserName());
 		jointAccountVO.setSecondEmailId(inviteRequestVO.getInviteeEmailId());
+		UserVO secondUser=userController.getUser(inviteRequestVO.getInviteeEmailId());
+		jointAccountVO.setSecondUserName(secondUser.getUserName());
 		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
 		jointAccountDao.createJointAccount(jointAccountVO);
 		return userController.updateJointAccountDetails(jointAccountVO);
@@ -79,8 +90,8 @@ public class JointAccountController {
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<JointAccountVO> searchJointAccounts(@QueryParam("keyword")String keyword) {
-		return jointAccountDao.searchJointAccounts("%"+keyword+"%");
+	public JointAccountSearchVO searchJointAccounts(@QueryParam("keyword")String keyword) {
+		return new JointAccountSearchVO(jointAccountDao.searchJointAccounts("%"+keyword+"%"));
 	}
 
 }
