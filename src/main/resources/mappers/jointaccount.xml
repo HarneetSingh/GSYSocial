@@ -71,9 +71,7 @@
        	OR
        		second_email_id LIKE #{value}
        	OR
-       	    first_user_name LIKE #{value}
-       	OR
-       		second_user_name LIKE #{value};
+       	    joint_account_name LIKE #{value};
     </select>
  	
  	
