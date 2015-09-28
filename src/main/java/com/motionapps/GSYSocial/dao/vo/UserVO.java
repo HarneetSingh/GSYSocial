@@ -32,6 +32,16 @@ public class UserVO implements Serializable{
 	private String jointAccountId;
 	
 	private String gcmDeviceId;
+	
+	private int followCount;
+
+	public int getFollowCount() {
+		return followCount;
+	}
+
+	public void setFollowCount(int followCount) {
+		this.followCount = followCount;
+	}
 
 	public String getSessionId() {
 		return sessionId;
@@ -105,9 +115,12 @@ public class UserVO implements Serializable{
 		this.gcmDeviceId = gcmDeviceId;
 	}
 
+
+
 	public UserVO(String userName, String emailId, String password,
 			String dateOfBirth, String mobileNumber, String sessionId,
-			String profilePicUrl, String jointAccountId, String gcmDeviceId) {
+			String profilePicUrl, String jointAccountId, String gcmDeviceId,
+			int followCount) {
 		super();
 		this.userName = userName;
 		this.emailId = emailId;
@@ -118,6 +131,7 @@ public class UserVO implements Serializable{
 		this.profilePicUrl = profilePicUrl;
 		this.jointAccountId = jointAccountId;
 		this.gcmDeviceId = gcmDeviceId;
+		this.followCount = followCount;
 	}
 
 	public UserVO(String emailId, String password) {

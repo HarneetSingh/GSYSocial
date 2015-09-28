@@ -13,6 +13,7 @@
         <result column="profile_pic" property="profilePicUrl" />
         <result column="joint_account_id" property="jointAccountId" />
         <result column="gcm_device_id" property="gcmDeviceId" />
+        <result column="follow_count" property="followCount" />
 	</resultMap>   
  
     
@@ -40,7 +41,8 @@
         	profile_pic,
         	session_id,
         	joint_account_id,
-        	gcm_device_id
+        	gcm_device_id,
+        	follow_count
         FROM
             user; 	            	
     </select>
@@ -53,7 +55,8 @@
         	profile_pic,
         	session_id,
         	joint_account_id,
-        	gcm_device_id
+        	gcm_device_id,
+        	follow_count
         FROM
             user
         WHERE
@@ -126,6 +129,24 @@
 			password = #{newPassword}
 		WHERE
 			email_id = #{emailId}
+ 	</update> 
+ 	
+ 	<update id="incrementFollowCount" parameterType="String">
+		UPDATE 
+			user
+		SET 
+			follow_count = follow_count + 1
+		WHERE
+			email_id = #{value}
+ 	</update>  
+ 	
+ 	<update id="decrementFollowCount" parameterType="String">
+		UPDATE 
+			user
+		SET 
+			follow_count = follow_count - 1
+		WHERE
+			email_id = #{value}
  	</update>  
  	
  	<update id="updateUser" parameterType="User">

@@ -35,3 +35,11 @@ UNIQUE(second_email_id)
 ALTER TABLE `gsysocial_db`.`user` 
 DROP INDEX `user_name` ;
 
+alter table gsysocial_db.user add follow_count int Default 0 NOT NULL;
+
+CREATE TABLE gsysocial_db.follower (
+follow_id VARCHAR(100) NOT NULL,
+email_id VARCHAR(100) NOT NULL,
+joint_account_id VARCHAR(100) NOT NULL,
+PRIMARY KEY(follow_id)
+);

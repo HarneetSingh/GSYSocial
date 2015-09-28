@@ -204,5 +204,17 @@ public class UserController {
 
 		}
 		
+		public Long incrementFollowCount(String emailId)
+		{
+			userDao.incrementFollowCount(emailId);
+			return (long)1;
+		}
+		
+		public Long decrementFollowCount(String emailId)
+		{
+			userDao.decrementFollowCount(emailId);
+			return (long)1;
+		}
+		
 		
 }	

@@ -5,9 +5,11 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.web.filter.RequestContextFilter;
 
 import com.motionapps.GSYSocial.controller.FileController;
+import com.motionapps.GSYSocial.controller.FollowerController;
 import com.motionapps.GSYSocial.controller.InviteRequestController;
 import com.motionapps.GSYSocial.controller.JointAccountController;
 import com.motionapps.GSYSocial.controller.UserController;
+import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 
 
 public class MyMainApplication extends ResourceConfig{
@@ -18,6 +20,7 @@ public class MyMainApplication extends ResourceConfig{
 		register(FileController.class);
 		register(InviteRequestController.class);
 		register(JointAccountController.class);
+		register(FollowerController.class);
 		register(JacksonFeature.class);		
 	}
 

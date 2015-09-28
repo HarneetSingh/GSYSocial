@@ -29,4 +29,9 @@ public interface UserDao {
 	public int checkIfUserNameAlreadyExists(String userName);
 	
 	public Long updateUser(UserVO user);
+	
+	public Long incrementFollowCount(String emailId);
+	
+	public Long decrementFollowCount(String emailId);
+
 }

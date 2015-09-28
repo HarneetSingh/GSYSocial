@@ -1,0 +1,47 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.motionapps.GSYSocial.dao.FollowerDao">
+
+    <resultMap id="followerMap" type="Follower" >
+        <id column="follow_id" property="followId"  />
+        <result column="email_id" property="emailId"/>
+        <result column="joint_account_id" property="jointAccountId" />
+	</resultMap>   
+	
+     	<!-- ************** CREATE ************** -->
+ 	<insert id="followAccount" parameterType="Follower" useGeneratedKeys="true">
+		INSERT 
+			INTO follower
+		SET 
+			follow_id=#{followId},
+			email_id = #{emailId},
+			joint_account_id = #{jointAccountId};
+ 	</insert>   
+	<!-- ************** READ ************** -->
+<!--     <select id="getUsers" resultMap="userMap">
+        SELECT
+        	email_id,
+        	user_name,
+        	password,
+        	date_of_birth,
+        	mobile_number,
+        	profile_pic,
+        	session_id,
+        	joint_account_id,
+        	gcm_device_id,
+        	follow_count
+        FROM
+            user; 	            	
+    </select> -->
+    	<!-- ************** DELETE ************** -->
+    <delete id="unfollowAccount" parameterType="Follower">
+        DELETE
+        FROM
+        	follower
+        WHERE
+        	email_id = #{emailId},
+		AND
+			joint_account_id = #{jointAccountId};
+    </delete>
+ </mapper>   
