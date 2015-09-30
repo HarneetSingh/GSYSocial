@@ -11,6 +11,7 @@
         <result column="second_user_name" property="secondUserName" />
         <result column="joint_account_name" property="jointAccountName"/>
         <result column="joint_account_story" property="jointAccountStory" />
+        <result column="follower_count" property="followerCount"/>
 	</resultMap>   
     
  	<!-- ************** CREATE ************** -->
@@ -37,7 +38,8 @@
         	first_user_name,
         	second_user_name,
         	joint_account_name,
-        	joint_account_story
+        	joint_account_story,
+        	follower_count
         FROM
             joint_account; 	            	
     </select>
@@ -49,7 +51,8 @@
         	first_user_name,
         	second_user_name,
         	joint_account_name,
-        	joint_account_story
+        	joint_account_story,
+        	follower_count
         FROM
             joint_account
         WHERE
@@ -63,7 +66,8 @@
         	first_user_name,
         	second_user_name,
         	joint_account_name,
-        	joint_account_story
+        	joint_account_story,
+        	follower_count
         FROM
             joint_account
         WHERE
@@ -91,5 +95,23 @@
 		WHERE
 			joint_account_id = #{jointAccountId}
  	</update>  
+ 	
+ 	<update id="incrementFollowCount" parameterType="String">
+ 	    UPDATE
+ 	    	joint_account
+ 	    SET
+ 	    	follower_count = follower_count + 1
+ 	    WHERE
+ 	    	joint_account_id=#{value}	
+ 	</update>
+ 	
+ 	<update id="decrementFollowCount" parameterType="String">
+ 	    UPDATE
+ 	    	joint_account
+ 	    SET
+ 	    	follower_count = follower_count - 1
+ 	    WHERE
+ 	    	joint_account_id=#{value}	
+ 	</update>
  	
 </mapper> 	

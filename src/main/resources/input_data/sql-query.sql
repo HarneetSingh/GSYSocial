@@ -43,3 +43,18 @@ email_id VARCHAR(100) NOT NULL,
 joint_account_id VARCHAR(100) NOT NULL,
 PRIMARY KEY(follow_id)
 );
+alter table gsysocial_db.follower ADD UNIQUE unique_constraint(email_id,joint_account_id);
+
+
+CREATE TABLE gsysocial_db.post (
+post_id VARCHAR(100) NOT NULL,
+joint_account_id VARCHAR(100) NOT NULL,
+file_url VARCHAR(200) NULL,
+file_type VARCHAR(100) NULL,
+post_text TEXT NOT NULL,
+total_rating BIGINT(20) NOT NULL DEFAULT 0,
+no_of_ratings INT NOT NULL DEFAULT 0,
+average_rating FLOAT NOT NULL DEFAULT 0,
+last_updated_time DATETIME NOT NULL,
+PRIMARY KEY(post_id)
+);

@@ -52,6 +52,11 @@
 	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.FollowerDao" />
 	</bean>
 	
+	<bean id="postDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
+	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.PostDao" />
+	</bean>
+	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="configLocation" value="classpath:config/mybatisV3.xml"/>
@@ -65,6 +70,10 @@
 	
     <bean id="userController" class="com.motionapps.GSYSocial.controller.UserController" >
     	<property name="userDao" ref="userDao"/>
+    </bean>
+    
+    <bean id="postController" class="com.motionapps.GSYSocial.controller.PostController" >
+    	<property name="postDao" ref="postDao"/>
     </bean>
     
     <bean id="fileController" class="com.motionapps.GSYSocial.controller.FileController" >
@@ -81,6 +90,7 @@
     </bean>
    	<bean id="followerController" class="com.motionapps.GSYSocial.controller.FollowerController" >
     	<property name="followerDao" ref="followerDao"/>
+    	<property name="jointAccountDao" ref="jointAccountDao"/>
     	<property name="userController" ref="userController"/>	
     </bean>
    

@@ -32,6 +32,16 @@ public class JointAccountVO implements Serializable{
 	private String jointAccountName;
 	
 	private String jointAccountStory;
+	
+	private String followerCount;
+
+	public String getFollowerCount() {
+		return followerCount;
+	}
+
+	public void setFollowerCount(String followerCount) {
+		this.followerCount = followerCount;
+	}
 
 	public String getJointAccountId() {
 		return jointAccountId;
@@ -95,7 +105,8 @@ public class JointAccountVO implements Serializable{
 
 	public JointAccountVO(String jointAccountId, String firstEmailId,
 			String firstUserName, String secondUserName, String secondEmailId,
-			String jointAccountName, String jointAccountStory) {
+			String jointAccountName, String jointAccountStory,
+			String followerCount) {
 		super();
 		this.jointAccountId = jointAccountId;
 		this.firstEmailId = firstEmailId;
@@ -104,8 +115,10 @@ public class JointAccountVO implements Serializable{
 		this.secondEmailId = secondEmailId;
 		this.jointAccountName = jointAccountName;
 		this.jointAccountStory = jointAccountStory;
+		this.followerCount = followerCount;
 	}
-	
+
+ 
 	
 
 }

@@ -9,6 +9,30 @@
         <result column="joint_account_id" property="jointAccountId" />
 	</resultMap>   
 	
+    <resultMap id="userMap" type="User" >
+        <id column="email_id" property="emailId"  />
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password" />
+        <result column="date_of_birth" property="dateOfBirth"/>
+        <result column="mobile_number" property="mobileNumber" />
+        <result column="session_id" property="sessionId" />
+        <result column="profile_pic" property="profilePicUrl" />
+        <result column="joint_account_id" property="jointAccountId" />
+        <result column="gcm_device_id" property="gcmDeviceId" />
+        <result column="follow_count" property="followCount" />
+	</resultMap>   
+	
+    <resultMap id="jointAccountMap" type="JointAccount" >
+        <id column="joint_account_id" property="jointAccountId"  />
+        <result column="first_email_id" property="firstEmailId"/>
+        <result column="first_user_name" property="firstUserName"/>
+        <result column="second_email_id" property="secondEmailId" />
+        <result column="second_user_name" property="secondUserName" />
+        <result column="joint_account_name" property="jointAccountName"/>
+        <result column="joint_account_story" property="jointAccountStory" />
+        <result column="follower_count" property="followerCount"/>
+	</resultMap>   
+	
      	<!-- ************** CREATE ************** -->
  	<insert id="followAccount" parameterType="Follower" useGeneratedKeys="true">
 		INSERT 
@@ -19,28 +43,56 @@
 			joint_account_id = #{jointAccountId};
  	</insert>   
 	<!-- ************** READ ************** -->
-<!--     <select id="getUsers" resultMap="userMap">
+	<select id="getJointAccountFollowers" parameterType="String" resultMap="userMap">
         SELECT
-        	email_id,
-        	user_name,
-        	password,
-        	date_of_birth,
-        	mobile_number,
-        	profile_pic,
-        	session_id,
-        	joint_account_id,
-        	gcm_device_id,
-        	follow_count
+        	user.email_id,
+        	user.user_name,
+	       	user.date_of_birth,
+        	user.mobile_number,
+        	user.profile_pic,
+        	user.joint_account_id,
+        	user.gcm_device_id,
+        	user.follow_count
         FROM
-            user; 	            	
-    </select> -->
+            user
+        INNER JOIN
+        	follower
+        ON
+        	user.email_id=follower.email_id	
+        AND
+        	follower.joint_account_id=#{value}
+        ORDER BY
+        	user.user_name;		
+    </select> 
+
+	<select id="getJointAccountsFollowedByUser" parameterType="String" resultMap="jointAccountMap">
+        SELECT
+        	joint_account.joint_account_id,
+        	joint_account.first_email_id,
+        	joint_account.second_email_id,
+        	joint_account.first_user_name,
+        	joint_account.second_user_name,
+        	joint_account.joint_account_name,
+        	joint_account.joint_account_story,
+        	joint_account.follower_count
+        FROM
+            joint_account
+        INNER JOIN
+        	follower
+        ON
+        	joint_account.joint_account_id=follower.joint_account_id	
+        AND
+        	follower.email_id=#{value}
+        ORDER BY
+        	joint_account.joint_account_name;		
+    </select> 
     	<!-- ************** DELETE ************** -->
     <delete id="unfollowAccount" parameterType="Follower">
         DELETE
         FROM
         	follower
         WHERE
-        	email_id = #{emailId},
+        	email_id = #{emailId}
 		AND
 			joint_account_id = #{jointAccountId};
     </delete>

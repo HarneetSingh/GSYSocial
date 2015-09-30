@@ -15,5 +15,9 @@ public interface JointAccountDao {
 	public JointAccountVO getJointAccount(String string);
 
 	public List<JointAccountVO> searchJointAccounts(String string);
+	
+	public Long incrementFollowCount(String jointAccountId);
+	
+	public Long decrementFollowCount(String jointAccountId);
 
 }

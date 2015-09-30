@@ -8,6 +8,7 @@ import com.motionapps.GSYSocial.controller.FileController;
 import com.motionapps.GSYSocial.controller.FollowerController;
 import com.motionapps.GSYSocial.controller.InviteRequestController;
 import com.motionapps.GSYSocial.controller.JointAccountController;
+import com.motionapps.GSYSocial.controller.PostController;
 import com.motionapps.GSYSocial.controller.UserController;
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 
@@ -21,6 +22,7 @@ public class MyMainApplication extends ResourceConfig{
 		register(InviteRequestController.class);
 		register(JointAccountController.class);
 		register(FollowerController.class);
+		register(PostController.class);
 		register(JacksonFeature.class);		
 	}
 

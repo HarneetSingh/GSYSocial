@@ -3,8 +3,10 @@ package com.motionapps.GSYSocial.controller;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -13,7 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.motionapps.GSYSocial.dao.FollowerDao;
+import com.motionapps.GSYSocial.dao.JointAccountDao;
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
+import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 
 @Controller
 @Path("/")
@@ -25,6 +31,14 @@ public class FollowerController {
 	@Autowired
 	private UserController userController;
 	
+	@Autowired
+	private JointAccountDao jointAccountDao;
+	
+
+	public void setJointAccountDao(JointAccountDao jointAccountDao) {
+		this.jointAccountDao = jointAccountDao;
+	}
+
 	public void setFollowerDao(FollowerDao followerDao) {
 		this.followerDao = followerDao;
 	}
@@ -41,6 +55,7 @@ public class FollowerController {
 	{
 		followerVO.setFollowId(UUID.randomUUID().toString());
 		followerDao.followAccount(followerVO);
+		jointAccountDao.incrementFollowCount(followerVO.getJointAccountId());
 		userController.incrementFollowCount(followerVO.getEmailId());
 		return Response.ok().build();
 		
@@ -54,9 +69,24 @@ public class FollowerController {
 	{
 		followerVO.setFollowId(UUID.randomUUID().toString());
 		followerDao.unfollowAccount(followerVO);
+		jointAccountDao.decrementFollowCount(followerVO.getJointAccountId());
 		userController.decrementFollowCount(followerVO.getEmailId());
 		return Response.ok().build();
 		
 	}
+	
+	@GET
+	@Path("/jointAccountFollowers")
+	public Response getJointAccountFollowers(@QueryParam("jointAccountId") String jointAccountId)
+	{
+		return Response.ok().entity(new UserSearchVO(followerDao.getJointAccountFollowers(jointAccountId))).type(MediaType.APPLICATION_JSON).build();
+	}
+	@GET
+	@Path("/jointAccountsFollowedByUser")
+	public Response getJointAccountsFollowedByUser(@QueryParam("emailId") String emailId)
+	{
+		return Response.ok().entity(new JointAccountSearchVO(followerDao.getJointAccountsFollowedByUser(emailId))).type(MediaType.APPLICATION_JSON).build();
+	}
+	
 
 }

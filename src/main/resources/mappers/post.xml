@@ -1,0 +1,60 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.motionapps.GSYSocial.dao.PostDao">
+
+    <resultMap id="postMap" type="Post" >
+        <id column="post_id" property="postId"  />
+      	<result column="joint_account_id" property="jointAccountId" />
+        <result column="file_url" property="fileUrl" />
+        <result column="file_type" property="fileType"/>
+        <result column="post_text" property="postText" />
+        <result column="total_rating" property="totalRating" />
+        <result column="no_of_ratings" property="noOfRatings" />
+ 		<result column="average_rating" property="averageRating" />
+	</resultMap>   
+ 
+    
+ 	<!-- ************** CREATE ************** -->
+ 	<insert id="createPost" parameterType="Post" useGeneratedKeys="true">
+		INSERT 
+			INTO post
+		SET 
+			post_id = #{postId},
+			joint_account_id = #{jointAccountId},
+			file_url = #{fileUrl},
+			file_type = #{fileType},
+			post_text = #{postText},
+			last_updated_time=now();
+ 	</insert>   
+	
+    
+	     	
+ 	<!-- ************** UPDATE ************** -->
+ 
+ 	<update id="updatePost" parameterType="Post">
+		UPDATE 
+			post
+		SET 
+			post_id = #{postId}
+			<if test="fileUrl != null">
+				,file_url = #{fileUrl}
+			</if>
+			<if test="fileType != null">
+				,file_type = #{fileType}
+			</if>
+			<if test="postText != null">
+				,post_text = #{postText}
+			</if>
+		WHERE
+			post_id = #{postId}
+ 	</update>  
+ 	
+ 		<!-- ************** DELETE ************** -->
+ 	
+ 	    <delete id="deletePost" parameterType="String">
+		DELETE FROM post WHERE post_id = #{value}
+	</delete>
+			
+ 	
+</mapper>
