@@ -11,7 +11,8 @@
         <result column="post_text" property="postText" />
         <result column="total_rating" property="totalRating" />
         <result column="no_of_ratings" property="noOfRatings" />
- 		<result column="average_rating" property="averageRating" />
+ 		<result column="created_time" property="createdTime" />
+ 		<result column="last_updated_time" property="lastUpdatedTime" />
 	</resultMap>   
  
     
@@ -25,10 +26,61 @@
 			file_url = #{fileUrl},
 			file_type = #{fileType},
 			post_text = #{postText},
-			last_updated_time=now();
+			last_updated_time=now(),
+			created_time=now();
  	</insert>   
 	
+    <!-- ************** READ ************** -->
+    <select id="getPostByJointAccount" parameterType="String" resultMap="postMap">
+        SELECT TOP 20
+			post_id,
+			joint_account_id,
+			file_url,
+			file_type,
+			post_text,
+			total_rating,
+			no_of_ratings
+        FROM
+            post
+		WHERE      
+        	joint_account_id=#{value}
+        ORDER BY
+        	created_time desc; 	            	
+    </select>
     
+    <select id="getPostForUser" parameterType="String" resultMap="postMap">
+        SELECT TOP 20
+			post.post_id,
+			post.joint_account_id,
+			post.file_url,
+			post.file_type,
+			post.post_text,
+			post.total_rating,
+			post.no_of_ratings
+        FROM
+            post
+         INNER JOIN
+        	follower
+        ON
+        	post.joint_account_id=follower.joint_account_id	
+        AND
+        	follower.email_id=#{value}
+        ORDER BY
+        	post.created_time desc; 	            	
+    </select>
+    
+    <select id="getAllPosts" parameterType="String" resultMap="postMap">
+        SELECT
+			post_id,
+			joint_account_id,
+			file_url,
+			file_type,
+			post_text,
+			total_rating,
+			no_of_ratings
+        FROM
+            post; 	            	
+    </select>
 	     	
  	<!-- ************** UPDATE ************** -->
  
@@ -39,16 +91,33 @@
 			post_id = #{postId}
 			<if test="fileUrl != null">
 				,file_url = #{fileUrl}
+				,last_updated_time=now()				
 			</if>
 			<if test="fileType != null">
 				,file_type = #{fileType}
+			    ,last_updated_time=now()
 			</if>
 			<if test="postText != null">
 				,post_text = #{postText}
+				,last_updated_time=now()
 			</if>
 		WHERE
 			post_id = #{postId}
  	</update>  
+ 	
+ 	<update id="addRatings" parameterType="Post">
+ 	    UPDATE 
+			post
+		SET 
+			post_id = #{postId}
+			<if test="rating != null">
+				,total_rating=totalRating+#{rating},
+				,no_of_ratings=no_of_ratings+1,
+				,last_updated_time=now()				
+			</if>
+		WHERE
+			post_id = #{postId}
+ 	</update>
  	
  		<!-- ************** DELETE ************** -->
  	

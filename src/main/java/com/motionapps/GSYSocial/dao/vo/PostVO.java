@@ -29,9 +29,8 @@ public class PostVO implements Serializable{
 	private int totalRating;
 	
 	private int noOfRatings;
-	
-	private float averageRating;
-	
+
+	private int newRating;
 	
 
 	public String getPostId() {
@@ -89,18 +88,18 @@ public class PostVO implements Serializable{
 	public void setNoOfRatings(int noOfRatings) {
 		this.noOfRatings = noOfRatings;
 	}
-
-	public float getAverageRating() {
-		return averageRating;
+	
+	public int getNewRating() {
+		return newRating;
 	}
 
-	public void setAverageRating(float averageRating) {
-		this.averageRating = averageRating;
+	public void setNewRating(int newRating) {
+		this.newRating = newRating;
 	}
 
 	public PostVO(String postId, String jointAccountId, String fileUrl,
-			String fileType, String postText, int totalRating, int noOfRatings,
-			float averageRating) {
+			String fileType, String postText, int totalRating, int noOfRatings)
+	{
 		super();
 		this.postId = postId;
 		this.jointAccountId = jointAccountId;
@@ -109,7 +108,6 @@ public class PostVO implements Serializable{
 		this.postText = postText;
 		this.totalRating = totalRating;
 		this.noOfRatings = noOfRatings;
-		this.averageRating = averageRating;
 	}
 	
 	public PostVO(){}

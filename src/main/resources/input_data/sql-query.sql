@@ -54,7 +54,7 @@ file_type VARCHAR(100) NULL,
 post_text TEXT NOT NULL,
 total_rating BIGINT(20) NOT NULL DEFAULT 0,
 no_of_ratings INT NOT NULL DEFAULT 0,
-average_rating FLOAT NOT NULL DEFAULT 0,
+created_time DATETIME NOT NULL,
 last_updated_time DATETIME NOT NULL,
 PRIMARY KEY(post_id)
 );

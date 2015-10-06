@@ -82,4 +82,12 @@ public class PostController {
 		return Response.status(200).entity(new PostArrayVO(postDao.getPostForUser(emailId))).build();
 		
 	}
+	
+	@GET
+	@Path("/getAllPosts")
+	public Response getAllPosts() {
+		
+		return Response.status(200).entity(new PostArrayVO(postDao.getAllPosts())).build();
+		
+	}
 }
