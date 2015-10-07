@@ -1,3 +1,7 @@
+alter table gsysocial_db.user modify column profile_pic VARCHAR(200)
+
+
+
 CREATE TABLE gsysocial_db.upload (
 id INT NOT NULL,
 name VARCHAR(100) NOT NULL,

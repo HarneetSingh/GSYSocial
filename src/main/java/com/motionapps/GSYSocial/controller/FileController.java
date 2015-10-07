@@ -1,5 +1,6 @@
 package com.motionapps.GSYSocial.controller;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -99,6 +101,51 @@ public class FileController {
 		{
 		File file =new File(Constants.fileLocation+fileName);
 	    ResponseBuilder builder = Response.ok((Object)file);
+	    builder.header("Content-Disposition", "attachment; filename=" + fileName);
+	    return builder.build();
+		}
+		catch(Exception e)
+		{
+			return Response.status(404).build();
+		}
+		
+
+	}
+	
+	@GET
+	@Path("/stream/{fileName}")
+	public Response streamFile(@PathParam("fileName") String fileName)
+	{
+//		try
+//		{
+//		FileVO fileVO=fileDao.downloadFile(fileId);
+//	    ResponseBuilder builder = Response.ok(fileVO.getFileContent());
+//	    builder.header("Content-Disposition", "attachment; filename=" + fileVO.getFileName());
+//	    return builder.build();
+//		}
+//		catch(Exception e)
+//		{
+//			return Response.status(404).build();
+//		}
+		try
+		{
+		File file =new File(Constants.fileLocation+fileName);
+		StreamingOutput stream = new StreamingOutput() {
+			@Override
+			public void write(OutputStream out)
+		    throws IOException {
+				
+		        final BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(out);
+
+		        // Stream is filled with data in this method.
+		    //    restDAO.readData(bufferedOutputStream);
+		        bufferedOutputStream.write(file);
+		        bufferedOutputStream.flush();
+		        bufferedOutputStream.close();
+		    }
+		};
+
+	    ResponseBuilder builder = Response.ok((Object)file,MediaType.APPLICATION_OCTET_STREAM);
 	    builder.header("Content-Disposition", "attachment; filename=" + fileName);
 	    return builder.build();
 		}

@@ -32,7 +32,7 @@
 	
     <!-- ************** READ ************** -->
     <select id="getPostByJointAccount" parameterType="String" resultMap="postMap">
-        SELECT TOP 20
+        SELECT
 			post_id,
 			joint_account_id,
 			file_url,
@@ -49,7 +49,7 @@
     </select>
     
     <select id="getPostForUser" parameterType="String" resultMap="postMap">
-        SELECT TOP 20
+        SELECT
 			post.post_id,
 			post.joint_account_id,
 			post.file_url,
