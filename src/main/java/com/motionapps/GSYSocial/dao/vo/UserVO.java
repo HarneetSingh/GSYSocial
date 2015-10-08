@@ -14,8 +14,14 @@ public class UserVO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 2342985461916530714L;
+	
+	private String userId;
 
 	private String userName;
+
+	private String oauthUid;
+
+	private String oauthProvider;
 	
 	private String emailId;
 	
@@ -117,12 +123,42 @@ public class UserVO implements Serializable{
 
 
 
-	public UserVO(String userName, String emailId, String password,
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getOauthUid() {
+		return oauthUid;
+	}
+
+	public void setOauthUid(String oauthUid) {
+		this.oauthUid = oauthUid;
+	}
+
+	public String getOauthProvider() {
+		return oauthProvider;
+	}
+
+	public void setOauthProvider(String oauthProvider) {
+		this.oauthProvider = oauthProvider;
+	}
+
+
+
+	public UserVO(String userId, String userName, String oauthUid,
+			String oauthProvider, String emailId, String password,
 			String dateOfBirth, String mobileNumber, String sessionId,
 			String profilePicUrl, String jointAccountId, String gcmDeviceId,
 			int followCount) {
 		super();
+		this.userId = userId;
 		this.userName = userName;
+		this.oauthUid = oauthUid;
+		this.oauthProvider = oauthProvider;
 		this.emailId = emailId;
 		this.password = password;
 		this.dateOfBirth = dateOfBirth;
@@ -134,6 +170,7 @@ public class UserVO implements Serializable{
 		this.followCount = followCount;
 	}
 
+	
 	public UserVO(String emailId, String password) {
 		super();
 		this.emailId = emailId;

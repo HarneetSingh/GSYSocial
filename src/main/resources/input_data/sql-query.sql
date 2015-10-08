@@ -1,5 +1,21 @@
 alter table gsysocial_db.user modify column profile_pic VARCHAR(200)
 
+alter table gsysocial_db.user drop PRIMARY KEY
+
+alter table gsysocial_db.user add oauth_uid VARCHAR(200);
+
+
+alter table gsysocial_db.user add oauth_provider VARCHAR(200);
+
+
+
+alter table gsysocial_db.user add user_id VARCHAR(200);
+
+update gsysocial_db.user set user_id='2sd233-2sd323' where email_id='sdsdsds@gmail.com'
+SELECT * FROM gsysocial_db.user
+
+alter table gsysocial_db.user add PRIMARY KEY(user_id)
+
 
 
 CREATE TABLE gsysocial_db.upload (
