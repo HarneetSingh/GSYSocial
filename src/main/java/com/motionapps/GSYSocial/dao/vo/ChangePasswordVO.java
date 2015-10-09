@@ -11,15 +11,16 @@ public class ChangePasswordVO implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -7053363776193298764L;
-	private String emailId;
+	private String userId;
 	private String oldPassword;
 	private String newPassword;
 	
-	public String getEmailId() {
-		return emailId;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getOldPassword() {
 		return oldPassword;

@@ -78,3 +78,24 @@ created_time DATETIME NOT NULL,
 last_updated_time DATETIME NOT NULL,
 PRIMARY KEY(post_id)
 );
+
+
+ALTER TABLE `gsysocial_db`.`user` 
+CHANGE COLUMN `email_id` `email_id` VARCHAR(100) NULL COMMENT '' ,
+CHANGE COLUMN `password` `password` VARCHAR(100) NULL COMMENT '' ,
+ADD UNIQUE INDEX `email_id_UNIQUE` (`email_id` ASC)  COMMENT '';
+
+
+
+alter table gsysocial_db.user drop primary key
+
+alter table gsysocial_db.user add oauth_uid VARCHAR(200) UNIQUE;
+
+alter table gsysocial_db.user add oauth_provider VARCHAR(200);
+
+alter table gsysocial_db.user add user_id VARCHAR(100);
+
+update gsysocial_db.user set user_id="sdsdsdds@gmail.com@gmail.com-23d32" where email_id="sdsdsdds@gmail.com"
+
+
+alter table gsysocial_db.user add primary key(user_id) 

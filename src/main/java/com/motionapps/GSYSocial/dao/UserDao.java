@@ -12,13 +12,15 @@ public interface UserDao {
 		
 	public List<UserVO> getUsers();
 	
-	public UserVO getUser(String emailId);
+	public UserVO getUser(String userId);
 	
+	public UserVO getUserByOauthUid(String oauthUid);
+
 	public List<UserVO> searchUser(String keyword);
 
 	public String getSessionId(String emailId);
 	
-	public String getPassword(String emailId);
+	public String getPassword(String userId);
 	
 	public Long updateSessionId(UserVO user);
 	
@@ -26,12 +28,12 @@ public interface UserDao {
 	
 	public int checkIfEmailIdAlreadyExists(String emailId);
 	
-	public int checkIfUserNameAlreadyExists(String userName);
+	public int checkIfOauthUidAlreadyExists(String oauthUid);
 	
 	public Long updateUser(UserVO user);
 	
-	public Long incrementFollowCount(String emailId);
+	public Long incrementFollowCount(String userId);
 	
-	public Long decrementFollowCount(String emailId);
+	public Long decrementFollowCount(String userId);
 
 }

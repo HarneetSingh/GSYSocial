@@ -49,34 +49,27 @@ public class UserController {
 		 * @return
 		 */
 		@POST 
-		@Path("/register")
+		@Path("/normalregisteration")
 		@Consumes({MediaType.APPLICATION_JSON})
 		@Transactional
-		public Response createUser(UserVO user) {
+		public Response normalregisteration(UserVO user) {
 			
+			if((user.getEmailId()==null)||(user.getEmailId().equals(""))||(user.getPassword().equals(""))||(user.getPassword()==null))
+				return Response.status(400).build();
 			int temp=userDao.checkIfEmailIdAlreadyExists(user.getEmailId());
 			if(temp>=1)
 			{
 				ErrorVO errorVO=new ErrorVO("EmailId already registered");
 				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
 			}
-//			else{
-//				temp=userDao.checkIfUserNameAlreadyExists(user.getUserName());
-//				if(temp>=1)
-//				{
-//					ErrorVO errorVO=new ErrorVO("User Name already registered");
-//					return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-//				}
-//			}
 			
-			String sessionId=UUID.randomUUID().toString();
-			user.setSessionId(sessionId);
+			String userId=UUID.randomUUID().toString();
+			user.setSessionId(userId);
+			user.setUserId(userId);
 			
 			Long abc=userDao.createUser(user);
 			if(abc==1)
 			{
-//				UserVO tempUser=new UserVO();
-//				tempUser.setSessionId(sessionId);
 				user.setPassword(null);
 				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
 			}
@@ -87,7 +80,39 @@ public class UserController {
 			}	
 			
 		}	
-		
+		@POST 
+		@Path("/oauthregisteration")
+		@Consumes({MediaType.APPLICATION_JSON})
+		@Transactional
+		public Response oauthregisteration(UserVO user) {
+			
+			if((user.getOauthProvider()==null)||(user.getOauthProvider().equals(""))||(user.getOauthUid().equals(""))||(user.getOauthUid()==null))
+				return Response.status(400).build();
+			int temp=userDao.checkIfOauthUidAlreadyExists(user.getOauthUid());
+			if(temp>=1)
+			{
+
+				UserVO reponse = userDao.getUserByOauthUid(user.getOauthUid());
+				return Response.status(200).entity(reponse).type(MediaType.APPLICATION_JSON).build();
+			}
+			
+			String userId=UUID.randomUUID().toString();
+			user.setSessionId(userId);
+			user.setUserId(userId);
+			
+			Long abc=userDao.createUser(user);
+			if(abc==1)
+			{
+				user.setPassword(null);
+				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
+			}
+			else
+			{
+				ErrorVO errorVO=new ErrorVO("Internal Server Error");
+				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+			}	
+			
+		}	
 		public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
 		{
 			UserVO userVO=new UserVO();
@@ -106,21 +131,9 @@ public class UserController {
 		@Transactional
 		public Response updateUserDetails(UserVO user) {
 			
-
-//			int	temp=userDao.checkIfUserNameAlreadyExists(user.getUserName());
-//			if(temp>=1)
-//			{
-//				ErrorVO errorVO=new ErrorVO("User Name already registered");
-//				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-//			}
 			userDao.updateUser(user);
-//			if(abc==1)
-//			{
+			return Response.status(200).build();
 
-				return Response.status(200).build();
-//			}
-//			else
-//			return Response.status(400).entity("Internal Server Error").build();	
 			
 		}	
 		
@@ -145,8 +158,8 @@ public class UserController {
 		@GET
 		@Path("/details")
 		@Produces(MediaType.APPLICATION_JSON)
-		public UserVO getUser(@QueryParam("emailId")String emailId) {
-			return userDao.getUser(emailId);
+		public UserVO getUser(@QueryParam("userId")String userId) {
+			return userDao.getUser(userId);
 		}
 		
 //		public UserVO getUserDetails(String emailId) {
@@ -192,7 +205,7 @@ public class UserController {
 		@Path("/changePassword")
 		public Response changePassword(ChangePasswordVO changePasswordVO)
 		{
-			if(changePasswordVO.getOldPassword().equals(userDao.getPassword(changePasswordVO.getEmailId())))
+			if(changePasswordVO.getOldPassword().equals(userDao.getPassword(changePasswordVO.getUserId())))
 			{
 				userDao.updatePassword(changePasswordVO);
 				return Response.ok().build();

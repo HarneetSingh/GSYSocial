@@ -4,7 +4,10 @@
 <mapper namespace="com.motionapps.GSYSocial.dao.UserDao">
 
     <resultMap id="userMap" type="User" >
-        <id column="email_id" property="emailId"  />
+        <id column="user_id" property="userId"/>
+        <result column="email_id" property="emailId"  />
+        <result column="oauth_uid" property="oauthUid"/>
+        <result column="oauth_provider" property="oauthProvider"/>
         <result column="user_name" property="userName"/>
         <result column="password" property="password" />
         <result column="date_of_birth" property="dateOfBirth"/>
@@ -22,6 +25,9 @@
 		INSERT 
 			INTO user
 		SET 
+			user_id = #{userId},
+			oauth_uid = #{oauthUid},
+			oauth_provider= #{oauthProvider},
 			email_id = #{emailId},
 			user_name = #{userName},
 			password = #{password},
@@ -33,6 +39,9 @@
 	<!-- ************** READ ************** -->
     <select id="getUsers" resultMap="userMap">
         SELECT
+        	user_id,
+        	oauth_uid,
+        	oauth_provider,
         	email_id,
         	user_name,
         	password,
@@ -48,6 +57,9 @@
     </select>
     <select id="getUser" resultMap="userMap" parameterType="String">
         SELECT
+            user_id,
+        	oauth_uid,
+        	oauth_provider,
         	email_id,
         	user_name,
         	date_of_birth,
@@ -60,7 +72,26 @@
         FROM
             user
         WHERE
-        	email_id=#{value};          	
+        	user_id=#{value};          	
+    </select>
+    <select id="getUserByOauthUid" resultMap="userMap" parameterType="String">
+        SELECT
+            user_id,
+        	oauth_uid,
+        	oauth_provider,
+        	email_id,
+        	user_name,
+        	date_of_birth,
+        	mobile_number,
+        	profile_pic,
+        	session_id,
+        	joint_account_id,
+        	gcm_device_id,
+        	follow_count
+        FROM
+            user
+        WHERE
+        	oauth_uid=#{value};          	
     </select>
     <select id="searchUser" resultMap="userMap" parameterType="String">
         SELECT
@@ -90,7 +121,7 @@
         FROM
             user
         WHERE      
-        	email_id=#{value}; 	            	
+        	user_id=#{value}; 	            	
     </select>
     
     <select id="checkIfEmailIdAlreadyExists" resultType="Int" parameterType="String">
@@ -102,14 +133,14 @@
         	email_id=#{value}; 	            	
     </select>
 	
-<!--     <select id="checkIfUserNameAlreadyExists" resultType="Int" parameterType="String">
+	<select id="checkIfOauthUidAlreadyExists" resultType="Int" parameterType="String">
         SELECT
         	count(*)
         FROM
             user
         WHERE      
-        	user_name=#{value}; 	            	
-    </select> -->
+        	oauth_uid=#{value}; 	            	
+    </select> 
     
 	     	
  	<!-- ************** UPDATE ************** -->
@@ -128,7 +159,7 @@
 		SET 
 			password = #{newPassword}
 		WHERE
-			email_id = #{emailId}
+			user_id = #{userId}
  	</update> 
  	
  	<update id="incrementFollowCount" parameterType="String">
@@ -137,7 +168,7 @@
 		SET 
 			follow_count = follow_count + 1
 		WHERE
-			email_id = #{value}
+			user_id = #{value}
  	</update>  
  	
  	<update id="decrementFollowCount" parameterType="String">
@@ -146,14 +177,14 @@
 		SET 
 			follow_count = follow_count - 1
 		WHERE
-			email_id = #{value}
+			user_id = #{value}
  	</update>  
  	
  	<update id="updateUser" parameterType="User">
 		UPDATE 
 			user
 		SET 
-			email_id = #{emailId}
+			user_id = #{userId}
 			<if test="userName != null">
 				,user_name = #{userName}
 			</if>
@@ -173,7 +204,7 @@
 				,gcm_device_id = #{gcmDeviceId}
 			</if>	
 		WHERE
-			email_id = #{emailId}
+			user_id = #{userId}
  	</update>  
  	
 			

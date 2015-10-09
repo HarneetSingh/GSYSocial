@@ -149,8 +149,9 @@ public class UserVO implements Serializable{
 
 
 
-	public UserVO(String userId, String userName, String oauthUid,
-			String oauthProvider, String emailId, String password,
+	public UserVO(
+			String userId, String oauthProvider, String oauthUid,
+			String userName, String emailId, String password,
 			String dateOfBirth, String mobileNumber, String sessionId,
 			String profilePicUrl, String jointAccountId, String gcmDeviceId,
 			int followCount) {
