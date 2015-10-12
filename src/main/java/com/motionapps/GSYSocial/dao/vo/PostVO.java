@@ -32,6 +32,51 @@ public class PostVO implements Serializable{
 
 	private int newRating;
 	
+	private String userName;
+	
+	private String profilePicUrl;
+	
+	private String createdTime;
+	
+	private String lastUpdatedTime;
+	
+
+
+	public String getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(String createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public String getLastUpdatedTime() {
+		return lastUpdatedTime;
+	}
+
+	public void setLastUpdatedTime(String lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getProfilePicUrl() {
+		return profilePicUrl;
+	}
+
+	public void setProfilePicUrl(String profilePicUrl) {
+		this.profilePicUrl = profilePicUrl;
+	}
+
+
+
+	
 
 	public String getPostId() {
 		return postId;
@@ -97,9 +142,13 @@ public class PostVO implements Serializable{
 		this.newRating = newRating;
 	}
 
+
+	public PostVO(){}
+
 	public PostVO(String postId, String jointAccountId, String fileUrl,
-			String fileType, String postText, int totalRating, int noOfRatings)
-	{
+			String fileType, String postText, int totalRating, int noOfRatings,
+			int newRating, String userName, String profilePicUrl,
+			String createdTime, String lastUpdatedTime) {
 		super();
 		this.postId = postId;
 		this.jointAccountId = jointAccountId;
@@ -108,12 +157,12 @@ public class PostVO implements Serializable{
 		this.postText = postText;
 		this.totalRating = totalRating;
 		this.noOfRatings = noOfRatings;
+		this.newRating = newRating;
+		this.userName = userName;
+		this.profilePicUrl = profilePicUrl;
+		this.createdTime = createdTime;
+		this.lastUpdatedTime = lastUpdatedTime;
 	}
-	
-	public PostVO(){}
-
-
-	
 
 
 }

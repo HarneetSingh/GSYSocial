@@ -13,6 +13,8 @@
         <result column="no_of_ratings" property="noOfRatings" />
  		<result column="created_time" property="createdTime" />
  		<result column="last_updated_time" property="lastUpdatedTime" />
+ 		<result column="user_name" property="userName"/>
+        <result column="profile_pic" property="profilePicUrl" /> 		
 	</resultMap>   
  
     
@@ -26,6 +28,8 @@
 			file_url = #{fileUrl},
 			file_type = #{fileType},
 			post_text = #{postText},
+			user_name = #{userName},
+			profile_pic = #{profilePicUrl},
 			last_updated_time=now(),
 			created_time=now();
  	</insert>   
@@ -38,14 +42,37 @@
 			file_url,
 			file_type,
 			post_text,
+			user_name,
+			profile_pic,
 			total_rating,
-			no_of_ratings
+			no_of_ratings,
+			created_time,
+			last_updated_time
         FROM
             post
 		WHERE      
         	joint_account_id=#{value}
         ORDER BY
         	created_time desc; 	            	
+    </select>
+    
+        <select id="getPostById" parameterType="String" resultMap="postMap">
+        SELECT
+			post_id,
+			joint_account_id,
+			file_url,
+			file_type,
+			post_text,
+			user_name,
+			profile_pic,
+			total_rating,
+			no_of_ratings,
+			created_time,
+			last_updated_time
+        FROM
+            post
+		WHERE      
+        	post_id=#{value}          	
     </select>
     
     <select id="getPostForUser" parameterType="String" resultMap="postMap">
@@ -55,8 +82,12 @@
 			post.file_url,
 			post.file_type,
 			post.post_text,
+			post.user_name,
+			post.profile_pic,
 			post.total_rating,
-			post.no_of_ratings
+			post.no_of_ratings,
+			post.created_time,
+			post.last_updated_time
         FROM
             post
          INNER JOIN
@@ -64,7 +95,7 @@
         ON
         	post.joint_account_id=follower.joint_account_id	
         AND
-        	follower.email_id=#{value}
+        	follower.user_id=#{value}
         ORDER BY
         	post.created_time desc; 	            	
     </select>
@@ -76,8 +107,12 @@
 			file_url,
 			file_type,
 			post_text,
+			user_name,
+			profile_pic,
 			total_rating,
-			no_of_ratings
+			no_of_ratings,
+			created_time,
+			last_updated_time
         FROM
             post; 	            	
     </select>
@@ -99,6 +134,10 @@
 			</if>
 			<if test="postText != null">
 				,post_text = #{postText}
+				,last_updated_time=now()
+			</if>
+			<if test="profilePicUrl != null">
+				,profile_pic = #{profilePicUrl}
 				,last_updated_time=now()
 			</if>
 		WHERE

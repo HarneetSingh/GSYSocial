@@ -82,6 +82,7 @@
     
     <bean id="inviteRequestController" class="com.motionapps.GSYSocial.controller.InviteRequestController" >
     	<property name="inviteRequestDao" ref="inviteRequestDao"/>
+    	<property name="userController" ref="userController"/>
     </bean>
     
     <bean id="jointAccountController" class="com.motionapps.GSYSocial.controller.JointAccountController" >

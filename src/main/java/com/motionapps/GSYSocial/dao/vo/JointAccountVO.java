@@ -21,19 +21,39 @@ public class JointAccountVO implements Serializable{
 
 	private String jointAccountId;
 	
-	private String firstEmailId;
+	private String firstUserId;
 	
 	private String firstUserName;
 	
 	private String secondUserName;
 	
-	private String secondEmailId;
+	private String secondUserId;
 	
 	private String jointAccountName;
 	
 	private String jointAccountStory;
 	
 	private String followerCount;
+	
+	private String postCount;
+	
+	private Boolean userFollowing;
+
+	public Boolean getUserFollowing() {
+		return userFollowing;
+	}
+
+	public void setUserFollowing(Boolean userFollowing) {
+		this.userFollowing = userFollowing;
+	}
+
+	public String getPostCount() {
+		return postCount;
+	}
+
+	public void setPostCount(String postCount) {
+		this.postCount = postCount;
+	}
 
 	public String getFollowerCount() {
 		return followerCount;
@@ -51,12 +71,12 @@ public class JointAccountVO implements Serializable{
 		this.jointAccountId = jointAccountId;
 	}
 
-	public String getFirstEmailId() {
-		return firstEmailId;
+	public String getFirstUserId() {
+		return firstUserId;
 	}
 
-	public void setFirstEmailId(String firstEmailId) {
-		this.firstEmailId = firstEmailId;
+	public void setFirstUserId(String firstUserId) {
+		this.firstUserId = firstUserId;
 	}
 
 	public String getFirstUserName() {
@@ -75,12 +95,12 @@ public class JointAccountVO implements Serializable{
 		this.secondUserName = secondUserName;
 	}
 
-	public String getSecondEmailId() {
-		return secondEmailId;
+	public String getSecondUserId() {
+		return secondUserId;
 	}
 
-	public void setSecondEmailId(String secondEmailId) {
-		this.secondEmailId = secondEmailId;
+	public void setSecondUserId(String secondUserId) {
+		this.secondUserId = secondUserId;
 	}
 
 	public String getJointAccountName() {
@@ -103,20 +123,25 @@ public class JointAccountVO implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public JointAccountVO(String jointAccountId, String firstEmailId,
-			String firstUserName, String secondUserName, String secondEmailId,
+	public JointAccountVO(String jointAccountId, String firstUserId,
+			String firstUserName, String secondUserName, String secondUserId,
 			String jointAccountName, String jointAccountStory,
-			String followerCount) {
+			String followerCount, String postCount, Boolean userFollowing) {
 		super();
 		this.jointAccountId = jointAccountId;
-		this.firstEmailId = firstEmailId;
+		this.firstUserId = firstUserId;
 		this.firstUserName = firstUserName;
 		this.secondUserName = secondUserName;
-		this.secondEmailId = secondEmailId;
+		this.secondUserId = secondUserId;
 		this.jointAccountName = jointAccountName;
 		this.jointAccountStory = jointAccountStory;
 		this.followerCount = followerCount;
+		this.postCount = postCount;
+		this.userFollowing = userFollowing;
 	}
+
+
+	
 
  
 	

@@ -47,13 +47,13 @@ public class JointAccountController {
 	{
 		JointAccountVO jointAccountVO=new JointAccountVO();
 		jointAccountVO.setJointAccountId(UUID.randomUUID().toString());
-		System.out.println(inviteRequestVO.getInviterEmailId());
-		jointAccountVO.setFirstEmailId(inviteRequestVO.getInviterEmailId());
-		UserVO firstUser=userController.getUser(inviteRequestVO.getInviterEmailId());
+		System.out.println(inviteRequestVO.getInviterUserId());
+		jointAccountVO.setFirstUserId(inviteRequestVO.getInviterUserId());
+		UserVO firstUser=userController.getUser(inviteRequestVO.getInviterUserId());
 		System.out.println(firstUser.getUserName());
 		jointAccountVO.setFirstUserName(firstUser.getUserName());
-		jointAccountVO.setSecondEmailId(inviteRequestVO.getInviteeEmailId());
-		UserVO secondUser=userController.getUser(inviteRequestVO.getInviteeEmailId());
+		jointAccountVO.setSecondUserId(inviteRequestVO.getInviteeUserId());
+		UserVO secondUser=userController.getUser(inviteRequestVO.getInviteeUserId());
 		jointAccountVO.setSecondUserName(secondUser.getUserName());
 		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
 		jointAccountDao.createJointAccount(jointAccountVO);
@@ -85,6 +85,14 @@ public class JointAccountController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JointAccountVO getJointAccount(@QueryParam("jointAccountId")String jointAccountId) {
 		return jointAccountDao.getJointAccount(jointAccountId);
+	}
+	
+	@GET
+	@Path("/detailsWithUserId")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JointAccountVO getJointAccount(@QueryParam("jointAccountId")String jointAccountId,@QueryParam("userId")String userId) {
+		return jointAccountDao.getJointAccountWithUserId(jointAccountId,userId);
+		
 	}
 	
 	@GET

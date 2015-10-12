@@ -5,13 +5,14 @@
 
  	<resultMap id="jointAccountMap" type="JointAccount" >
         <id column="joint_account_id" property="jointAccountId"  />
-        <result column="first_email_id" property="firstEmailId"/>
+        <result column="first_user_id" property="firstUserId"/>
         <result column="first_user_name" property="firstUserName"/>
-        <result column="second_email_id" property="secondEmailId" />
+        <result column="second_user_id" property="secondUserId" />
         <result column="second_user_name" property="secondUserName" />
         <result column="joint_account_name" property="jointAccountName"/>
         <result column="joint_account_story" property="jointAccountStory" />
         <result column="follower_count" property="followerCount"/>
+        <result column="user_following" property="userFollowing"/>
 	</resultMap>   
     
  	<!-- ************** CREATE ************** -->
@@ -20,8 +21,8 @@
 			INTO joint_account
 		SET 
 			joint_account_id = #{jointAccountId},
-			first_email_id = #{firstEmailId},
-			second_email_id = #{secondEmailId},
+			first_user_id = #{firstUserId},
+			second_user_id = #{secondUserId},
 			first_user_name=#{firstUserName},
 			second_user_name=#{secondUserName},
 			joint_account_name = #{jointAccountName},
@@ -33,8 +34,8 @@
     <select id="getJointAccounts" resultMap="jointAccountMap">
         SELECT
         	joint_account_id,
-        	first_email_id,
-        	second_email_id,
+        	first_user_id,
+        	second_user_id,
         	first_user_name,
         	second_user_name,
         	joint_account_name,
@@ -46,8 +47,8 @@
     <select id="getJointAccount" resultMap="jointAccountMap" parameterType="String">
         SELECT
         	joint_account_id,
-        	first_email_id,
-        	second_email_id,
+        	first_user_id,
+        	second_user_id,
         	first_user_name,
         	second_user_name,
         	joint_account_name,
@@ -58,11 +59,27 @@
         WHERE
         	joint_account_id=#{value};          	
     </select>
+   <select id="getJointAccountWithUserId" resultMap="jointAccountMap" parameterType="map">
+        SELECT
+        	joint_account_id,
+        	first_user_id,
+        	second_user_id,
+        	first_user_name,
+        	second_user_name,
+        	joint_account_name,
+        	joint_account_story,
+        	follower_count,
+            EXISTS(SELECT * FROM follower where joint_account_id=#{jointAccountId} AND user_id=#{userId}) AS user_following 
+        FROM
+            joint_account
+        WHERE
+        	joint_account_id=#{jointAccountId};          	
+    </select>
     <select id="searchJointAccounts" resultMap="jointAccountMap" parameterType="String">
         SELECT
         	joint_account_id,
-        	first_email_id,
-        	second_email_id,
+        	first_user_id,
+        	second_user_id,
         	first_user_name,
         	second_user_name,
         	joint_account_name,
@@ -71,9 +88,9 @@
         FROM
             joint_account
         WHERE
-        	first_email_id LIKE #{value}
+        	first_user_id LIKE #{value}
        	OR
-       		second_email_id LIKE #{value}
+       		second_user_id LIKE #{value}
        	OR
        	    joint_account_name LIKE #{value};
     </select>
@@ -114,4 +131,21 @@
  	    	joint_account_id=#{value}	
  	</update>
  	
+ 		<update id="incrementPostCount" parameterType="String">
+ 	    UPDATE
+ 	    	joint_account
+ 	    SET
+ 	    	post_count = post_count + 1
+ 	    WHERE
+ 	    	joint_account_id=#{value}	
+ 	</update>
+ 	
+ 	<update id="decrementPostCount" parameterType="String">
+ 	    UPDATE
+ 	    	joint_account
+ 	    SET
+ 	    	post_count = post_count - 1
+ 	    WHERE
+ 	    	joint_account_id=#{value}	
+ 	</update>
 </mapper> 	

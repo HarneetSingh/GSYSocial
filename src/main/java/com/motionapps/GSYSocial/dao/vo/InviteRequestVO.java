@@ -20,13 +20,10 @@ public class InviteRequestVO implements Serializable{
 
 	private String inviteRequestId;
 	
-	private String inviterEmailId;
+	private String inviterUserId;
 	
-	private String inviteeEmailId;
+	private String inviteeUserId;
 	
-	private Boolean inviteAccepted;
-	
-	private Boolean inviteRejected;
 	
 	private String jointAccountName;
 
@@ -38,51 +35,23 @@ public class InviteRequestVO implements Serializable{
 		this.inviteRequestId = inviteRequestId;
 	}
 
-	public String getInviterEmailId() {
-		return inviterEmailId;
+	public String getInviterUserId() {
+		return inviterUserId;
 	}
 
-	public void setInviterEmailId(String inviterEmailId) {
-		this.inviterEmailId = inviterEmailId;
+	public void setInviterUserId(String inviterUserId) {
+		this.inviterUserId = inviterUserId;
 	}
 
-	public String getInviteeEmailId() {
-		return inviteeEmailId;
+	public String getInviteeUserId() {
+		return inviteeUserId;
 	}
 
-	public void setInviteeEmailId(String inviteeEmailId) {
-		this.inviteeEmailId = inviteeEmailId;
+	public void setInviteeUserId(String inviteeUserId) {
+		this.inviteeUserId = inviteeUserId;
 	}
 
-	public Boolean getInviteAccepted() {
-		return inviteAccepted;
-	}
-
-	public void setInviteAccepted(Boolean inviteAccepted) {
-		this.inviteAccepted = inviteAccepted;
-	}
-
-	public Boolean getInviteRejected() {
-		return inviteRejected;
-	}
-
-	public void setInviteRejected(Boolean inviteRejected) {
-		this.inviteRejected = inviteRejected;
-	}
 	
-	
-	public InviteRequestVO(String inviteRequestId, String inviterEmailId,
-			String inviteeEmailId, Boolean inviteAccepted,
-			Boolean inviteRejected, String jointAccountName) {
-		super();
-		this.inviteRequestId = inviteRequestId;
-		this.inviterEmailId = inviterEmailId;
-		this.inviteeEmailId = inviteeEmailId;
-		this.inviteAccepted = inviteAccepted;
-		this.inviteRejected = inviteRejected;
-		this.jointAccountName = jointAccountName;
-	}
-
 	public String getJointAccountName() {
 		return jointAccountName;
 	}
@@ -90,6 +59,18 @@ public class InviteRequestVO implements Serializable{
 	public void setJointAccountName(String jointAccountName) {
 		this.jointAccountName = jointAccountName;
 	}
+	
+	
+	public InviteRequestVO(String inviteRequestId, String inviterUserId,
+			String inviteeUserId, String jointAccountName) {
+		super();
+		this.inviteRequestId = inviteRequestId;
+		this.inviterUserId = inviterUserId;
+		this.inviteeUserId = inviteeUserId;
+		this.jointAccountName = jointAccountName;
+	}
+
+
 
 	public InviteRequestVO()
 	{}

@@ -50,7 +50,7 @@ public class FileController {
 	@Autowired
 	FileDao fileDao;
 	
-    final int chunk_size = 1024 * 1924 ; // 1MB chunks
+    final int chunk_size = 1024 * 1024 ; // 1MB chunks
 	
 
 	public void setFileDao(FileDao fileDao) {
@@ -101,6 +101,7 @@ public class FileController {
 	
 	@GET
 	@Path("/stream/{fileName}")
+	@Produces("video/mp4")
 	public Response streamFile(@HeaderParam("Range") String range,@PathParam("fileName") String fileName)
 	{
 

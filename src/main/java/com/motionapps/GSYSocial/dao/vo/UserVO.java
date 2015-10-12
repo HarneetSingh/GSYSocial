@@ -40,6 +40,16 @@ public class UserVO implements Serializable{
 	private String gcmDeviceId;
 	
 	private int followCount;
+	
+	private boolean inviteRequestPending;
+
+	public boolean isInviteRequestPending() {
+		return inviteRequestPending;
+	}
+
+	public void setInviteRequestPending(boolean inviteRequestPending) {
+		this.inviteRequestPending = inviteRequestPending;
+	}
 
 	public int getFollowCount() {
 		return followCount;
@@ -148,13 +158,12 @@ public class UserVO implements Serializable{
 	}
 
 
-
-	public UserVO(
-			String userId, String oauthProvider, String oauthUid,
-			String userName, String emailId, String password,
+	
+	public UserVO(String userId, String userName, String oauthUid,
+			String oauthProvider, String emailId, String password,
 			String dateOfBirth, String mobileNumber, String sessionId,
 			String profilePicUrl, String jointAccountId, String gcmDeviceId,
-			int followCount) {
+			int followCount, boolean inviteRequestPending) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -169,9 +178,9 @@ public class UserVO implements Serializable{
 		this.jointAccountId = jointAccountId;
 		this.gcmDeviceId = gcmDeviceId;
 		this.followCount = followCount;
+		this.inviteRequestPending = inviteRequestPending;
 	}
 
-	
 	public UserVO(String emailId, String password) {
 		super();
 		this.emailId = emailId;

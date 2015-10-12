@@ -5,8 +5,8 @@
 
  	<resultMap id="inviteRequestMap" type="InviteRequest" >
         <id column="invite_id" property="inviteRequestId"  />
-        <result column="inviter_email_id" property="inviterEmailId"/>
-        <result column="invitee_email_id" property="inviteeEmailId" />
+        <result column="inviter_user_id" property="inviterUserId"/>
+        <result column="invitee_user_id" property="inviteeUserId" />
         <result column="joint_account_name" property="jointAccountName"/>
 	</resultMap>   
     
@@ -16,8 +16,8 @@
 			INTO invite_request
 		SET 
 			invite_id = #{inviteRequestId},
-			inviter_email_id = #{inviterEmailId},
-			invitee_email_id = #{inviteeEmailId},
+			inviter_user_id = #{inviterUserId},
+			invitee_user_id = #{inviteeUserId},
 			joint_account_name = #{jointAccountName};
  	</insert>   
  	
@@ -25,8 +25,8 @@
  	<select id="getInviteRequestDetails" parameterType="String" resultMap="inviteRequestMap">
  	    SELECT
  	    	invite_id,
- 	    	inviter_email_id,
- 	    	invitee_email_id,
+ 	    	inviter_user_id,
+ 	    	invitee_user_id,
  	    	joint_account_name
  	    FROM
  	    	invite_request
@@ -37,27 +37,18 @@
  	 	<select id="getInviteRequest" parameterType="String" resultMap="inviteRequestMap">
  	    SELECT
  	    	invite_id,
- 	    	inviter_email_id,
- 	    	invitee_email_id,
+ 	    	inviter_user_id,
+ 	    	invitee_user_id,
  	    	joint_account_name
  	    FROM
  	    	invite_request
  	    WHERE
- 	    	inviter_email_id = #{value}
+ 	    	inviter_user_id = #{value}
  	    OR
- 	    	invitee_email_id = #{value};
+ 	    	invitee_user_id = #{value};
  	</select>
  		     	
- 	<!-- ************** UPDATE ************** -->
- 	<update id="inviteAccepted" parameterType="InviteRequest">
-		UPDATE 
-			invite_request
-		SET 
-			invite_accepted = TRUE
-		WHERE
-			invite_id = #{inviteRequestId}
- 	</update>
- 	
+
  	<delete id="inviteDeleted" parameterType="InviteRequest">
 		DELETE 
 		FROM 

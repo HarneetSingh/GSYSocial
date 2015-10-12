@@ -12,7 +12,9 @@ import javax.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.motionapps.GSYSocial.dao.JointAccountDao;
 import com.motionapps.GSYSocial.dao.PostDao;
 import com.motionapps.GSYSocial.dao.vo.PostArrayVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
@@ -23,6 +25,9 @@ public class PostController {
 	
 	@Autowired
 	private PostDao postDao;
+	
+	@Autowired
+	private JointAccountDao jointAccountDao;
 
 	public void setPostDao(PostDao postDao) {
 		this.postDao = postDao;
@@ -35,6 +40,7 @@ public class PostController {
 	{
 		postVO.setPostId(UUID.randomUUID().toString());
 		Long status=postDao.createPost(postVO);
+		jointAccountDao.incrementPostCount(postVO.getJointAccountId());
 		if(status==1)
 			return Response.ok().build();
 		else
@@ -56,14 +62,16 @@ public class PostController {
 	
 	@GET
 	@Path("/delete")
+	@Transactional
 	public Response deletePost(@QueryParam("postId")String postId) {
 		
+		PostVO postVO = postDao.getPostById(postId);
 		Long status = postDao.deletePost(postId);
+		jointAccountDao.decrementPostCount(postVO.getJointAccountId());
 		if(status==1)
 			return Response.ok().build();
 		else
-			return Response.status(400).build();
-		
+			return Response.status(400).build();	
 	}
 	
 	
@@ -77,9 +85,9 @@ public class PostController {
 	
 	@GET
 	@Path("/getPostForUser")
-	public Response getPostForUser(@QueryParam("emailId")String emailId) {
+	public Response getPostForUser(@QueryParam("userId")String userId) {
 		
-		return Response.status(200).entity(new PostArrayVO(postDao.getPostForUser(emailId))).build();
+		return Response.status(200).entity(new PostArrayVO(postDao.getPostForUser(userId))).build();
 		
 	}
 	

@@ -14,7 +14,7 @@ public class FollowerVO implements Serializable{
 	private static final long serialVersionUID = 4345715611490162866L;
 	
 	private String followId;
-	private String emailId;
+	private String userId;
 	private String jointAccountId;
 	
 	
@@ -24,11 +24,12 @@ public class FollowerVO implements Serializable{
 	public void setFollowId(String followId) {
 		this.followId = followId;
 	}
-	public String getEmailId() {
-		return emailId;
+
+	public String getUserId() {
+		return userId;
 	}
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getJointAccountId() {
 		return jointAccountId;
@@ -38,12 +39,13 @@ public class FollowerVO implements Serializable{
 	}
 	public FollowerVO()
 	{}
-	public FollowerVO(String followId, String emailId, String jointAccountId) {
+	public FollowerVO(String followId, String userId, String jointAccountId) {
 		super();
 		this.followId = followId;
-		this.emailId = emailId;
+		this.userId = userId;
 		this.jointAccountId = jointAccountId;
 	}
+
 	
 	
 

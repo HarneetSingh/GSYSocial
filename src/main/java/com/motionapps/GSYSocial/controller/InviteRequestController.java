@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.motionapps.GSYSocial.dao.InviteRequestDao;
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
+import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 @Controller
 @Path("/invite")
@@ -26,8 +27,14 @@ public class InviteRequestController {
 	public InviteRequestDao inviteRequestDao;
 	@Autowired
 	public JointAccountController jointAccountController;
+	@Autowired
+	public UserController userController;
 	
 	
+	public void setUserController(UserController userController) {
+		this.userController = userController;
+	}
+
 	public void setInviteRequestDao(InviteRequestDao inviteRequestDao) {
 		this.inviteRequestDao = inviteRequestDao;
 	}
@@ -46,10 +53,20 @@ public class InviteRequestController {
 		String inviteRequestId=UUID.randomUUID().toString();
 		inviteRequestVO.setInviteRequestId(inviteRequestId);
 		Long result=inviteRequestDao.inviteUser(inviteRequestVO);
-		InviteRequestVO tempInviteRequestVO=new InviteRequestVO();
-		tempInviteRequestVO.setInviteRequestId(inviteRequestId);
+//		InviteRequestVO tempInviteRequestVO=new InviteRequestVO();
+//		tempInviteRequestVO.setInviteRequestId(inviteRequestId);
+		
+		
+		//Setting the invite_request_pending flag in user table to true
+		UserVO userVO=new UserVO();
+		userVO.setUserId(inviteRequestVO.getInviteeUserId());
+		userVO.setInviteRequestPending(Boolean.TRUE);
+		userController.updateUserDetails(userVO);
+		userVO.setUserId(inviteRequestVO.getInviterUserId());
+		userController.updateUserDetails(userVO);
+
 		if(result==1)
-			return Response.status(200).entity(tempInviteRequestVO).type(MediaType.APPLICATION_JSON).build();
+			return Response.status(200).entity(inviteRequestVO).type(MediaType.APPLICATION_JSON).build();
 		else
 			return Response.status(400).build();
 	}
@@ -60,10 +77,25 @@ public class InviteRequestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response inviteAccepted(InviteRequestVO inviteRequestVO)
 	{
-		inviteRequestVO.setInviteAccepted(Boolean.TRUE);
-		Long result=inviteRequestDao.inviteAccepted(inviteRequestVO);
+//		inviteRequestVO.setInviteAccepted(Boolean.TRUE);
+		
+		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
+		UserVO userVO=new UserVO();
+		userVO.setUserId(inviteRequestVO.getInviteeUserId());
+		userVO.setInviteRequestPending(Boolean.FALSE);
+		userController.updateUserDetails(userVO);
+		userVO.setUserId(inviteRequestVO.getInviterUserId());
+		userController.updateUserDetails(userVO);
+		
+		
+		Long result=inviteRequestDao.inviteDeleted(inviteRequestVO);		
+
+		
+		
 		if(result==1){
-			inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
+			//Setting the invite_request_pending flag in user table to false
+
+			//inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
 			result=jointAccountController.createJointAccount(inviteRequestVO);
 			if(result==1)
 				return Response.ok().build();
@@ -85,6 +117,18 @@ public class InviteRequestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response inviteRejected(InviteRequestVO inviteRequestVO)
 	{
+		
+		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
+
+		//Setting the invite_request_pending flag in user table to false
+		UserVO userVO=new UserVO();
+		userVO.setUserId(inviteRequestVO.getInviteeUserId());
+		userVO.setInviteRequestPending(Boolean.FALSE);
+		userController.updateUserDetails(userVO);
+		userVO.setUserId(inviteRequestVO.getInviterUserId());
+		userController.updateUserDetails(userVO);
+		
+		
 		Long result=inviteRequestDao.inviteDeleted(inviteRequestVO);
 		if(result==1){
 			return Response.ok().build();
@@ -98,9 +142,9 @@ public class InviteRequestController {
 	
 	@GET
 	@Path("/pending")
-	public Response pendingRequests(@QueryParam("emailId") String emailId)
+	public Response pendingRequests(@QueryParam("userId") String userId)
 	{
-		InviteRequestVO inviteRequestVO=inviteRequestDao.getInviteRequest(emailId);
+		InviteRequestVO inviteRequestVO=inviteRequestDao.getInviteRequest(userId);
 		return Response.status(200).entity(inviteRequestVO).type(MediaType.APPLICATION_JSON).build();
 	}
 	

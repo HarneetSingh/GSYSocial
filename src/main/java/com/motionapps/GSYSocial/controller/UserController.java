@@ -116,10 +116,10 @@ public class UserController {
 		public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
 		{
 			UserVO userVO=new UserVO();
-			userVO.setEmailId(jointAccountVO.getFirstEmailId());
+			userVO.setUserId(jointAccountVO.getFirstUserId());
 			userVO.setJointAccountId(jointAccountVO.getJointAccountId());
 			updateUserDetails(userVO);
-			userVO.setEmailId(jointAccountVO.getSecondEmailId());
+			userVO.setUserId(jointAccountVO.getSecondUserId());
 			updateUserDetails(userVO);
 			return (long)1;
 		}
@@ -178,11 +178,11 @@ public class UserController {
 			{	
 				if(password.equals(user.getPassword()))
 				{
-				String sessionId=UUID.randomUUID().toString();
-				user.setSessionId(sessionId);
-				userDao.updateSessionId(user);
+				//String sessionId=UUID.randomUUID().toString();
+				//user.setSessionId(sessionId);
+				//userDao.updateSessionId(user);
 				user.setPassword(null);
-				user=userDao.getUser(emailId);
+				user=userDao.getUserByEmailId(emailId);
 				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
 				}
 				else

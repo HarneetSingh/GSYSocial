@@ -14,8 +14,10 @@ public interface PostDao {
 	
 	public List<PostVO> getPostByJointAccount(String jointAccountId);
 	
-	public List<PostVO> getPostForUser(String emailId);
+	public List<PostVO> getPostForUser(String userId);
 	
 	public List<PostVO> getAllPosts();
+	
+	public PostVO getPostById(String postId);
 
 }

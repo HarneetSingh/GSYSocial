@@ -56,7 +56,7 @@ public class FollowerController {
 		followerVO.setFollowId(UUID.randomUUID().toString());
 		followerDao.followAccount(followerVO);
 		jointAccountDao.incrementFollowCount(followerVO.getJointAccountId());
-		userController.incrementFollowCount(followerVO.getEmailId());
+		userController.incrementFollowCount(followerVO.getUserId());
 		return Response.ok().build();
 		
 	}
@@ -70,7 +70,7 @@ public class FollowerController {
 		followerVO.setFollowId(UUID.randomUUID().toString());
 		followerDao.unfollowAccount(followerVO);
 		jointAccountDao.decrementFollowCount(followerVO.getJointAccountId());
-		userController.decrementFollowCount(followerVO.getEmailId());
+		userController.decrementFollowCount(followerVO.getUserId());
 		return Response.ok().build();
 		
 	}
@@ -83,9 +83,9 @@ public class FollowerController {
 	}
 	@GET
 	@Path("/jointAccountsFollowedByUser")
-	public Response getJointAccountsFollowedByUser(@QueryParam("emailId") String emailId)
+	public Response getJointAccountsFollowedByUser(@QueryParam("userId") String userId)
 	{
-		return Response.ok().entity(new JointAccountSearchVO(followerDao.getJointAccountsFollowedByUser(emailId))).type(MediaType.APPLICATION_JSON).build();
+		return Response.ok().entity(new JointAccountSearchVO(followerDao.getJointAccountsFollowedByUser(userId))).type(MediaType.APPLICATION_JSON).build();
 	}
 	
 

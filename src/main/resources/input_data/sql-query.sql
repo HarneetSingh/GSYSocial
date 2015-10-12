@@ -17,6 +17,13 @@ SELECT * FROM gsysocial_db.user
 alter table gsysocial_db.user add PRIMARY KEY(user_id)
 
 
+alter table gsysocial_db.user add invite_request_pending BOOLEAN DEFAULT FALSE;
+
+
+alter table gsysocial_db.joint_account add column post_count int(11) NOT NULL DEFAULT '0'
+
+
+
 
 CREATE TABLE gsysocial_db.upload (
 id INT NOT NULL,

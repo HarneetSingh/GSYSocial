@@ -14,6 +14,6 @@ public interface InviteRequestDao {
 	
 	public InviteRequestVO getInviteRequestDetails(String inviteRequestId);
 	
-	public InviteRequestVO getInviteRequest(String emailId);
+	public InviteRequestVO getInviteRequest(String userId);
 
 }

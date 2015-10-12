@@ -17,6 +17,7 @@
         <result column="joint_account_id" property="jointAccountId" />
         <result column="gcm_device_id" property="gcmDeviceId" />
         <result column="follow_count" property="followCount" />
+        <result column="invite_request_pending" property="inviteRequestPending"/>
 	</resultMap>   
  
     
@@ -51,7 +52,8 @@
         	session_id,
         	joint_account_id,
         	gcm_device_id,
-        	follow_count
+        	follow_count,
+        	invite_request_pending
         FROM
             user; 	            	
     </select>
@@ -68,11 +70,32 @@
         	session_id,
         	joint_account_id,
         	gcm_device_id,
-        	follow_count
+        	follow_count,
+        	invite_request_pending
         FROM
             user
         WHERE
         	user_id=#{value};          	
+    </select>
+    <select id="getUserByEmailId" resultMap="userMap" parameterType="String">
+        SELECT
+            user_id,
+        	oauth_uid,
+        	oauth_provider,
+        	email_id,
+        	user_name,
+        	date_of_birth,
+        	mobile_number,
+        	profile_pic,
+        	session_id,
+        	joint_account_id,
+        	gcm_device_id,
+        	follow_count,
+        	invite_request_pending
+        FROM
+            user
+        WHERE
+        	email_id=#{value};          	
     </select>
     <select id="getUserByOauthUid" resultMap="userMap" parameterType="String">
         SELECT
@@ -87,7 +110,8 @@
         	session_id,
         	joint_account_id,
         	gcm_device_id,
-        	follow_count
+        	follow_count,
+        	invite_request_pending
         FROM
             user
         WHERE
@@ -121,7 +145,7 @@
         FROM
             user
         WHERE      
-        	user_id=#{value}; 	            	
+        	email_id=#{value}; 	            	
     </select>
     
     <select id="checkIfEmailIdAlreadyExists" resultType="Int" parameterType="String">
@@ -185,6 +209,9 @@
 			user
 		SET 
 			user_id = #{userId}
+		    <if test="emailId != null">
+				,email_id = #{emailId}
+			</if>
 			<if test="userName != null">
 				,user_name = #{userName}
 			</if>
@@ -202,6 +229,9 @@
 			</if>	
 			<if test="gcmDeviceId != null">
 				,gcm_device_id = #{gcmDeviceId}
+			</if>	
+			<if test="inviteRequestPending != null">
+				,invite_request_pending = #{inviteRequestPending}
 			</if>	
 		WHERE
 			user_id = #{userId}

@@ -14,6 +14,8 @@ public interface UserDao {
 	
 	public UserVO getUser(String userId);
 	
+	public UserVO getUserByEmailId(String emailId);
+	
 	public UserVO getUserByOauthUid(String oauthUid);
 
 	public List<UserVO> searchUser(String keyword);
