@@ -27,8 +27,8 @@ public class MediaStreamer implements StreamingOutput{
 	                length -= read;
 	            }
 	        } finally {
-	        	outputStream.close();
 	            raf.close();
+	        	outputStream.close();
 	        }
 	    }
 

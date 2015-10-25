@@ -43,7 +43,7 @@ public class JointAccountController {
 		this.userController = userController;
 	}
 	
-	public Long createJointAccount(InviteRequestVO inviteRequestVO)
+	public JointAccountVO createJointAccount(InviteRequestVO inviteRequestVO)
 	{
 		JointAccountVO jointAccountVO=new JointAccountVO();
 		jointAccountVO.setJointAccountId(UUID.randomUUID().toString());
@@ -57,7 +57,8 @@ public class JointAccountController {
 		jointAccountVO.setSecondUserName(secondUser.getUserName());
 		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
 		jointAccountDao.createJointAccount(jointAccountVO);
-		return userController.updateJointAccountDetails(jointAccountVO);
+		userController.updateJointAccountDetails(jointAccountVO);
+		return getJointAccount(jointAccountVO.getJointAccountId());
 	}
 	
 	@POST

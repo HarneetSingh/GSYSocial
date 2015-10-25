@@ -12,7 +12,9 @@
         <result column="joint_account_name" property="jointAccountName"/>
         <result column="joint_account_story" property="jointAccountStory" />
         <result column="follower_count" property="followerCount"/>
+        <result column="post_count" property="postCount"/>
         <result column="user_following" property="userFollowing"/>
+        <result column="profile_pic" property="profilePic"/>
 	</resultMap>   
     
  	<!-- ************** CREATE ************** -->
@@ -40,7 +42,9 @@
         	second_user_name,
         	joint_account_name,
         	joint_account_story,
-        	follower_count
+        	follower_count,
+        	post_count,
+        	profile_pic
         FROM
             joint_account; 	            	
     </select>
@@ -53,7 +57,9 @@
         	second_user_name,
         	joint_account_name,
         	joint_account_story,
-        	follower_count
+        	follower_count,
+        	post_count,
+        	profile_pic
         FROM
             joint_account
         WHERE
@@ -69,6 +75,8 @@
         	joint_account_name,
         	joint_account_story,
         	follower_count,
+        	post_count,
+        	profile_pic,
             EXISTS(SELECT * FROM follower where joint_account_id=#{jointAccountId} AND user_id=#{userId}) AS user_following 
         FROM
             joint_account
@@ -84,7 +92,9 @@
         	second_user_name,
         	joint_account_name,
         	joint_account_story,
-        	follower_count
+        	follower_count,
+        	post_count,
+        	profile_pic
         FROM
             joint_account
         WHERE
@@ -108,6 +118,9 @@
 			</if>
 			<if test="jointAccountStory != null">
 				,joint_account_story = #{jointAccountStory}
+			</if>
+		   <if test="profilePic != null">
+				,profile_pic = #{profilePic}
 			</if>
 		WHERE
 			joint_account_id = #{jointAccountId}

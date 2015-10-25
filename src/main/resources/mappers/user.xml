@@ -119,11 +119,14 @@
     </select>
     <select id="searchUser" resultMap="userMap" parameterType="String">
         SELECT
+        	user_id,
         	email_id,
         	user_name,
         	date_of_birth,
         	mobile_number,
-        	profile_pic
+        	profile_pic,
+        	joint_account_id,
+        	invite_request_pending
         FROM
             user
         WHERE

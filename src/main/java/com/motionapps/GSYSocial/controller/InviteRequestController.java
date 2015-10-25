@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.motionapps.GSYSocial.dao.InviteRequestDao;
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 @Controller
@@ -29,6 +30,8 @@ public class InviteRequestController {
 	public JointAccountController jointAccountController;
 	@Autowired
 	public UserController userController;
+	
+	private JointAccountVO jointAccountVO;
 	
 	
 	public void setUserController(UserController userController) {
@@ -96,11 +99,9 @@ public class InviteRequestController {
 			//Setting the invite_request_pending flag in user table to false
 
 			//inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
-			result=jointAccountController.createJointAccount(inviteRequestVO);
-			if(result==1)
-				return Response.ok().build();
-			else
-				return Response.status(400).build();
+			jointAccountVO=jointAccountController.createJointAccount(inviteRequestVO);
+			return Response.ok().entity(jointAccountVO).type(MediaType.APPLICATION_JSON).build();
+			
 		}else
 			{
 			ErrorVO errorVO=new ErrorVO("No Pending Request Found");

@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement()
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class JointAccountVO implements Serializable{
 	
 	/**
@@ -38,6 +37,17 @@ public class JointAccountVO implements Serializable{
 	private String postCount;
 	
 	private Boolean userFollowing;
+	
+	private String profilePic;
+
+	
+	public String getProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
+	}
 
 	public Boolean getUserFollowing() {
 		return userFollowing;
@@ -126,7 +136,8 @@ public class JointAccountVO implements Serializable{
 	public JointAccountVO(String jointAccountId, String firstUserId,
 			String firstUserName, String secondUserName, String secondUserId,
 			String jointAccountName, String jointAccountStory,
-			String followerCount, String postCount, Boolean userFollowing) {
+			String followerCount, String postCount, Boolean userFollowing,
+			String profilePic) {
 		super();
 		this.jointAccountId = jointAccountId;
 		this.firstUserId = firstUserId;
@@ -138,6 +149,7 @@ public class JointAccountVO implements Serializable{
 		this.followerCount = followerCount;
 		this.postCount = postCount;
 		this.userFollowing = userFollowing;
+		this.profilePic = profilePic;
 	}
 
 
