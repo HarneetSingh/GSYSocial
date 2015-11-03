@@ -230,11 +230,11 @@
 			<if test="jointAccountId != null">
 				,joint_account_id = #{jointAccountId}
 			</if>	
-			<if test="gcmDeviceId != null">
-				,gcm_device_id = #{gcmDeviceId}
-			</if>	
 			<if test="inviteRequestPending != null">
 				,invite_request_pending = #{inviteRequestPending}
+			</if>	
+			<if test="gcmDeviceId != null">
+				,gcm_device_id = #{gcmDeviceId}
 			</if>	
 		WHERE
 			user_id = #{userId}

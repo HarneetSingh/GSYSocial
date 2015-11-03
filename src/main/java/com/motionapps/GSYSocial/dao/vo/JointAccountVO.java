@@ -32,15 +32,17 @@ public class JointAccountVO implements Serializable{
 	
 	private String jointAccountStory;
 	
-	private String followerCount;
+	private int followerCount;
 	
-	private String postCount;
+	private int postCount;
 	
 	private Boolean userFollowing;
 	
 	private String profilePic;
 
 	
+
+
 	public String getProfilePic() {
 		return profilePic;
 	}
@@ -57,19 +59,19 @@ public class JointAccountVO implements Serializable{
 		this.userFollowing = userFollowing;
 	}
 
-	public String getPostCount() {
+	public int getPostCount() {
 		return postCount;
 	}
 
-	public void setPostCount(String postCount) {
+	public void setPostCount(int postCount) {
 		this.postCount = postCount;
 	}
 
-	public String getFollowerCount() {
+	public int getFollowerCount() {
 		return followerCount;
 	}
 
-	public void setFollowerCount(String followerCount) {
+	public void setFollowerCount(int followerCount) {
 		this.followerCount = followerCount;
 	}
 
@@ -130,13 +132,12 @@ public class JointAccountVO implements Serializable{
 	}
 	
 	public JointAccountVO() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public JointAccountVO(String jointAccountId, String firstUserId,
 			String firstUserName, String secondUserName, String secondUserId,
 			String jointAccountName, String jointAccountStory,
-			String followerCount, String postCount, Boolean userFollowing,
+			int followerCount, int postCount, Boolean userFollowing,
 			String profilePic) {
 		super();
 		this.jointAccountId = jointAccountId;
@@ -151,8 +152,6 @@ public class JointAccountVO implements Serializable{
 		this.userFollowing = userFollowing;
 		this.profilePic = profilePic;
 	}
-
-
 	
 
  

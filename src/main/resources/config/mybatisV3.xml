@@ -12,6 +12,8 @@
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.JointAccountVO" alias="JointAccount"/>  
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.FollowerVO" alias="Follower"/>    
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.PostVO" alias="Post"/>     
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.CommentVO" alias="Comment"/>     
+        
     </typeAliases>
     <mappers>
         <mapper resource="mappers/user.xml" />
@@ -20,5 +22,6 @@
         <mapper resource="mappers/inviterequest.xml" />
         <mapper resource="mappers/follower.xml" />
         <mapper resource="mappers/post.xml" />
+        <mapper resource="mappers/comment.xml" />
     </mappers>
 </configuration>

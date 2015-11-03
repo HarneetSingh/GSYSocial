@@ -14,7 +14,10 @@
  		<result column="created_time" property="createdTime" />
  		<result column="last_updated_time" property="lastUpdatedTime" />
  		<result column="user_name" property="userName"/>
-        <result column="profile_pic" property="profilePicUrl" /> 		
+        <result column="profile_pic" property="profilePicUrl" />
+        <result column="thumb_nail_url" property="thumbNameUrl" /> 		
+        <result column="comment_count" property="commentCount" /> 		
+        
 	</resultMap>   
  
     
@@ -30,6 +33,7 @@
 			post_text = #{postText},
 			user_name = #{userName},
 			profile_pic = #{profilePicUrl},
+			thumb_nail_url= #{thumbNameUrl},
 			last_updated_time=now(),
 			created_time=now();
  	</insert>   
@@ -41,9 +45,11 @@
 			joint_account_id,
 			file_url,
 			file_type,
+			thumb_nail_url,
 			post_text,
 			user_name,
 			profile_pic,
+			comment_count,
 			total_rating,
 			no_of_ratings,
 			created_time,
@@ -62,9 +68,11 @@
 			joint_account_id,
 			file_url,
 			file_type,
+			thumb_nail_url,
 			post_text,
 			user_name,
 			profile_pic,
+			comment_count,
 			total_rating,
 			no_of_ratings,
 			created_time,
@@ -81,9 +89,11 @@
 			post.joint_account_id,
 			post.file_url,
 			post.file_type,
+			post.thumb_nail_url,
 			post.post_text,
 			post.user_name,
 			post.profile_pic,
+			post.comment_count,
 			post.total_rating,
 			post.no_of_ratings,
 			post.created_time,
@@ -106,9 +116,11 @@
 			joint_account_id,
 			file_url,
 			file_type,
+			thumb_nail_url,	
 			post_text,
 			user_name,
 			profile_pic,
+			comment_count,
 			total_rating,
 			no_of_ratings,
 			created_time,
@@ -140,6 +152,10 @@
 				,profile_pic = #{profilePicUrl}
 				,last_updated_time=now()
 			</if>
+			<if test="thumbNameUrl != null">
+				,thumb_nail_url = #{thumbNameUrl}
+				,last_updated_time=now()
+			</if>
 		WHERE
 			post_id = #{postId}
  	</update>  
@@ -156,6 +172,24 @@
 			</if>
 		WHERE
 			post_id = #{postId}
+ 	</update>
+ 	
+ 	<update id="incrementCommentCount" parameterType="String">
+ 	    UPDATE
+ 	    	post
+ 	    SET
+ 	    	comment_count = comment_count + 1
+ 	    WHERE
+ 	    	post_id=#{value}	
+ 	</update>
+ 	
+ 	<update id="decrementCommentCount" parameterType="String">
+ 	    UPDATE
+ 	    	post
+ 	    SET
+ 	    	comment_count = comment_count - 1
+ 	    WHERE
+ 	    	post_id=#{value}	
  	</update>
  	
  		<!-- ************** DELETE ************** -->

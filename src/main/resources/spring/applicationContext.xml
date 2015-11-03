@@ -57,6 +57,12 @@
 	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.PostDao" />
 	</bean>
 	
+		
+	<bean id="commentDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
+	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.CommentDao" />
+	</bean>
+	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="configLocation" value="classpath:config/mybatisV3.xml"/>
@@ -76,6 +82,12 @@
     	<property name="postDao" ref="postDao"/>
     </bean>
     
+      <bean id="commentController" class="com.motionapps.GSYSocial.controller.CommentController" >
+    	<property name="postDao" ref="postDao"/>
+    	<property name="commentDao" ref="commentDao"/>
+    	
+    </bean>
+    
     <bean id="fileController" class="com.motionapps.GSYSocial.controller.FileController" >
     	<property name="fileDao" ref="fileDao"/>
     </bean>
@@ -93,6 +105,9 @@
     	<property name="followerDao" ref="followerDao"/>
     	<property name="jointAccountDao" ref="jointAccountDao"/>
     	<property name="userController" ref="userController"/>	
+    </bean>
+    
+   	<bean id="notificationService" class="com.motionapps.GSYSocial.services.NotificationService" >
     </bean>
    
 <!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

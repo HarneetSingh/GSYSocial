@@ -4,6 +4,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.web.filter.RequestContextFilter;
 
+import com.motionapps.GSYSocial.controller.CommentController;
 import com.motionapps.GSYSocial.controller.FileController;
 import com.motionapps.GSYSocial.controller.FollowerController;
 import com.motionapps.GSYSocial.controller.InviteRequestController;
@@ -23,6 +24,8 @@ public class MyMainApplication extends ResourceConfig{
 		register(JointAccountController.class);
 		register(FollowerController.class);
 		register(PostController.class);
+		register(CommentController.class);
+		register(NotificationService.class);
 		register(JacksonFeature.class);		
 	}
 

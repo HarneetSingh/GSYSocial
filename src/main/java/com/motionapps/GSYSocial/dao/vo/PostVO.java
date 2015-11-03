@@ -39,7 +39,20 @@ public class PostVO implements Serializable{
 	
 	private String lastUpdatedTime;
 	
+	private String thumbNameUrl;
+	
+	private String commentCount;
+	
+	
 
+
+	public String getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(String commentCount) {
+		this.commentCount = commentCount;
+	}
 
 	public String getCreatedTime() {
 		return createdTime;
@@ -142,12 +155,25 @@ public class PostVO implements Serializable{
 	}
 
 
+	
+
+
+	public String getThumbNameUrl() {
+		return thumbNameUrl;
+	}
+
+	public void setThumbNameUrl(String thumbNameUrl) {
+		this.thumbNameUrl = thumbNameUrl;
+	}
+	
+	
 	public PostVO(){}
 
 	public PostVO(String postId, String jointAccountId, String fileUrl,
 			String fileType, String postText, int totalRating, int noOfRatings,
 			int newRating, String userName, String profilePicUrl,
-			String createdTime, String lastUpdatedTime) {
+			String createdTime, String lastUpdatedTime, String thumbNameUrl,
+			String commentCount) {
 		super();
 		this.postId = postId;
 		this.jointAccountId = jointAccountId;
@@ -161,7 +187,13 @@ public class PostVO implements Serializable{
 		this.profilePicUrl = profilePicUrl;
 		this.createdTime = createdTime;
 		this.lastUpdatedTime = lastUpdatedTime;
+		this.thumbNameUrl = thumbNameUrl;
+		this.commentCount = commentCount;
 	}
+
+
+
+
 
 
 }

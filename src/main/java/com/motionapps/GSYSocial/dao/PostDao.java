@@ -19,5 +19,9 @@ public interface PostDao {
 	public List<PostVO> getAllPosts();
 	
 	public PostVO getPostById(String postId);
+	
+	public Long incrementCommentCount(String postId);
+	
+	public Long decrementCommentCount(String postId);
 
 }

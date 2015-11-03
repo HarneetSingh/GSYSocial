@@ -91,8 +91,17 @@ public class UserController {
 			int temp=userDao.checkIfOauthUidAlreadyExists(user.getOauthUid());
 			if(temp>=1)
 			{
-
+				String gcmDeviceId=user.getGcmDeviceId();
 				UserVO reponse = userDao.getUserByOauthUid(user.getOauthUid());
+				//Updating the gcm device id
+				if(gcmDeviceId!=null)
+				{
+					UserVO tempUser=new UserVO();
+					tempUser.setUserId(reponse.getUserId());
+					tempUser.setGcmDeviceId(gcmDeviceId);
+					userDao.updateUser(tempUser);
+					reponse.setGcmDeviceId(gcmDeviceId);
+				}
 				return Response.status(200).entity(reponse).type(MediaType.APPLICATION_JSON).build();
 			}
 			
@@ -174,6 +183,7 @@ public class UserController {
 			
 			String emailId=user.getEmailId();
 			String password =userDao.getPassword(emailId);
+			String gcmDeviceId=user.getGcmDeviceId();
 			if(password!=null)
 			{	
 				if(password.equals(user.getPassword()))
@@ -181,8 +191,18 @@ public class UserController {
 				//String sessionId=UUID.randomUUID().toString();
 				//user.setSessionId(sessionId);
 				//userDao.updateSessionId(user);
-				user.setPassword(null);
+				//user.setPassword(null);
 				user=userDao.getUserByEmailId(emailId);
+				//Updating the gcm device id
+				if(gcmDeviceId!=null)
+				{
+				UserVO tempUser=new UserVO();
+				tempUser.setUserId(user.getUserId());
+				tempUser.setGcmDeviceId(gcmDeviceId);
+				userDao.updateUser(tempUser);
+				user.setGcmDeviceId(gcmDeviceId);
+				}
+				
 				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
 				}
 				else

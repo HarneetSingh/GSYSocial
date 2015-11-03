@@ -144,7 +144,7 @@
  	    	joint_account_id=#{value}	
  	</update>
  	
- 		<update id="incrementPostCount" parameterType="String">
+ 	<update id="incrementPostCount" parameterType="String">
  	    UPDATE
  	    	joint_account
  	    SET

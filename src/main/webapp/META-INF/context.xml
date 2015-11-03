@@ -18,7 +18,7 @@
 	   username="admin"
 	   password="password"
 	   driverClassName="com.mysql.jdbc.Driver"
-	   url="jdbc:mysql://gfysocial.c5l4tznddpos.us-west-2.rds.amazonaws.com:3306/gsysocial_db?allowMultiQueries=true"
+	   url="jdbc:mysql://intactyoudb.cglxbiwerkka.us-west-2.rds.amazonaws.com:3306/intactyou?allowMultiQueries=true"
    />     
 <!--  <Resource
 	   name="jdbc/gsysocial_db"
