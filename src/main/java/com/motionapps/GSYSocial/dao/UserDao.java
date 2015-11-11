@@ -37,5 +37,7 @@ public interface UserDao {
 	public Long incrementFollowCount(String userId);
 	
 	public Long decrementFollowCount(String userId);
+	
+	public Long clearGcmDeviceId(String gcmDeviceId);
 
 }

@@ -91,6 +91,18 @@
         ORDER BY
         	joint_account.joint_account_name;		
     </select> 
+    
+	
+	<select id="getFollowersVOByJointAccount" parameterType="String" resultMap="followerMap">
+        SELECT
+			follow_id,
+			user_id,
+			joint_account_id
+        FROM
+            follower
+        WHERE
+        	joint_account_id=#{value};
+    </select> 
 
     	<!-- ************** DELETE ************** -->
     <delete id="unfollowAccount" parameterType="Follower">

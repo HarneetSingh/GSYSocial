@@ -1,6 +1,6 @@
 package com.motionapps.GSYSocial.controller;
 
-import java.util.UUID;
+
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,33 +14,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.motionapps.GSYSocial.dao.JointAccountDao;
-import com.motionapps.GSYSocial.dao.PostDao;
-import com.motionapps.GSYSocial.dao.vo.PostArrayVO;
+
 import com.motionapps.GSYSocial.dao.vo.PostVO;
+import com.motionapps.GSYSocial.services.PostService;
 
 @Controller
 @Path("/post")
 public class PostController {
 	
-	@Autowired
-	private PostDao postDao;
 	
 	@Autowired
-	private JointAccountDao jointAccountDao;
+	private PostService postService;
+	
+	private Long status;
 
-	public void setPostDao(PostDao postDao) {
-		this.postDao = postDao;
-	}
+
 	
+	public void setPostService(PostService postService) {
+		this.postService = postService;
+	}
+
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPost(PostVO postVO)
 	{
-		postVO.setPostId(UUID.randomUUID().toString());
-		Long status=postDao.createPost(postVO);
-		jointAccountDao.incrementPostCount(postVO.getJointAccountId());
+		Long status=postService.createPost(postVO);
+
 		if(status==1)
 			return Response.ok().build();
 		else
@@ -52,7 +52,7 @@ public class PostController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updatePost(PostVO postVO)
 	{
-		Long status = postDao.updatePost(postVO);
+		Long status = postService.updatePost(postVO);
 		if(status==1)
 			return Response.ok().build();
 		else
@@ -65,9 +65,7 @@ public class PostController {
 	@Transactional
 	public Response deletePost(@QueryParam("postId")String postId) {
 		
-		PostVO postVO = postDao.getPostById(postId);
-		Long status = postDao.deletePost(postId);
-		jointAccountDao.decrementPostCount(postVO.getJointAccountId());
+		status=postService.deletePost(postId);
 		if(status==1)
 			return Response.ok().build();
 		else
@@ -79,7 +77,7 @@ public class PostController {
 	@Path("/getPostByJointAccount")
 	public Response getPostByJointAccount(@QueryParam("jointAccountId")String jointAccountId) {
 		
-		return Response.status(200).entity(new PostArrayVO(postDao.getPostByJointAccount(jointAccountId))).build();
+		return Response.status(200).entity(postService.getPostByJointAccount(jointAccountId)).build();
 		
 	}
 	
@@ -87,7 +85,7 @@ public class PostController {
 	@Path("/getPostForUser")
 	public Response getPostForUser(@QueryParam("userId")String userId) {
 		
-		return Response.status(200).entity(new PostArrayVO(postDao.getPostForUser(userId))).build();
+		return Response.status(200).entity(postService.getPostForUser(userId)).build();
 		
 	}
 	
@@ -95,7 +93,10 @@ public class PostController {
 	@Path("/getAllPosts")
 	public Response getAllPosts() {
 		
-		return Response.status(200).entity(new PostArrayVO(postDao.getAllPosts())).build();
+		return Response.status(200).entity(postService.getAllPosts()).build();
 		
 	}
+	
+	
+	
 }

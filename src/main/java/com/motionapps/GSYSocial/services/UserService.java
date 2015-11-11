@@ -1,22 +1,18 @@
 package com.motionapps.GSYSocial.services;
 
+
+
 import java.util.List;
 import java.util.UUID;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.motionapps.GSYSocial.dao.UserDao;
+import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
+import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 
@@ -25,9 +21,179 @@ public class UserService {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	private UserVO userVO;
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+	
+	
+	public UserVO normalregisteration(UserVO user) {
+		
+		if((user.getEmailId()==null)||(user.getEmailId().equals(""))||(user.getPassword().equals(""))||(user.getPassword()==null))
+			return userVO;
+		int temp=userDao.checkIfEmailIdAlreadyExists(user.getEmailId());
+		if(temp>=1)
+		{
+
+			return userVO;
+		}
+		
+		String userId=UUID.randomUUID().toString();
+		user.setSessionId(userId);
+		user.setUserId(userId);
+		
+		Long abc=userDao.createUser(user);
+		if(abc==1)
+		{
+			user.setPassword(null);
+			return user;
+		}
+		else
+		{
+			return userVO;
+		}	
+		
+	}	
+	
+	public UserVO oauthregisteration(UserVO user) {
+		
+		if((user.getOauthProvider()==null)||(user.getOauthProvider().equals(""))||(user.getOauthUid().equals(""))||(user.getOauthUid()==null))
+			return userVO;
+		int temp=userDao.checkIfOauthUidAlreadyExists(user.getOauthUid());
+		if(temp>=1)
+		{
+			String gcmDeviceId=user.getGcmDeviceId();
+			UserVO reponse = userDao.getUserByOauthUid(user.getOauthUid());
+			//Updating the gcm device id
+			if(gcmDeviceId!=null)
+			{
+				UserVO tempUser=new UserVO();
+				tempUser.setUserId(reponse.getUserId());
+				tempUser.setGcmDeviceId(gcmDeviceId);
+				userDao.updateUser(tempUser);
+				reponse.setGcmDeviceId(gcmDeviceId);
+			}
+			return reponse;
+		}
+		
+		String userId=UUID.randomUUID().toString();
+		user.setSessionId(userId);
+		user.setUserId(userId);
+		
+		Long abc=userDao.createUser(user);
+		if(abc==1)
+		{
+			user.setPassword(null);
+			return user;
+		}
+		else
+		{
+			return userVO;
+		}	
+		
+	}	
+	
+	public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
+	{
+		UserVO userVO=new UserVO();
+		userVO.setUserId(jointAccountVO.getFirstUserId());
+		userVO.setJointAccountId(jointAccountVO.getJointAccountId());
+		userDao.updateUser(userVO);
+		userVO.setUserId(jointAccountVO.getSecondUserId());
+		userDao.updateUser(userVO);
+		return (long)1;
+	}
+	
+	
+	public List<UserVO> getUsers() {
+		return userDao.getUsers();
+	}
+	
+	public UserSearchVO  searchUser(String keyword) {
+		return new UserSearchVO(userDao.searchUser("%"+keyword+"%"));
+	}
+	
+	public UserVO getUser(String userId) {
+		return userDao.getUser(userId);
+	}
+	
+	
+	public Long incrementFollowCount(String emailId)
+	{
+		userDao.incrementFollowCount(emailId);
+		return (long)1;
+	}
+	
+	public Long decrementFollowCount(String emailId)
+	{
+		userDao.decrementFollowCount(emailId);
+		return (long)1;
+	}
+	
+	public Long updateUserDetails(UserVO user) {
+		
+		return userDao.updateUser(user);
+
+		
+	}	
+	
+	public UserVO loginUser(UserVO user) {
+		String emailId=user.getEmailId();
+		String password =userDao.getPassword(emailId);
+		String gcmDeviceId=user.getGcmDeviceId();
+		if(password!=null)
+		{	
+			if(password.equals(user.getPassword()))
+			{
+			//String sessionId=UUID.randomUUID().toString();
+			//user.setSessionId(sessionId);
+			//userDao.updateSessionId(user);
+			//user.setPassword(null);
+			user=userDao.getUserByEmailId(emailId);
+			//Updating the gcm device id
+			if(gcmDeviceId!=null)
+			{
+			clearGcmDeviceId(gcmDeviceId);	
+			UserVO  tempUser =new UserVO();
+			tempUser.setUserId(user.getUserId());
+			tempUser.setGcmDeviceId(gcmDeviceId);
+			userDao.updateUser(tempUser);
+			user.setGcmDeviceId(gcmDeviceId);
+			}
+			
+			return user;
+			}
+			else
+			{
+				return userVO;
+			}	
+		}
+		else
+		{
+			return userVO;
+
+		}	
+	}
+	
+	public Long clearGcmDeviceId(String gcmDeviceId)
+	{
+		return userDao.clearGcmDeviceId(gcmDeviceId);
+	}
+	
+	public Long changePassword(ChangePasswordVO changePasswordVO)
+	{
+		if(changePasswordVO.getOldPassword().equals(userDao.getPassword(changePasswordVO.getUserId())))
+		{
+			userDao.updatePassword(changePasswordVO);
+			return 1L;
+		}
+		else{
+			//ErrorVO errorVO=new ErrorVO("Authentication Failed");
+			return 0L;
+		}
+
 	}
 	
 	

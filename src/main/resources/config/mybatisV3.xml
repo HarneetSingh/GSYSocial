@@ -13,6 +13,8 @@
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.FollowerVO" alias="Follower"/>    
         <typeAlias type="com.motionapps.GSYSocial.dao.vo.PostVO" alias="Post"/>     
 		<typeAlias type="com.motionapps.GSYSocial.dao.vo.CommentVO" alias="Comment"/>     
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.RatingVO" alias="Rating"/>     
+		
         
     </typeAliases>
     <mappers>
@@ -23,5 +25,6 @@
         <mapper resource="mappers/follower.xml" />
         <mapper resource="mappers/post.xml" />
         <mapper resource="mappers/comment.xml" />
+        <mapper resource="mappers/rating.xml" />
     </mappers>
 </configuration>

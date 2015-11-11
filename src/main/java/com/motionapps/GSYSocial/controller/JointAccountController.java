@@ -1,7 +1,6 @@
 package com.motionapps.GSYSocial.controller;
 
-import java.util.List;
-import java.util.UUID;
+
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,18 +11,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonValue;
-import org.codehaus.jackson.map.annotate.JsonRootName;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.motionapps.GSYSocial.dao.JointAccountDao;
-import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
-import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
+
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
-import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.services.JointAccountService;
+
 
 @Controller
 @Path("/account")
@@ -31,43 +26,29 @@ public class JointAccountController {
 	
 	
 	@Autowired
-	public JointAccountDao jointAccountDao;
-	@Autowired
-	private UserController userController;
+	public JointAccountService jointAccountService;
 
-	public void setJointAccountDao(JointAccountDao jointAccountDao) {
-		this.jointAccountDao = jointAccountDao;
-	}
+	private Long status;
+
+
+
 	
-	public void setUserController(UserController userController) {
-		this.userController = userController;
+	public void setJointAccountService(JointAccountService jointAccountService) {
+		this.jointAccountService = jointAccountService;
 	}
-	
-	public JointAccountVO createJointAccount(InviteRequestVO inviteRequestVO)
-	{
-		JointAccountVO jointAccountVO=new JointAccountVO();
-		jointAccountVO.setJointAccountId(UUID.randomUUID().toString());
-		System.out.println(inviteRequestVO.getInviterUserId());
-		jointAccountVO.setFirstUserId(inviteRequestVO.getInviterUserId());
-		UserVO firstUser=userController.getUser(inviteRequestVO.getInviterUserId());
-		System.out.println(firstUser.getUserName());
-		jointAccountVO.setFirstUserName(firstUser.getUserName());
-		jointAccountVO.setSecondUserId(inviteRequestVO.getInviteeUserId());
-		UserVO secondUser=userController.getUser(inviteRequestVO.getInviteeUserId());
-		jointAccountVO.setSecondUserName(secondUser.getUserName());
-		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
-		jointAccountDao.createJointAccount(jointAccountVO);
-		userController.updateJointAccountDetails(jointAccountVO);
-		return getJointAccount(jointAccountVO.getJointAccountId());
-	}
+
+
 	
 	@POST
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateJointAccountDetails(JointAccountVO jointAccountVO)
 	{
-		jointAccountDao.updateJointAccountDetails(jointAccountVO);
-		return Response.ok().build();
+		status=jointAccountService.updateJointAccountDetails(jointAccountVO);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
 	}
 	
 	/************************************ READ ************************************/
@@ -77,30 +58,40 @@ public class JointAccountController {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<JointAccountVO> getJointAccounts() {
-		return jointAccountDao.getJointAccounts();
+	public Response getJointAccounts() {
+		return Response.ok().entity(jointAccountService.getJointAccounts()).build();
 	}
 	
 	@GET
 	@Path("/details")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JointAccountVO getJointAccount(@QueryParam("jointAccountId")String jointAccountId) {
-		return jointAccountDao.getJointAccount(jointAccountId);
+	public Response getJointAccount(@QueryParam("jointAccountId")String jointAccountId) {
+		return Response.ok().entity(jointAccountService.getJointAccount(jointAccountId)).build();
 	}
 	
 	@GET
 	@Path("/detailsWithUserId")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JointAccountVO getJointAccount(@QueryParam("jointAccountId")String jointAccountId,@QueryParam("userId")String userId) {
-		return jointAccountDao.getJointAccountWithUserId(jointAccountId,userId);
+	public Response getJointAccount(@QueryParam("jointAccountId")String jointAccountId,@QueryParam("userId")String userId) {
+		return  Response.ok().entity(jointAccountService.getJointAccountWithUserId(jointAccountId,userId)).build();
 		
 	}
 	
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public JointAccountSearchVO searchJointAccounts(@QueryParam("keyword")String keyword) {
-		return new JointAccountSearchVO(jointAccountDao.searchJointAccounts("%"+keyword+"%"));
+	public Response searchJointAccounts(@QueryParam("keyword")String keyword) {
+		return  Response.ok().entity(jointAccountService.searchJointAccounts(keyword)).build();
 	}
-
+	
+	@GET
+	@Path("/delete")
+	public Response deleteJointAccount(@QueryParam("jointAccountId")String jointAccountId)
+	{
+		status=jointAccountService.deleteJointAccount(jointAccountId);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();		
+	}
 }

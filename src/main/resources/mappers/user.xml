@@ -239,6 +239,16 @@
 		WHERE
 			user_id = #{userId}
  	</update>  
+ 	<update id="clearGcmDeviceId" parameterType="String">
+		UPDATE 
+			user
+		SET 
+			gcm_device_id = null
+		WHERE
+			gcm_device_id = #{value}
+ 	</update>  
+ 	
+ 	
  	
 			
  	

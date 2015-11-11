@@ -5,7 +5,6 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.springframework.beans.factory.annotation.Required;
 
 
 
@@ -23,7 +22,6 @@ public class InviteRequestVO implements Serializable{
 	private String inviterUserId;
 	
 	private String inviteeUserId;
-	
 	
 	private String jointAccountName;
 

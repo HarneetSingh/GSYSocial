@@ -63,6 +63,11 @@
 	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.CommentDao" />
 	</bean>
 	
+	<bean id="ratingDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	   <property name="sqlSessionFactory" ref="sqlSessionFactory"/>    
+	   <property name="mapperInterface" value="com.motionapps.GSYSocial.dao.RatingDao" />
+	</bean>
+	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="configLocation" value="classpath:config/mybatisV3.xml"/>
@@ -72,39 +77,77 @@
 	    <property name="jndiName" value="java:/comp/env/jdbc/gsysocial_db" />
 	    <property name="resourceRef" value="true" />    
 	</bean> 
-
 	
-    <bean id="userController" class="com.motionapps.GSYSocial.controller.UserController" >
+	<bean id="userController" class="com.motionapps.GSYSocial.controller.UserController" >
+    	<property name="userService" ref="userService"/>
+    </bean>
+    
+	<bean id="userService" class="com.motionapps.GSYSocial.services.UserService" >
     	<property name="userDao" ref="userDao"/>
+    </bean>
+	 
+    <bean id="postService" class="com.motionapps.GSYSocial.services.PostService" >
+    	<property name="postDao" ref="postDao"/>
+    	<property name="jointAccountService" ref="jointAccountService"/>
+    	<property name="commentService" ref="commentService"/>
+    	<property name="ratingService" ref="ratingService"/>
     </bean>
     
     <bean id="postController" class="com.motionapps.GSYSocial.controller.PostController" >
-    	<property name="postDao" ref="postDao"/>
+    	<property name="postService" ref="postService"/>
     </bean>
     
-      <bean id="commentController" class="com.motionapps.GSYSocial.controller.CommentController" >
-    	<property name="postDao" ref="postDao"/>
-    	<property name="commentDao" ref="commentDao"/>
-    	
+     <bean id="commentController" class="com.motionapps.GSYSocial.controller.CommentController" >
+    	<property name="commentService" ref="commentService"/>
     </bean>
+    
+     <bean id="commentService" class="com.motionapps.GSYSocial.services.CommentService" >
+         <property name="commentDao" ref="commentDao"/>
+         <property name="postService" ref="postService"/>
+     </bean>
+     
+     <bean id="ratingController" class="com.motionapps.GSYSocial.controller.RatingController" >
+    	<property name="ratingService" ref="ratingService"/>
+    </bean>
+    
+     <bean id="ratingService" class="com.motionapps.GSYSocial.services.RatingService" >
+         <property name="ratingDao" ref="ratingDao"/>
+         <property name="postService" ref="postService"/>
+     </bean>
     
     <bean id="fileController" class="com.motionapps.GSYSocial.controller.FileController" >
     	<property name="fileDao" ref="fileDao"/>
     </bean>
     
+    <bean id="inviteRequestService" class="com.motionapps.GSYSocial.services.InviteRequestService" >
+         <property name="jointAccountService" ref="jointAccountService"/>
+         <property name="inviteRequestDao" ref="inviteRequestDao"/>
+         <property name="userService" ref="userService"/>
+     </bean>
+    
     <bean id="inviteRequestController" class="com.motionapps.GSYSocial.controller.InviteRequestController" >
-    	<property name="inviteRequestDao" ref="inviteRequestDao"/>
-    	<property name="userController" ref="userController"/>
+    	<property name="inviteRequestService" ref="inviteRequestService"/>    	
     </bean>
     
+	<bean id="jointAccountService" class="com.motionapps.GSYSocial.services.JointAccountService" >
+         <property name="jointAccountDao" ref="jointAccountDao"/>
+         <property name="postService" ref="postService"/>
+         <property name="followerService" ref="followerService"/>
+         <property name="userService" ref="userService"/>
+     </bean>
+	
     <bean id="jointAccountController" class="com.motionapps.GSYSocial.controller.JointAccountController" >
-    	<property name="jointAccountDao" ref="jointAccountDao"/>
-    	<property name="userController" ref="userController"/>
+    	<property name="jointAccountService" ref="jointAccountService"/>
     </bean>
-   	<bean id="followerController" class="com.motionapps.GSYSocial.controller.FollowerController" >
+    
+	<bean id="followerService" class="com.motionapps.GSYSocial.services.FollowerService" >
     	<property name="followerDao" ref="followerDao"/>
-    	<property name="jointAccountDao" ref="jointAccountDao"/>
-    	<property name="userController" ref="userController"/>	
+    	<property name="jointAccountService" ref="jointAccountService"/>
+    	<property name="userService" ref="userService"/>	
+     </bean>
+    
+   	<bean id="followerController" class="com.motionapps.GSYSocial.controller.FollowerController" >
+    	<property name="followerService" ref="followerService"/>
     </bean>
     
    	<bean id="notificationService" class="com.motionapps.GSYSocial.services.NotificationService" >

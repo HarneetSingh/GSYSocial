@@ -1,11 +1,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.motionapps.GSYSocial.dao.CommentDao">
+<mapper namespace="com.motionapps.GSYSocial.dao.RatingDao">
 
-    <resultMap id="commentMap" type="Comment" >
-        <id column="comment_id" property="commentId"  />
-      	<result column="comment_text" property="commentText" />
+    <resultMap id="ratingMap" type="Rating" >
+        <id column="rating_id" property="ratingId"  />
+      	<result column="rating_value" property="ratingValue" />
         <result column="post_id" property="postId" />
         <result column="user_name" property="userName" />
         <result column="profile_pic" property="profilePicUrl"/>
@@ -16,12 +16,12 @@
  
     
  	<!-- ************** CREATE ************** -->
- 	<insert id="addComment" parameterType="Comment" useGeneratedKeys="true">
+ 	<insert id="addRating" parameterType="Rating" useGeneratedKeys="true">
 		INSERT 
-			INTO comment
+			INTO rating
 		SET 
-			comment_id = #{commentId},
-			comment_text=#{commentText},
+			rating_id = #{ratingId},
+			rating_value=#{ratingValue},
 			post_id = #{postId},
 			user_name = #{userName},
 			profile_pic = #{profilePicUrl},
@@ -31,74 +31,74 @@
 	
     <!-- ************** READ ************** -->
 
-    <select id="getCommentById" parameterType="String" resultMap="commentMap">
+    <select id="getRatingById" parameterType="String" resultMap="ratingMap">
         SELECT
-			comment_id,
-			comment_text,
+			rating_id,
+			rating_value,
 			post_id,
 			user_name,
 			profile_pic,
 			created_time,
 			last_updated_time
         FROM
-            comment
+            rating
 		WHERE      
-        	comment_id=#{value}          	
+        	rating_id=#{value}          	
     </select>
     
-    <select id="getCommentsByPost" parameterType="String" resultMap="commentMap">
+    <select id="getRatingsByPost" parameterType="String" resultMap="ratingMap">
         SELECT
-			comment_id,
-			comment_text,
+			rating_id,
+			rating_value,
 			post_id,
 			user_name,
 			profile_pic,
 			created_time,
 			last_updated_time
         FROM
-            comment
+            rating
 		WHERE      
         	post_id=#{value}
         ORDER BY
         	created_time asc; 	            	
     </select>
     
-    <select id="getAllComments" parameterType="String" resultMap="commentMap">
+    <select id="getAllRatings" parameterType="String" resultMap="ratingMap">
         SELECT
-			comment_id,
-			comment_text,
+			rating_id,
+			rating_value,
 			post_id,
 			user_name,
 			profile_pic,
 			created_time,
 			last_updated_time
         FROM
-            comment; 	            	
+            rating; 	            	
     </select>
 	     	
  	<!-- ************** UPDATE ************** -->
  
- 	<update id="updateComment" parameterType="Post">
+ 	<update id="updateRating" parameterType="Post">
 		UPDATE 
-			comment
+			rating
 		SET 
-			comment_id = #{commentId}
-			<if test="commentText != null">
-				,comment_text = #{commentText}
+			rating_id = #{ratingId}
+			<if test="ratingValue != null">
+				,rating_value = #{ratingValue}
 				,last_updated_time=now()				
 			</if>
 		WHERE
-			comment_id = #{commentId}
+			rating_id = #{ratingId}
  	</update>  
 
  	
  		<!-- ************** DELETE ************** -->
  	
- 	    <delete id="deleteComment" parameterType="String">
-		DELETE FROM comment WHERE comment_id = #{value}
+ 	    <delete id="deleteRating" parameterType="String">
+		DELETE FROM rating WHERE rating_id = #{value}
 		</delete>
-		<delete id="deleteAllCommentsByPost" parameterType="String">
-		DELETE FROM comment WHERE post_id = #{value}
+		<delete id="deleteAllRatingsByPost" parameterType="String">
+		DELETE FROM rating WHERE post_id = #{value}
 		</delete>		
  	
 </mapper>

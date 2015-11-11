@@ -1,6 +1,5 @@
 package com.motionapps.GSYSocial.controller;
 
-import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,37 +13,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.motionapps.GSYSocial.dao.FollowerDao;
-import com.motionapps.GSYSocial.dao.JointAccountDao;
+
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
-import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
-import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
-import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
+import com.motionapps.GSYSocial.services.FollowerService;
+
 
 @Controller
 @Path("/")
 public class FollowerController {
 	
 	@Autowired
-	private FollowerDao followerDao;
+	private FollowerService followerService;
 	
-	@Autowired
-	private UserController userController;
+	private Long status;
 	
-	@Autowired
-	private JointAccountDao jointAccountDao;
 	
-
-	public void setJointAccountDao(JointAccountDao jointAccountDao) {
-		this.jointAccountDao = jointAccountDao;
-	}
-
-	public void setFollowerDao(FollowerDao followerDao) {
-		this.followerDao = followerDao;
-	}
-
-	public void setUserController(UserController userController) {
-		this.userController = userController;
+	public void setFollowerService(FollowerService followerService) {
+		this.followerService = followerService;
 	}
 
 	@POST
@@ -53,11 +38,11 @@ public class FollowerController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response followAccount(FollowerVO followerVO)
 	{
-		followerVO.setFollowId(UUID.randomUUID().toString());
-		followerDao.followAccount(followerVO);
-		jointAccountDao.incrementFollowCount(followerVO.getJointAccountId());
-		userController.incrementFollowCount(followerVO.getUserId());
-		return Response.ok().build();
+		status=followerService.followAccount(followerVO);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
 		
 	}
 	
@@ -67,11 +52,12 @@ public class FollowerController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response unfollowAccount(FollowerVO followerVO)
 	{
-		followerVO.setFollowId(UUID.randomUUID().toString());
-		followerDao.unfollowAccount(followerVO);
-		jointAccountDao.decrementFollowCount(followerVO.getJointAccountId());
-		userController.decrementFollowCount(followerVO.getUserId());
-		return Response.ok().build();
+
+		status=followerService.unfollowAccount(followerVO);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
 		
 	}
 	
@@ -79,13 +65,14 @@ public class FollowerController {
 	@Path("/jointAccountFollowers")
 	public Response getJointAccountFollowers(@QueryParam("jointAccountId") String jointAccountId)
 	{
-		return Response.ok().entity(new UserSearchVO(followerDao.getJointAccountFollowers(jointAccountId))).type(MediaType.APPLICATION_JSON).build();
+		return Response.ok().entity(followerService.getJointAccountFollowers(jointAccountId)).type(MediaType.APPLICATION_JSON).build();
 	}
+	
 	@GET
 	@Path("/jointAccountsFollowedByUser")
 	public Response getJointAccountsFollowedByUser(@QueryParam("userId") String userId)
 	{
-		return Response.ok().entity(new JointAccountSearchVO(followerDao.getJointAccountsFollowedByUser(userId))).type(MediaType.APPLICATION_JSON).build();
+		return Response.ok().entity(followerService.getJointAccountsFollowedByUser(userId)).type(MediaType.APPLICATION_JSON).build();
 	}
 	
 

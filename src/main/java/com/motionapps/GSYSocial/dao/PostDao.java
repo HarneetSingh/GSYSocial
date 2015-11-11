@@ -23,5 +23,13 @@ public interface PostDao {
 	public Long incrementCommentCount(String postId);
 	
 	public Long decrementCommentCount(String postId);
+	
+	public Long addRating(PostVO postVO);
+	
+	public Long deleteRating(PostVO postVO);
+	
+	public Long updateRating(PostVO postVO);
+	
+	public Long deletePostByJointAccountId(String jointAccountId);
 
 }

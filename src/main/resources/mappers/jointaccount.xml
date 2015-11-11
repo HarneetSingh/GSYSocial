@@ -161,4 +161,11 @@
  	    WHERE
  	    	joint_account_id=#{value}	
  	</update>
+ 	
+ 	
+ 	<!-- ************** DELETE ************** -->
+ 	
+ 	    <delete id="deleteJointAccount" parameterType="String">
+		DELETE FROM joint_account WHERE joint_account_id=#{value}
+	</delete>
 </mapper> 	

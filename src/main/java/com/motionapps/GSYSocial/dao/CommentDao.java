@@ -14,9 +14,9 @@ public interface CommentDao {
 	
 	public List<CommentVO> getCommentsByPost(String postId);
 	
-	public Long deleteComment(String commentId);
-	
 	public Long updateComment(CommentVO commentVO);
 
-
+	public Long deleteComment(String commentId);
+	
+	public Long deleteAllCommentsByPost(String postId);
 }

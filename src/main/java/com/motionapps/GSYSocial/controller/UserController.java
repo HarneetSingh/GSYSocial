@@ -1,7 +1,6 @@
 package com.motionapps.GSYSocial.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,12 +16,10 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.motionapps.GSYSocial.dao.UserDao;
 import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
-import com.motionapps.GSYSocial.dao.vo.ErrorVO;
-import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.services.UserService;
 
 @Controller
 @DependsOn("userDao")
@@ -32,11 +29,14 @@ public class UserController {
 
 		
 		@Autowired
-		private UserDao userDao;
+		private UserService userService;
+		
+		Long status;
 
-		public void setUserDao(UserDao userDao) {
-			this.userDao = userDao;
+		public void setUserService(UserService userService) {
+			this.userService = userService;
 		}
+	
 		
 		/************************************ CREATE ************************************/
 
@@ -54,30 +54,11 @@ public class UserController {
 		@Transactional
 		public Response normalregisteration(UserVO user) {
 			
-			if((user.getEmailId()==null)||(user.getEmailId().equals(""))||(user.getPassword().equals(""))||(user.getPassword()==null))
-				return Response.status(400).build();
-			int temp=userDao.checkIfEmailIdAlreadyExists(user.getEmailId());
-			if(temp>=1)
-			{
-				ErrorVO errorVO=new ErrorVO("EmailId already registered");
-				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-			}
-			
-			String userId=UUID.randomUUID().toString();
-			user.setSessionId(userId);
-			user.setUserId(userId);
-			
-			Long abc=userDao.createUser(user);
-			if(abc==1)
-			{
-				user.setPassword(null);
+			UserVO userVO=userService.normalregisteration(user);
+			if(userVO!=null)
 				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
-			}
 			else
-			{
-				ErrorVO errorVO=new ErrorVO("Internal Server Error");
-				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-			}	
+				return Response.status(400).build();
 			
 		}	
 		@POST 
@@ -86,52 +67,14 @@ public class UserController {
 		@Transactional
 		public Response oauthregisteration(UserVO user) {
 			
-			if((user.getOauthProvider()==null)||(user.getOauthProvider().equals(""))||(user.getOauthUid().equals(""))||(user.getOauthUid()==null))
-				return Response.status(400).build();
-			int temp=userDao.checkIfOauthUidAlreadyExists(user.getOauthUid());
-			if(temp>=1)
-			{
-				String gcmDeviceId=user.getGcmDeviceId();
-				UserVO reponse = userDao.getUserByOauthUid(user.getOauthUid());
-				//Updating the gcm device id
-				if(gcmDeviceId!=null)
-				{
-					UserVO tempUser=new UserVO();
-					tempUser.setUserId(reponse.getUserId());
-					tempUser.setGcmDeviceId(gcmDeviceId);
-					userDao.updateUser(tempUser);
-					reponse.setGcmDeviceId(gcmDeviceId);
-				}
-				return Response.status(200).entity(reponse).type(MediaType.APPLICATION_JSON).build();
-			}
-			
-			String userId=UUID.randomUUID().toString();
-			user.setSessionId(userId);
-			user.setUserId(userId);
-			
-			Long abc=userDao.createUser(user);
-			if(abc==1)
-			{
-				user.setPassword(null);
+			UserVO userVO=userService.normalregisteration(user);
+			if(userVO!=null)
 				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
-			}
 			else
-			{
-				ErrorVO errorVO=new ErrorVO("Internal Server Error");
-				return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-			}	
+				return Response.status(400).build();
 			
 		}	
-		public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
-		{
-			UserVO userVO=new UserVO();
-			userVO.setUserId(jointAccountVO.getFirstUserId());
-			userVO.setJointAccountId(jointAccountVO.getJointAccountId());
-			updateUserDetails(userVO);
-			userVO.setUserId(jointAccountVO.getSecondUserId());
-			updateUserDetails(userVO);
-			return (long)1;
-		}
+
 
 		
 		@POST 
@@ -140,9 +83,11 @@ public class UserController {
 		@Transactional
 		public Response updateUserDetails(UserVO user) {
 			
-			userDao.updateUser(user);
-			return Response.status(200).build();
-
+			status=userService.updateUserDetails(user);
+			if(status==1)
+				return Response.status(200).build();
+			else 
+				return Response.status(400).build();
 			
 		}	
 		
@@ -154,69 +99,36 @@ public class UserController {
 		@GET
 		@Produces(MediaType.APPLICATION_JSON)
 		public List<UserVO> getUsers() {
-			return userDao.getUsers();
+			return userService.getUsers();
 		}
 		
 		@GET
 		@Path("/search")
 		@Produces(MediaType.APPLICATION_JSON)
 		public UserSearchVO searchUser(@QueryParam("keyword")String keyword) {
-			return new UserSearchVO(userDao.searchUser("%"+keyword+"%"));
+			return userService.searchUser(keyword);
 		}
 		
 		@GET
 		@Path("/details")
 		@Produces(MediaType.APPLICATION_JSON)
 		public UserVO getUser(@QueryParam("userId")String userId) {
-			return userDao.getUser(userId);
+			return userService.getUser(userId);
 		}
 		
-//		public UserVO getUserDetails(String emailId) {
-//			return userDao.getUser(emailId);
-//		}
-//		
+
 		@POST 
 		@Consumes({MediaType.APPLICATION_JSON})
+		@Produces({MediaType.APPLICATION_JSON})
 		@Transactional
 		@Path("/login")
 		public Response loginUser(UserVO user) {
 			
-			String emailId=user.getEmailId();
-			String password =userDao.getPassword(emailId);
-			String gcmDeviceId=user.getGcmDeviceId();
-			if(password!=null)
-			{	
-				if(password.equals(user.getPassword()))
-				{
-				//String sessionId=UUID.randomUUID().toString();
-				//user.setSessionId(sessionId);
-				//userDao.updateSessionId(user);
-				//user.setPassword(null);
-				user=userDao.getUserByEmailId(emailId);
-				//Updating the gcm device id
-				if(gcmDeviceId!=null)
-				{
-				UserVO tempUser=new UserVO();
-				tempUser.setUserId(user.getUserId());
-				tempUser.setGcmDeviceId(gcmDeviceId);
-				userDao.updateUser(tempUser);
-				user.setGcmDeviceId(gcmDeviceId);
-				}
-				
-				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
-				}
-				else
-				{
-					ErrorVO errorVO=new ErrorVO("Authentication Failed");
-					return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-				}	
-			}
+			UserVO userVO=userService.loginUser(user);
+			if(userVO!=null)
+				return Response.ok().entity(userVO).build();
 			else
-			{
-				ErrorVO errorVO=new ErrorVO("Authentication Failed");
-				return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-			}	
-			
+				return Response.status(401).build();
 		}	
 		
 		@POST 
@@ -225,29 +137,16 @@ public class UserController {
 		@Path("/changePassword")
 		public Response changePassword(ChangePasswordVO changePasswordVO)
 		{
-			if(changePasswordVO.getOldPassword().equals(userDao.getPassword(changePasswordVO.getUserId())))
-			{
-				userDao.updatePassword(changePasswordVO);
+			
+			status=userService.changePassword(changePasswordVO);
+			if(status==1)
 				return Response.ok().build();
-			}
-			else{
-				ErrorVO errorVO=new ErrorVO("Authentication Failed");
-				return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
-			}
+			else
+				return Response.status(401).build();
 
 		}
 		
-		public Long incrementFollowCount(String emailId)
-		{
-			userDao.incrementFollowCount(emailId);
-			return (long)1;
-		}
 		
-		public Long decrementFollowCount(String emailId)
-		{
-			userDao.decrementFollowCount(emailId);
-			return (long)1;
-		}
 		
 		
 }	

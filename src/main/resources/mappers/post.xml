@@ -160,14 +160,41 @@
 			post_id = #{postId}
  	</update>  
  	
- 	<update id="addRatings" parameterType="Post">
+ 	<update id="addRating" parameterType="Post">
  	    UPDATE 
 			post
 		SET 
 			post_id = #{postId}
-			<if test="rating != null">
-				,total_rating=totalRating+#{rating},
-				,no_of_ratings=no_of_ratings+1,
+			<if test="newRating != null">
+				,total_rating=total_rating + #{newRating}
+				,no_of_ratings=no_of_ratings + 1
+				,last_updated_time=now()				
+			</if>
+		WHERE
+			post_id = #{postId}
+ 	</update>
+ 	
+ 	<update id="deleteRating" parameterType="Post">
+ 	    UPDATE 
+			post
+		SET 
+			post_id = #{postId}
+			<if test="newRating != null">
+				,total_rating=total_rating - #{newRating}
+				,no_of_ratings=no_of_ratings - 1
+				,last_updated_time=now()				
+			</if>
+		WHERE
+			post_id = #{postId}
+ 	</update>
+ 	
+ 	<update id="updateRating" parameterType="Post">
+ 	    UPDATE 
+			post
+		SET 
+			post_id = #{postId}
+			<if test="newRating != null">
+				,total_rating=total_rating + #{newRating}
 				,last_updated_time=now()				
 			</if>
 		WHERE

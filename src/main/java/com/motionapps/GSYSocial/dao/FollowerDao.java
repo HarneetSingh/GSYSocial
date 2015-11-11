@@ -2,7 +2,6 @@ package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
@@ -18,4 +17,5 @@ public interface FollowerDao {
 	
 	public List<JointAccountVO> getJointAccountsFollowedByUser(String userId);
 		
+	public List<FollowerVO> getFollowersVOByJointAccount(String jointAccountId);
 }

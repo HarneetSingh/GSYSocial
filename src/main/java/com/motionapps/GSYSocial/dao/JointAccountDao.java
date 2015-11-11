@@ -27,6 +27,8 @@ public interface JointAccountDao {
 	public Long incrementPostCount(String jointAccountId);
 
 	public Long decrementPostCount(String jointAccountId);
+	
+	public Long deleteJointAccount(String jointAccountId);
 
 
 }

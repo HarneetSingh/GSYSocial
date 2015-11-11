@@ -14,11 +14,11 @@ import org.springframework.stereotype.Controller;
 public class NotificationService {
 	
 	private WebTarget target;
-	private String BASE_URI="http://ec2-54-200-61-8.us-west-2.compute.amazonaws.com/GFYSocial";
+	private String BASE_URI="https://gcm-http.googleapis.com/gcm/send";
 	
 	@GET
 	@Path("/test")
-	public Response testNotification()
+	public Response testNotifiwcation()
 	{
 		Client client = ClientBuilder.newClient();
 		target = client.target(BASE_URI);

@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnoreType;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement
 public class UserVO implements Serializable{
