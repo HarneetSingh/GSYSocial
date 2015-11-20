@@ -12,11 +12,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.ClientResponse;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.springframework.stereotype.Controller;
 
 import com.motionapps.GSYSocial.dao.vo.Notification;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
+import com.motionapps.GSYSocial.dao.vo.NotificationResposeVO;
 
 @Controller
 @Path("/")
@@ -34,6 +36,7 @@ public class NotificationService {
 
 		Client client = ClientBuilder.newBuilder()
 						.register(JacksonFeature.class)
+						.register(new LoggingFilter())
 						.build();
 		target = client.target(BASE_URI);
 		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
@@ -45,13 +48,15 @@ public class NotificationService {
 		notificationRequestVO.setTo("ePywcaQp5lE:APA91bHBz__mS_ZZzqumEAnr9q-k9ylgT-7CGSsy8uq0g-UsMLWBjMzei2LN424cMaluPaQUQ6A4h2aQUxEE4j1lQx2mtgLUd56bTS95b44W1Ol7cSO97bl3L6xuRKETMRBbu9SII7Lp");
 		notificationRequestVO.setNotification(notification);
 		
-		
+		System.out.println(notificationRequestVO.toString());
 //		Response responseMsg = target.path("/send").
 //									request().accept(MediaType.APPLICATION_JSON)
 //									.post(Entity.entity(notificationRequestVO,MediaType.APPLICATION_JSON),ClientResponse.class);
-		Response response = target.path("/send").request().post(Entity.json(notificationRequestVO));
+		NotificationResposeVO response = target.path("/send").request(MediaType.APPLICATION_JSON).header("Authorization", "key="+key).post(Entity.json(notificationRequestVO),NotificationResposeVO.class);
+		//System.out.println(response);
+		//return response;
 		
-		return Response.ok().entity(response).build();
+		return Response.ok().entity(response).type(MediaType.APPLICATION_JSON).build();
 	}
 
 }

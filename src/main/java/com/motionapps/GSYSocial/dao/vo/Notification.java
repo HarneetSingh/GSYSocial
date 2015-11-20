@@ -2,6 +2,8 @@ package com.motionapps.GSYSocial.dao.vo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+
+	@XmlRootElement
 	public class Notification
 	{
 		private String title;
