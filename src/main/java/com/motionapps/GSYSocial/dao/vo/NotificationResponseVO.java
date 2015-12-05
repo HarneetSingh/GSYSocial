@@ -5,11 +5,10 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.junit.Ignore;
 
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class NotificationResposeVO implements Serializable{
+public class NotificationResponseVO implements Serializable{
 
 	/**
 	 * 
@@ -26,7 +25,7 @@ public class NotificationResposeVO implements Serializable{
 
 	Object results;
 	
-	public NotificationResposeVO(long multicast_id, int success, int failure,
+	public NotificationResponseVO(long multicast_id, int success, int failure,
 			int canonical_ids, Object results) {
 		super();
 		this.multicast_id = multicast_id;
@@ -68,7 +67,7 @@ public class NotificationResposeVO implements Serializable{
 		this.failure = failure;
 	}
 	
-	public NotificationResposeVO() {
+	public NotificationResponseVO() {
 	}
 	
 

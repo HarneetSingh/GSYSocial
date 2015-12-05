@@ -11,11 +11,11 @@ public class CommentVO implements Serializable{
 	
 	private String commentId;
 
-
 	private String postId;
 	
 	private String commentText;
-	
+
+
 	private String userName;
 	
 	private String profilePicUrl;
@@ -41,6 +41,8 @@ public class CommentVO implements Serializable{
 	public void setPostId(String postId) {
 		this.postId = postId;
 	}
+	
+
 
 	public String getUserName() {
 		return userName;
@@ -87,8 +89,8 @@ public class CommentVO implements Serializable{
 	}
 
 	public CommentVO(String commentId, String postId, String commentText,
-			String userName, String profilePicUrl, String createdTime,
-			String lastUpdatedTime) {
+			String userName, String profilePicUrl,
+			String createdTime, String lastUpdatedTime) {
 		super();
 		this.commentId = commentId;
 		this.postId = postId;
@@ -98,7 +100,8 @@ public class CommentVO implements Serializable{
 		this.createdTime = createdTime;
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
-	
+
+
 
 	
 }

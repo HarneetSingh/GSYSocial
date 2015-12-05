@@ -59,23 +59,28 @@ public class UserService {
 	
 	public UserVO oauthregisteration(UserVO user) {
 		
+	//	System.out.println("Inside oauthregisteration");
+
 		if((user.getOauthProvider()==null)||(user.getOauthProvider().equals(""))||(user.getOauthUid().equals(""))||(user.getOauthUid()==null))
 			return userVO;
 		int temp=userDao.checkIfOauthUidAlreadyExists(user.getOauthUid());
 		if(temp>=1)
 		{
+//			System.out.println("Inside IF");
 			String gcmDeviceId=user.getGcmDeviceId();
-			UserVO reponse = userDao.getUserByOauthUid(user.getOauthUid());
+			UserVO response = userDao.getUserByOauthUid(user.getOauthUid());
+//			System.out.println("Inside "+ response.getUserId());
 			//Updating the gcm device id
 			if(gcmDeviceId!=null)
 			{
+//				System.out.println("Inside IF gcmDeviceId");
 				UserVO tempUser=new UserVO();
-				tempUser.setUserId(reponse.getUserId());
+				tempUser.setUserId(response.getUserId());
 				tempUser.setGcmDeviceId(gcmDeviceId);
 				userDao.updateUser(tempUser);
-				reponse.setGcmDeviceId(gcmDeviceId);
+				response.setGcmDeviceId(gcmDeviceId);
 			}
-			return reponse;
+			return response;
 		}
 		
 		String userId=UUID.randomUUID().toString();
@@ -138,6 +143,11 @@ public class UserService {
 
 		
 	}	
+	public Long updateInviteRequestStatus(UserVO userVO) {
+		
+		return userDao.updateInviteRequestStatus(userVO);
+		
+	}
 	
 	public UserVO loginUser(UserVO user) {
 		String emailId=user.getEmailId();

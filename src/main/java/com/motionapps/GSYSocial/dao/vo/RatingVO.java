@@ -31,17 +31,20 @@ public class RatingVO implements Serializable
 	
 
 	public RatingVO(String ratingId, String postId, int ratingValue,
-			String userName, String profilePicUrl, String createdTime,
-			String lastUpdatedTime) {
+			String userName, String profilePicUrl,
+			String createdTime, String lastUpdatedTime) {
 		super();
 		this.ratingId = ratingId;
 		this.postId = postId;
 		this.ratingValue = ratingValue;
+
 		this.userName = userName;
 		this.profilePicUrl = profilePicUrl;
 		this.createdTime = createdTime;
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
+	
+
 
 
 

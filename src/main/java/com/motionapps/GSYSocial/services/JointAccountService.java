@@ -56,9 +56,11 @@ public class JointAccountService {
 		UserVO firstUser=userService.getUser(inviteRequestVO.getInviterUserId());
 		System.out.println(firstUser.getUserName());
 		jointAccountVO.setFirstUserName(firstUser.getUserName());
+		jointAccountVO.setFirstUserProfilePic(firstUser.getProfilePicUrl());
 		jointAccountVO.setSecondUserId(inviteRequestVO.getInviteeUserId());
 		UserVO secondUser=userService.getUser(inviteRequestVO.getInviteeUserId());
 		jointAccountVO.setSecondUserName(secondUser.getUserName());
+		jointAccountVO.setSecondUserProfilePic(secondUser.getProfilePicUrl());
 		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
 		jointAccountDao.createJointAccount(jointAccountVO);
 		userService.updateJointAccountDetails(jointAccountVO);

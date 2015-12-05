@@ -38,6 +38,10 @@ public class JointAccountVO implements Serializable{
 	private Boolean userFollowing;
 	
 	private String profilePic;
+	
+	private String firstUserProfilePic;
+	
+	private String secondUserProfilePic;
 
 	
 
@@ -130,6 +134,22 @@ public class JointAccountVO implements Serializable{
 		this.jointAccountStory = jointAccountStory;
 	}
 	
+	public String getFirstUserProfilePic() {
+		return firstUserProfilePic;
+	}
+
+	public void setFirstUserProfilePic(String firstUserProfilePic) {
+		this.firstUserProfilePic = firstUserProfilePic;
+	}
+
+	public String getSecondUserProfilePic() {
+		return secondUserProfilePic;
+	}
+
+	public void setSecondUserProfilePic(String secondUserProfilePic) {
+		this.secondUserProfilePic = secondUserProfilePic;
+	}
+
 	public JointAccountVO() {
 	}
 
@@ -137,7 +157,8 @@ public class JointAccountVO implements Serializable{
 			String firstUserName, String secondUserName, String secondUserId,
 			String jointAccountName, String jointAccountStory,
 			int followerCount, int postCount, Boolean userFollowing,
-			String profilePic) {
+			String profilePic, String firstUserProfilePic,
+			String secondUserProfilePic) {
 		super();
 		this.jointAccountId = jointAccountId;
 		this.firstUserId = firstUserId;
@@ -150,7 +171,11 @@ public class JointAccountVO implements Serializable{
 		this.postCount = postCount;
 		this.userFollowing = userFollowing;
 		this.profilePic = profilePic;
+		this.firstUserProfilePic = firstUserProfilePic;
+		this.secondUserProfilePic = secondUserProfilePic;
 	}
+
+
 	
 
  

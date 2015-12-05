@@ -13,10 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.motionapps.GSYSocial.dao.vo.CommentVO;
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
+import com.motionapps.GSYSocial.dao.vo.Notification;
+import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
+import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
+import com.motionapps.GSYSocial.dao.vo.PostVO;
+import com.motionapps.GSYSocial.dao.vo.UserVO;
 import com.motionapps.GSYSocial.services.InviteRequestService;
+import com.motionapps.GSYSocial.services.UserService;
 
 @Controller
 @Path("/invite")
@@ -27,9 +34,7 @@ public class InviteRequestController {
 	
 	@Autowired
 	public InviteRequestService inviteRequestService;
-
-	
-	
+		
 	public void setInviteRequestService(InviteRequestService inviteRequestService) {
 		this.inviteRequestService = inviteRequestService;
 	}
@@ -90,5 +95,7 @@ public class InviteRequestController {
 	{
 		return Response.status(200).entity(inviteRequestService.pendingRequests(userId)).type(MediaType.APPLICATION_JSON).build();
 	}
+	
+
 	
 }

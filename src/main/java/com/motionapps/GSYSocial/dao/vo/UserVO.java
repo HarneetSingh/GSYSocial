@@ -33,6 +33,8 @@ public class UserVO implements Serializable{
 	
 	private String profilePicUrl;
 	
+	private String gallery;
+	
 	private String jointAccountId;
 	
 	private String gcmDeviceId;
@@ -113,6 +115,14 @@ public class UserVO implements Serializable{
 		this.profilePicUrl = profilePicUrl;
 	}
 
+	public String getGallery() {
+		return gallery;
+	}
+
+	public void setGallery(String gallery) {
+		this.gallery = gallery;
+	}
+
 	public String getJointAccountId() {
 		return jointAccountId;
 	}
@@ -156,12 +166,21 @@ public class UserVO implements Serializable{
 	}
 
 
-	
+	public UserVO() {
+	}
+
+
+	public UserVO(String emailId, String password) {
+		super();
+		this.emailId = emailId;
+		this.password = password;
+	}
+
 	public UserVO(String userId, String userName, String oauthUid,
 			String oauthProvider, String emailId, String password,
 			String dateOfBirth, String mobileNumber, String sessionId,
-			String profilePicUrl, String jointAccountId, String gcmDeviceId,
-			int followCount, boolean inviteRequestPending) {
+			String profilePicUrl, String gallery, String jointAccountId,
+			String gcmDeviceId, int followCount, boolean inviteRequestPending) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -173,22 +192,16 @@ public class UserVO implements Serializable{
 		this.mobileNumber = mobileNumber;
 		this.sessionId = sessionId;
 		this.profilePicUrl = profilePicUrl;
+		this.gallery = gallery;
 		this.jointAccountId = jointAccountId;
 		this.gcmDeviceId = gcmDeviceId;
 		this.followCount = followCount;
 		this.inviteRequestPending = inviteRequestPending;
 	}
 
-	public UserVO(String emailId, String password) {
-		super();
-		this.emailId = emailId;
-		this.password = password;
-	}
+	
 
 
-
-	public UserVO() {
-	}
-
+	
 
 }

@@ -34,6 +34,8 @@ public interface UserDao {
 	
 	public Long updateUser(UserVO user);
 	
+	public Long updateInviteRequestStatus(UserVO userVO);
+	
 	public Long incrementFollowCount(String userId);
 	
 	public Long decrementFollowCount(String userId);

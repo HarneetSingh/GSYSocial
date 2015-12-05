@@ -16,7 +16,19 @@ public class NotificationRequestVO implements Serializable{
 	
 	private Notification notification;
 	
+	private NotificationDataVO data;
 	
+	
+	public NotificationDataVO getData() {
+		return data;
+	}
+
+
+	public void setData(NotificationDataVO data) {
+		this.data = data;
+	}
+
+
 	public String getTo() {
 		return to;
 	}
@@ -36,7 +48,11 @@ public class NotificationRequestVO implements Serializable{
 		this.notification = notification;
 	}
 
-
+	@Override
+	public String toString() {
+		
+		return "{ to :"+to+notification.toString()+data.toString()+ "}";
+	}
 	
 	
 }

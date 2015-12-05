@@ -113,6 +113,8 @@
      <bean id="ratingService" class="com.motionapps.GSYSocial.services.RatingService" >
          <property name="ratingDao" ref="ratingDao"/>
          <property name="postService" ref="postService"/>
+         <property name="notificationService" ref="notificationService"/>
+         
      </bean>
     
     <bean id="fileController" class="com.motionapps.GSYSocial.controller.FileController" >

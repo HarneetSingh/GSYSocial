@@ -18,6 +18,7 @@
         <result column="gcm_device_id" property="gcmDeviceId" />
         <result column="follow_count" property="followCount" />
         <result column="invite_request_pending" property="inviteRequestPending"/>
+        <result column="gallery" property="gallery"/>
 	</resultMap>   
  
     
@@ -35,6 +36,7 @@
 			date_of_birth = #{dateOfBirth},
 			mobile_number = #{mobileNumber},
 			profile_pic=#{profilePicUrl},
+			gallery=#{gallery},
 			session_id=#{sessionId};
  	</insert>   
 	<!-- ************** READ ************** -->
@@ -49,6 +51,7 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
+        	gallery,
         	session_id,
         	joint_account_id,
         	gcm_device_id,
@@ -67,6 +70,7 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
+        	gallery,
         	session_id,
         	joint_account_id,
         	gcm_device_id,
@@ -87,6 +91,7 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
+        	gallery,
         	session_id,
         	joint_account_id,
         	gcm_device_id,
@@ -107,6 +112,7 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
+        	gallery,
         	session_id,
         	joint_account_id,
         	gcm_device_id,
@@ -125,6 +131,7 @@
         	date_of_birth,
         	mobile_number,
         	profile_pic,
+        	gallery,
         	joint_account_id,
         	invite_request_pending
         FROM
@@ -230,11 +237,23 @@
 			<if test="jointAccountId != null">
 				,joint_account_id = #{jointAccountId}
 			</if>	
-			<if test="inviteRequestPending != null">
-				,invite_request_pending = #{inviteRequestPending}
-			</if>	
 			<if test="gcmDeviceId != null">
 				,gcm_device_id = #{gcmDeviceId}
+			</if>	
+			<if test="gallery != null">
+				,gallery = #{gallery}
+			</if>	
+		WHERE
+			user_id = #{userId}
+ 	</update>  
+ 	
+ 	<update id="updateInviteRequestStatus" parameterType="User">
+		UPDATE 
+			user
+		SET 
+			user_id = #{userId}
+			<if test="inviteRequestPending != null">
+				,invite_request_pending = #{inviteRequestPending}
 			</if>	
 		WHERE
 			user_id = #{userId}

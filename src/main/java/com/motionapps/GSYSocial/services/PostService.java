@@ -122,6 +122,11 @@ public class PostService {
 		
 	}
 	
+	public PostVO getPostById(String postId) {
+	
+		return postDao.getPostById(postId);
+	}
+	
 	public Long deletePost(String postId) {
 		
 		

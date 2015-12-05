@@ -34,6 +34,8 @@ public class PostVO implements Serializable{
 	
 	private String profilePicUrl;
 	
+	private String userId;
+	
 	private String createdTime;
 	
 	private String lastUpdatedTime;
@@ -153,9 +155,13 @@ public class PostVO implements Serializable{
 		this.newRating = newRating;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
 
-	
-
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public String getThumbNameUrl() {
 		return thumbNameUrl;
@@ -171,8 +177,8 @@ public class PostVO implements Serializable{
 	public PostVO(String postId, String jointAccountId, String fileUrl,
 			String fileType, String postText, int totalRating, int noOfRatings,
 			int newRating, String userName, String profilePicUrl,
-			String createdTime, String lastUpdatedTime, String thumbNameUrl,
-			String commentCount) {
+			String userId, String createdTime, String lastUpdatedTime,
+			String thumbNameUrl, String commentCount) {
 		super();
 		this.postId = postId;
 		this.jointAccountId = jointAccountId;
@@ -184,6 +190,7 @@ public class PostVO implements Serializable{
 		this.newRating = newRating;
 		this.userName = userName;
 		this.profilePicUrl = profilePicUrl;
+		this.userId = userId;
 		this.createdTime = createdTime;
 		this.lastUpdatedTime = lastUpdatedTime;
 		this.thumbNameUrl = thumbNameUrl;

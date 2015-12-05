@@ -14,6 +14,7 @@
  		<result column="created_time" property="createdTime" />
  		<result column="last_updated_time" property="lastUpdatedTime" />
  		<result column="user_name" property="userName"/>
+ 		<result column="user_id" property="userId"/>
         <result column="profile_pic" property="profilePicUrl" />
         <result column="thumb_nail_url" property="thumbNameUrl" /> 		
         <result column="comment_count" property="commentCount" /> 		
@@ -31,6 +32,7 @@
 			file_url = #{fileUrl},
 			file_type = #{fileType},
 			post_text = #{postText},
+			user_id = #{userId},
 			user_name = #{userName},
 			profile_pic = #{profilePicUrl},
 			thumb_nail_url= #{thumbNameUrl},
@@ -47,6 +49,7 @@
 			file_type,
 			thumb_nail_url,
 			post_text,
+			user_id,
 			user_name,
 			profile_pic,
 			comment_count,
@@ -70,6 +73,7 @@
 			file_type,
 			thumb_nail_url,
 			post_text,
+			user_id,
 			user_name,
 			profile_pic,
 			comment_count,
@@ -91,6 +95,7 @@
 			post.file_type,
 			post.thumb_nail_url,
 			post.post_text,
+			post.user_id,
 			post.user_name,
 			post.profile_pic,
 			post.comment_count,
@@ -116,6 +121,7 @@
 			joint_account_id,
 			file_url,
 			file_type,
+			user_id,
 			thumb_nail_url,	
 			post_text,
 			user_name,

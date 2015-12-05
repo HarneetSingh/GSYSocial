@@ -56,7 +56,7 @@ public class UserController {
 			
 			UserVO userVO=userService.normalregisteration(user);
 			if(userVO!=null)
-				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
+				return Response.status(200).entity(userVO).type(MediaType.APPLICATION_JSON).build();
 			else
 				return Response.status(400).build();
 			
@@ -67,9 +67,12 @@ public class UserController {
 		@Transactional
 		public Response oauthregisteration(UserVO user) {
 			
-			UserVO userVO=userService.normalregisteration(user);
+			//System.out.println("Inside IF oauthregisteration");
+			UserVO userVO=userService.oauthregisteration(user);
+			System.out.println("Inside oauthregisteration"+ userVO.getUserId());
+
 			if(userVO!=null)
-				return Response.status(200).entity(user).type(MediaType.APPLICATION_JSON).build();
+				return Response.status(200).entity(userVO).type(MediaType.APPLICATION_JSON).build();
 			else
 				return Response.status(400).build();
 			
