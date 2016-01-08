@@ -1,183 +1,229 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.motionapps.GSYSocial.dao.JointAccountDao">
 
- 	<resultMap id="jointAccountMap" type="JointAccount" >
-        <id column="joint_account_id" property="jointAccountId"  />
-        <result column="first_user_id" property="firstUserId"/>
-        <result column="first_user_name" property="firstUserName"/>
-        <result column="second_user_id" property="secondUserId" />
-        <result column="second_user_name" property="secondUserName" />
-        <result column="joint_account_name" property="jointAccountName"/>
-        <result column="joint_account_story" property="jointAccountStory" />
-        <result column="follower_count" property="followerCount"/>
-        <result column="post_count" property="postCount"/>
-        <result column="user_following" property="userFollowing"/>
-        <result column="profile_pic" property="profilePic"/>
-        <result column="first_user_profile_pic" property="firstUserProfilePic"/>
-        <result column="second_user_profile_pic" property="secondUserProfilePic"/>
-	</resultMap>   
-    
- 	<!-- ************** CREATE ************** -->
- 	<insert id="createJointAccount" parameterType="JointAccount" useGeneratedKeys="true">
-		INSERT 
-			INTO joint_account
-		SET 
-			joint_account_id = #{jointAccountId},
-			first_user_id = #{firstUserId},
-			second_user_id = #{secondUserId},
-			first_user_name=#{firstUserName},
-			first_user_profile_pic=#{firstUserProfilePic},
-			second_user_name=#{secondUserName},
-			second_user_profile_pic=#{secondUserProfilePic},
-			joint_account_name = #{jointAccountName},
-			joint_account_story = #{jointAccountStory};
- 	</insert>   
- 	
- 	
- 		<!-- ************** READ ************** -->
-    <select id="getJointAccounts" resultMap="jointAccountMap">
-        SELECT
-        	joint_account_id,
-        	first_user_id,
-        	second_user_id,
-        	first_user_name,
-        	first_user_profile_pic,
-        	second_user_name,
-        	second_user_profile_pic,
-        	joint_account_name,
-        	joint_account_story,
-        	follower_count,
-        	post_count,
-        	profile_pic
-        FROM
-            joint_account; 	            	
-    </select>
-    <select id="getJointAccount" resultMap="jointAccountMap" parameterType="String">
-        SELECT
-        	joint_account_id,
-        	first_user_id,
-        	second_user_id,
-        	first_user_name,
-        	first_user_profile_pic,
-        	second_user_name,
-        	second_user_profile_pic,
-        	joint_account_name,
-        	joint_account_story,
-        	follower_count,
-        	post_count,
-        	profile_pic
-        FROM
-            joint_account
-        WHERE
-        	joint_account_id=#{value};          	
-    </select>
-   <select id="getJointAccountWithUserId" resultMap="jointAccountMap" parameterType="map">
-        SELECT
-        	joint_account_id,
-        	first_user_id,
-        	second_user_id,
-        	first_user_name,
-        	first_user_profile_pic,
-        	second_user_name,
-        	second_user_profile_pic,
-        	joint_account_name,
-        	joint_account_story,
-        	follower_count,
-        	post_count,
-        	profile_pic,
-            EXISTS(SELECT * FROM follower where joint_account_id=#{jointAccountId} AND user_id=#{userId}) AS user_following 
-        FROM
-            joint_account
-        WHERE
-        	joint_account_id=#{jointAccountId};          	
-    </select>
-    <select id="searchJointAccounts" resultMap="jointAccountMap" parameterType="String">
-        SELECT
-        	joint_account_id,
-        	first_user_id,
-        	second_user_id,
-        	first_user_name,
-        	first_user_profile_pic,
-        	second_user_name,
-        	second_user_profile_pic,
-        	joint_account_name,
-        	joint_account_story,
-        	follower_count,
-        	post_count,
-        	profile_pic
-        FROM
-            joint_account
-        WHERE
-        	first_user_id LIKE #{value}
-       	OR
-       		second_user_id LIKE #{value}
-       	OR
-       	    joint_account_name LIKE #{value};
-    </select>
- 	
- 	
- 	<!-- ************** UPDATE ************** -->
- 	
- 	<update id="updateJointAccountDetails" parameterType="JointAccount">
-		UPDATE 
-			joint_account
-		SET 
-			joint_account_id = #{jointAccountId}
-			<if test="jointAccountName != null">
-				,joint_account_name = #{jointAccountName}
-			</if>
-			<if test="jointAccountStory != null">
-				,joint_account_story = #{jointAccountStory}
-			</if>
-		   <if test="profilePic != null">
-				,profile_pic = #{profilePic}
-			</if>
+	<resultMap id="jointAccountMap" type="JointAccount">
+		<id column="joint_account_id" property="jointAccountId" />
+		<result column="first_user_id" property="firstUserId" />
+		<result column="first_user_name" property="firstUserName" />
+		<result column="second_user_id" property="secondUserId" />
+		<result column="second_user_name" property="secondUserName" />
+		<result column="joint_account_name" property="jointAccountName" />
+		<result column="moments_pics" property="momentsPics" />
+		<result column="follower_count" property="followerCount" />
+		<result column="post_count" property="postCount" />
+		<result column="user_following" property="userFollowing" />
+		<result column="profile_pic" property="profilePic" />
+		<result column="first_user_profile_pic" property="firstUserProfilePic" />
+		<result column="second_user_profile_pic" property="secondUserProfilePic" />
+		<result column="relationship" property="relationship" />
+		<result column="first_user_answer" property="firstUserAnswer" />
+		<result column="second_user_answer" property="secondUserAnswer" />
+		<result column="privacy_mode" property="privacyMode" />
+
+
+	</resultMap>
+
+	<!-- ************** CREATE ************** -->
+	<insert id="createJointAccount" parameterType="JointAccount"
+		useGeneratedKeys="true">
+		INSERT
+		INTO joint_account
+		SET
+		joint_account_id =
+		#{jointAccountId},
+		first_user_id = #{firstUserId},
+		second_user_id =
+		#{secondUserId},
+		first_user_name= #{firstUserName},
+		first_user_profile_pic= #{firstUserProfilePic},
+		second_user_name=
+		#{secondUserName},
+		second_user_profile_pic= #{secondUserProfilePic},
+		joint_account_name = #{jointAccountName};
+	</insert>
+
+
+	<!-- ************** READ ************** -->
+	<select id="getJointAccounts" resultMap="jointAccountMap">
+		SELECT
+		joint_account_id,
+		first_user_id,
+		second_user_id,
+		first_user_name,
+		first_user_profile_pic,
+		second_user_name,
+		second_user_profile_pic,
+		joint_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		first_user_answer,
+		second_user_answer,
+		privacy_mode
+		FROM
+		joint_account;
+	</select>
+	<select id="getJointAccount" resultMap="jointAccountMap"
+		parameterType="String">
+		SELECT
+		joint_account_id,
+		first_user_id,
+		second_user_id,
+		first_user_name,
+		first_user_profile_pic,
+		second_user_name,
+		second_user_profile_pic,
+		joint_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		first_user_answer,
+		second_user_answer,
+		privacy_mode
+		FROM
+		joint_account
 		WHERE
-			joint_account_id = #{jointAccountId}
- 	</update>  
- 	
- 	<update id="incrementFollowCount" parameterType="String">
- 	    UPDATE
- 	    	joint_account
- 	    SET
- 	    	follower_count = follower_count + 1
- 	    WHERE
- 	    	joint_account_id=#{value}	
- 	</update>
- 	
- 	<update id="decrementFollowCount" parameterType="String">
- 	    UPDATE
- 	    	joint_account
- 	    SET
- 	    	follower_count = follower_count - 1
- 	    WHERE
- 	    	joint_account_id=#{value}	
- 	</update>
- 	
- 	<update id="incrementPostCount" parameterType="String">
- 	    UPDATE
- 	    	joint_account
- 	    SET
- 	    	post_count = post_count + 1
- 	    WHERE
- 	    	joint_account_id=#{value}	
- 	</update>
- 	
- 	<update id="decrementPostCount" parameterType="String">
- 	    UPDATE
- 	    	joint_account
- 	    SET
- 	    	post_count = post_count - 1
- 	    WHERE
- 	    	joint_account_id=#{value}	
- 	</update>
- 	
- 	
- 	<!-- ************** DELETE ************** -->
- 	
- 	    <delete id="deleteJointAccount" parameterType="String">
-		DELETE FROM joint_account WHERE joint_account_id=#{value}
+		joint_account_id=#{value};
+	</select>
+	<select id="getJointAccountWithUserId" resultMap="jointAccountMap"
+		parameterType="map">
+		SELECT
+		joint_account_id,
+		first_user_id,
+		second_user_id,
+		first_user_name,
+		first_user_profile_pic,
+		second_user_name,
+		second_user_profile_pic,
+		joint_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		first_user_answer,
+		second_user_answer,
+		privacy_mode,
+		EXISTS(SELECT * FROM follower where
+		joint_account_id=#{jointAccountId} AND
+		user_id=#{userId}) AS
+		user_following
+		FROM
+		joint_account
+		WHERE
+		joint_account_id=#{jointAccountId};
+	</select>
+	<select id="searchJointAccounts" resultMap="jointAccountMap"
+		parameterType="String">
+		SELECT
+		joint_account_id,
+		first_user_id,
+		second_user_id,
+		first_user_name,
+		first_user_profile_pic,
+		second_user_name,
+		second_user_profile_pic,
+		joint_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		first_user_answer,
+		second_user_answer,
+		privacy_mode
+		FROM
+		joint_account
+		WHERE
+		first_user_id
+		LIKE #{value}
+		OR
+		second_user_id LIKE #{value}
+		OR
+		joint_account_name LIKE
+		#{value};
+	</select>
+
+
+	<!-- ************** UPDATE ************** -->
+
+	<update id="updateJointAccountDetails" parameterType="JointAccount">
+		UPDATE
+		joint_account
+		SET
+		joint_account_id = #{jointAccountId}
+		<if test="jointAccountName != null">
+			,joint_account_name = #{jointAccountName}
+		</if>
+		<if test="momentsPics != null">
+			,moments_pics = #{momentsPics}
+		</if>
+		<if test="profilePic != null">
+			,profile_pic = #{profilePic}
+		</if>
+		<if test="relationship != null">
+			,relationship = #{relationship}
+		</if>
+		<if test="privacyMode != null">
+			,privacy_mode = #{privacyMode}
+		</if>
+		<if test="firstUserAnswer != null">
+			,first_user_answer = #{firstUserAnswer}
+		</if>
+		<if test="secondUserAnswer != null">
+			,second_user_answer = #{secondUserAnswer}
+		</if>
+		WHERE
+		joint_account_id = #{jointAccountId}
+	</update>
+
+	<update id="incrementFollowCount" parameterType="String">
+		UPDATE
+		joint_account
+		SET
+		follower_count = follower_count + 1
+		WHERE
+		joint_account_id=#{value}
+	</update>
+
+	<update id="decrementFollowCount" parameterType="String">
+		UPDATE
+		joint_account
+		SET
+		follower_count = follower_count - 1
+		WHERE
+		joint_account_id=#{value}
+	</update>
+
+	<update id="incrementPostCount" parameterType="String">
+		UPDATE
+		joint_account
+		SET
+		post_count = post_count + 1
+		WHERE
+		joint_account_id=#{value}
+	</update>
+
+	<update id="decrementPostCount" parameterType="String">
+		UPDATE
+		joint_account
+		SET
+		post_count = post_count - 1
+		WHERE
+		joint_account_id=#{value}
+	</update>
+
+
+	<!-- ************** DELETE ************** -->
+
+	<delete id="deleteJointAccount" parameterType="String">
+		DELETE FROM
+		joint_account WHERE joint_account_id=#{value}
 	</delete>
 </mapper> 	

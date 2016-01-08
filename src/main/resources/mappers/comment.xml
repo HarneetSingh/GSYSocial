@@ -7,8 +7,7 @@
         <id column="comment_id" property="commentId"  />
       	<result column="comment_text" property="commentText" />
         <result column="post_id" property="postId" />
-        <result column="user_name" property="userName" />
-        <result column="profile_pic" property="profilePicUrl"/>
+        <result column="user_id" property="userId" />
         <result column="created_time" property="createdTime" />
         <result column="last_updated_time" property="lastUpdatedTime" />	
         
@@ -23,8 +22,7 @@
 			comment_id = #{commentId},
 			comment_text=#{commentText},
 			post_id = #{postId},
-			user_name = #{userName},
-			profile_pic = #{profilePicUrl},
+			user_id = #{userId},
 			last_updated_time=now(),
 			created_time=now();
  	</insert>   
@@ -36,8 +34,7 @@
 			comment_id,
 			comment_text,
 			post_id,
-			user_name,
-			profile_pic,
+			user_id,
 			created_time,
 			last_updated_time
         FROM
@@ -51,8 +48,7 @@
 			comment_id,
 			comment_text,
 			post_id,
-			user_name,
-			profile_pic,
+			user_id,
 			created_time,
 			last_updated_time
         FROM
@@ -62,14 +58,26 @@
         ORDER BY
         	created_time asc; 	            	
     </select>
+    <select id="getCommentsByUserId" parameterType="String" resultMap="commentMap">
+        SELECT
+			comment_id,
+			comment_text,
+			post_id,
+			user_id,
+			created_time,
+			last_updated_time
+        FROM
+            comment
+		WHERE      
+        	user_id=#{value};         	
+    </select>
     
     <select id="getAllComments" parameterType="String" resultMap="commentMap">
         SELECT
 			comment_id,
 			comment_text,
 			post_id,
-			user_name,
-			profile_pic,
+			user_id,
 			created_time,
 			last_updated_time
         FROM
@@ -99,6 +107,7 @@
 		</delete>
 		<delete id="deleteAllCommentsByPost" parameterType="String">
 		DELETE FROM comment WHERE post_id = #{value}
-		</delete>		
+		</delete>	
+
  	
 </mapper>

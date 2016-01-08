@@ -1,5 +1,6 @@
 package com.motionapps.GSYSocial.services;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import com.motionapps.GSYSocial.dao.RatingDao;
 import com.motionapps.GSYSocial.dao.vo.Notification;
 import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
+import com.motionapps.GSYSocial.dao.vo.PostArrayVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
 import com.motionapps.GSYSocial.dao.vo.RatingArrayVO;
 import com.motionapps.GSYSocial.dao.vo.RatingVO;
@@ -51,8 +53,8 @@ public class RatingService {
 
 	public Long addRating(RatingVO ratingVO)
 	{
-//		if(ratingVO.getRatingValue()>5)
-//			return 0L;
+		if(ratingVO.getRatingValue()>2)
+			return 0L;
 		ratingVO.setRatingId(UUID.randomUUID().toString());
 		ratingDao.addRating(ratingVO);
 		postService.addRating(ratingVO);
@@ -66,8 +68,13 @@ public class RatingService {
 	
 	public RatingArrayVO getAllRatingsByPost(String postId)
 	{
-		return new RatingArrayVO(ratingDao.getRatingsByPost(postId));
-	}
+		List<RatingVO> ratingVOList=ratingDao.getRatingsByPost(postId);
+		for (int i=0;i<ratingVOList.size();i++) 
+		{
+			ratingVOList.set(i, addUserData(ratingVOList.get(i)));
+		}
+		RatingArrayVO ratingArrayVO = new RatingArrayVO(ratingVOList);
+		return ratingArrayVO;	}
 	
 	
 	public Long updateRating(RatingVO ratingVO)
@@ -95,6 +102,17 @@ public class RatingService {
 		return postService.removeRating(ratingVO);
 	}
 	
+	public Long deleteRatingsByUserId(String userId)
+	{
+
+		List<RatingVO> ratingVOList=ratingDao.getRatingByUserId(userId);
+		for (RatingVO ratingVO : ratingVOList) {	
+		ratingDao.deleteRating(ratingVO.getRatingId());
+		return postService.removeRating(ratingVO);
+		}
+		return 1L;
+	}
+	
 	
 	public Long deleteAllRatingsByPost(String postId)
 	{
@@ -112,11 +130,21 @@ public class RatingService {
 		notificationRequestVO.setTo(userVO.getGcmDeviceId());
 		Notification notification =new Notification();
 		notification.setTitle("Intactyou");
-		notification.setText(ratingVO.getUserName()+notificationText);
+		userVO=userService.getUser(ratingVO.getUserId());
+		notification.setText(userVO.getUserName()+notificationText);
+		notification.setIcon(userVO.getProfilePicUrl());
 		notificationRequestVO.setNotification(notification);
 		NotificationDataVO notificationDataVO=new NotificationDataVO(1,postVO);
 		notificationRequestVO.setData(notificationDataVO);
 		return notificationRequestVO;
+	}
+	
+	public RatingVO addUserData(RatingVO ratingVO)
+	{
+		UserVO userVO=userService.getUser(ratingVO.getUserId());
+		ratingVO.setUserName(userVO.getUserName());
+		ratingVO.setProfilePicUrl(userVO.getProfilePicUrl());
+		return ratingVO;
 	}
 
 }

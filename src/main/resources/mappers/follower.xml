@@ -1,117 +1,169 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.motionapps.GSYSocial.dao.FollowerDao">
 
-    <resultMap id="followerMap" type="Follower" >
-        <id column="follow_id" property="followId"  />
-        <result column="user_id" property="userId"/>
-        <result column="joint_account_id" property="jointAccountId" />
-	</resultMap>   
-	
-     <resultMap id="userMap" type="User" >
-        <id column="user_id" property="userId"/>
-        <result column="email_id" property="emailId"  />
-        <result column="oauth_uid" property="oauthUid"/>
-        <result column="oauth_provider" property="oauthProvider"/>
-        <result column="user_name" property="userName"/>
-        <result column="password" property="password" />
-        <result column="date_of_birth" property="dateOfBirth"/>
-        <result column="mobile_number" property="mobileNumber" />
-        <result column="session_id" property="sessionId" />
-        <result column="profile_pic" property="profilePicUrl" />
-        <result column="joint_account_id" property="jointAccountId" />
-        <result column="gcm_device_id" property="gcmDeviceId" />
-        <result column="follow_count" property="followCount" />
-        <result column="invite_request_pending" property="inviteRequestPending"/>
-	</resultMap>   
- 
-	
- 	<resultMap id="jointAccountMap" type="JointAccount" >
-        <id column="joint_account_id" property="jointAccountId"  />
-        <result column="first_user_id" property="firstUserId"/>
-        <result column="first_user_name" property="firstUserName"/>
-        <result column="second_user_id" property="secondUserId" />
-        <result column="second_user_name" property="secondUserName" />
-        <result column="joint_account_name" property="jointAccountName"/>
-        <result column="joint_account_story" property="jointAccountStory" />
-        <result column="follower_count" property="followerCount"/>
-	</resultMap>   
-	
-     	<!-- ************** CREATE ************** -->
- 	<insert id="followAccount" parameterType="Follower" useGeneratedKeys="true">
-		INSERT 
-			INTO follower
-		SET 
-			follow_id=#{followId},
-			user_id = #{userId},
-			joint_account_id = #{jointAccountId};
- 	</insert>   
+	<resultMap id="followerMap" type="Follower">
+		<id column="follow_id" property="followId" />
+		<result column="user_id" property="userId" />
+		<result column="joint_account_id" property="jointAccountId" />
+	</resultMap>
+
+	<resultMap id="followerRequestMap" type="Follower">
+		<id column="follow_request_id" property="followId" />
+		<result column="user_id" property="userId" />
+		<result column="joint_account_id" property="jointAccountId" />
+	</resultMap>
+
+	<resultMap id="userMap" type="User">
+		<id column="user_id" property="userId" />
+		<result column="email_id" property="emailId" />
+		<result column="oauth_uid" property="oauthUid" />
+		<result column="oauth_provider" property="oauthProvider" />
+		<result column="user_name" property="userName" />
+		<result column="password" property="password" />
+		<result column="date_of_birth" property="dateOfBirth" />
+		<result column="mobile_number" property="mobileNumber" />
+		<result column="session_id" property="sessionId" />
+		<result column="profile_pic" property="profilePicUrl" />
+		<result column="joint_account_id" property="jointAccountId" />
+		<result column="gcm_device_id" property="gcmDeviceId" />
+		<result column="follow_count" property="followCount" />
+		<result column="invite_request_pending" property="inviteRequestPending" />
+	</resultMap>
+
+
+	<resultMap id="jointAccountMap" type="JointAccount">
+		<id column="joint_account_id" property="jointAccountId" />
+		<result column="first_user_id" property="firstUserId" />
+		<result column="first_user_name" property="firstUserName" />
+		<result column="second_user_id" property="secondUserId" />
+		<result column="second_user_name" property="secondUserName" />
+		<result column="joint_account_name" property="jointAccountName" />
+		<result column="joint_account_story" property="jointAccountStory" />
+		<result column="follower_count" property="followerCount" />
+	</resultMap>
+
+	<!-- ************** CREATE ************** -->
+	<insert id="followAccount" parameterType="Follower"
+		useGeneratedKeys="true">
+		INSERT
+		INTO follower
+		SET
+		follow_id=#{followId},
+		user_id =
+		#{userId},
+		joint_account_id = #{jointAccountId};
+	</insert>
+
+	<insert id="sendFollowRequest" parameterType="Follower"
+		useGeneratedKeys="true">
+		INSERT
+		INTO follow_request
+		SET
+		follow_request_id=#{followId},
+		user_id = #{userId},
+		joint_account_id =
+		#{jointAccountId};
+	</insert>
 	<!-- ************** READ ************** -->
-	<select id="getJointAccountFollowers" parameterType="String" resultMap="userMap">
-        SELECT
-        	user.user_id,
-        	user.user_name,
-	       	user.date_of_birth,
-        	user.mobile_number,
-        	user.profile_pic,
-        	user.joint_account_id,
-        	user.gcm_device_id,
-        	user.follow_count
-        FROM
-            user
-        INNER JOIN
-        	follower
-        ON
-        	user.user_id=follower.user_id	
-        AND
-        	follower.joint_account_id=#{value}
-        ORDER BY
-        	user.user_name;		
-    </select> 
-
-	<select id="getJointAccountsFollowedByUser" parameterType="String" resultMap="jointAccountMap">
-        SELECT
-        	joint_account.joint_account_id,
-        	joint_account.first_user_id,
-        	joint_account.second_user_id,
-        	joint_account.first_user_name,
-        	joint_account.second_user_name,
-        	joint_account.joint_account_name,
-        	joint_account.joint_account_story,
-        	joint_account.follower_count
-        FROM
-            joint_account
-        INNER JOIN
-        	follower
-        ON
-        	joint_account.joint_account_id=follower.joint_account_id	
-        AND
-        	follower.user_id=#{value}
-        ORDER BY
-        	joint_account.joint_account_name;		
-    </select> 
-    
-	
-	<select id="getFollowersVOByJointAccount" parameterType="String" resultMap="followerMap">
-        SELECT
-			follow_id,
-			user_id,
-			joint_account_id
-        FROM
-            follower
-        WHERE
-        	joint_account_id=#{value};
-    </select> 
-
-    	<!-- ************** DELETE ************** -->
-    <delete id="unfollowAccount" parameterType="Follower">
-        DELETE
-        FROM
-        	follower
-        WHERE
-        	user_id = #{userId}
+	<select id="getJointAccountFollowers" parameterType="String"
+		resultMap="userMap">
+		SELECT
+		user.user_id,
+		user.user_name,
+		user.date_of_birth,
+		user.mobile_number,
+		user.profile_pic,
+		user.joint_account_id,
+		user.gcm_device_id,
+		user.follow_count
+		FROM
+		user
+		INNER JOIN
+		follower
+		ON
+		user.user_id=follower.user_id
 		AND
-			joint_account_id = #{jointAccountId};
-    </delete>
- </mapper>   
+		follower.joint_account_id=#{value}
+		ORDER BY
+		user.user_name;
+	</select>
+	<select id="getFollowerVOByUserId" parameterType="String"
+		resultMap="followerMap">
+		SELECT
+		follow_id,
+		user_id,
+		joint_account_id
+		FROM
+		follower
+		WHERE
+		user_id=#{value};
+	</select>
+
+	<select id="getFollowRequest" parameterType="String" resultMap="followerRequestMap">
+		SELECT
+		follow_request_id,
+		user_id,
+		joint_account_id
+		FROM
+		follow_request
+		WHERE
+		follow_request_id=#{value};
+	</select>
+
+
+	<select id="getJointAccountsFollowedByUser" parameterType="String"
+		resultMap="jointAccountMap">
+		SELECT
+		joint_account.joint_account_id,
+		joint_account.first_user_id,
+		joint_account.second_user_id,
+		joint_account.first_user_name,
+		joint_account.second_user_name,
+		joint_account.joint_account_name,
+		joint_account.joint_account_story,
+		joint_account.follower_count
+		FROM
+		joint_account
+		INNER JOIN
+		follower
+		ON
+		joint_account.joint_account_id=follower.joint_account_id
+		AND
+		follower.user_id=#{value}
+		ORDER BY
+		joint_account.joint_account_name;
+	</select>
+
+
+	<select id="getFollowersVOByJointAccount" parameterType="String"
+		resultMap="followerMap">
+		SELECT
+		follow_id,
+		user_id,
+		joint_account_id
+		FROM
+		follower
+		WHERE
+		joint_account_id=#{value};
+	</select>
+
+	<!-- ************** DELETE ************** -->
+	<delete id="unfollowAccount" parameterType="Follower">
+		DELETE
+		FROM
+		follower
+		WHERE
+		user_id = #{userId}
+		AND
+		joint_account_id = #{jointAccountId};
+	</delete>
+	<delete id="removeFollowRequest" parameterType="String">
+		DELETE
+		FROM
+		follow_request
+		WHERE
+		follow_request_id = #{value};
+	</delete>
+</mapper>   

@@ -111,6 +111,17 @@ public class UserController {
 		public UserSearchVO searchUser(@QueryParam("keyword")String keyword) {
 			return userService.searchUser(keyword);
 		}
+		@GET
+		@Path("/delete")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response deleteUser(@QueryParam("userId")String userId) {
+			status=userService.deleteUser(userId);
+			if(status==1)
+				return Response.ok().build();
+			else
+				return Response.status(400).build();
+
+		}
 		
 		@GET
 		@Path("/details")

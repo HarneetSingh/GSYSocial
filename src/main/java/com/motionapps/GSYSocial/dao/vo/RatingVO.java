@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.dao.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class RatingVO implements Serializable
 {
@@ -9,41 +10,40 @@ public class RatingVO implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = -777169146469953445L;
-	
+
 	private String ratingId;
-	
+
 	private String postId;
-	
+
 	private int ratingValue;
-	
+
+	private String userId;
+
 	private String userName;
-	
+
 	private String profilePicUrl;
-	
-	private String createdTime;
-	
-	private String lastUpdatedTime;
-	
+
+	private Date createdTime;
+
+	private Date lastUpdatedTime;
+
 	public RatingVO() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
-	public RatingVO(String ratingId, String postId, int ratingValue,
-			String userName, String profilePicUrl,
-			String createdTime, String lastUpdatedTime) {
+	public RatingVO(String ratingId, String postId, int ratingValue, String userId, String userName,
+			String profilePicUrl, Date createdTime, Date lastUpdatedTime) {
 		super();
 		this.ratingId = ratingId;
 		this.postId = postId;
 		this.ratingValue = ratingValue;
-
+		this.userId = userId;
 		this.userName = userName;
 		this.profilePicUrl = profilePicUrl;
 		this.createdTime = createdTime;
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
-	
+
 
 
 
@@ -88,21 +88,29 @@ public class RatingVO implements Serializable
 		this.profilePicUrl = profilePicUrl;
 	}
 
-	public String getCreatedTime() {
+	public Date getCreatedTime() {
 		return createdTime;
 	}
 
-	public void setCreatedTime(String createdTime) {
+	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
 
-	public String getLastUpdatedTime() {
+	public Date getLastUpdatedTime() {
 		return lastUpdatedTime;
 	}
 
-	public void setLastUpdatedTime(String lastUpdatedTime) {
+	public void setLastUpdatedTime(Date lastUpdatedTime) {
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
-	
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 
 }

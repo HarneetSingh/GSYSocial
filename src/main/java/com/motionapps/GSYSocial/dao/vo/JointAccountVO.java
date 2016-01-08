@@ -29,7 +29,7 @@ public class JointAccountVO implements Serializable{
 	
 	private String jointAccountName;
 	
-	private String jointAccountStory;
+	private String momentsPics;
 	
 	private int followerCount;
 	
@@ -42,9 +42,48 @@ public class JointAccountVO implements Serializable{
 	private String firstUserProfilePic;
 	
 	private String secondUserProfilePic;
-
 	
+	private String relationship;
+	
+	private String firstUserAnswer;
+	
+	private String secondUserAnswer;
+	
+	private int privacyMode;
+		
 
+
+	public int getPrivacyMode() {
+		return privacyMode;
+	}
+
+	public void setPrivacyMode(int privacyMode) {
+		this.privacyMode = privacyMode;
+	}
+
+	public String getRelationship() {
+		return relationship;
+	}
+
+	public void setRelationship(String relationship) {
+		this.relationship = relationship;
+	}
+
+	public String getFirstUserAnswer() {
+		return firstUserAnswer;
+	}
+
+	public void setFirstUserAnswer(String firstUserAnswer) {
+		this.firstUserAnswer = firstUserAnswer;
+	}
+
+	public String getSecondUserAnswer() {
+		return secondUserAnswer;
+	}
+
+	public void setSecondUserAnswer(String secondUserAnswer) {
+		this.secondUserAnswer = secondUserAnswer;
+	}
 
 	public String getProfilePic() {
 		return profilePic;
@@ -126,12 +165,12 @@ public class JointAccountVO implements Serializable{
 		this.jointAccountName = jointAccountName;
 	}
 
-	public String getJointAccountStory() {
-		return jointAccountStory;
+	public String getMomentsPics() {
+		return momentsPics;
 	}
 
-	public void setJointAccountStory(String jointAccountStory) {
-		this.jointAccountStory = jointAccountStory;
+	public void setMomentsPics(String momentsPics) {
+		this.momentsPics = momentsPics;
 	}
 	
 	public String getFirstUserProfilePic() {
@@ -153,12 +192,10 @@ public class JointAccountVO implements Serializable{
 	public JointAccountVO() {
 	}
 
-	public JointAccountVO(String jointAccountId, String firstUserId,
-			String firstUserName, String secondUserName, String secondUserId,
-			String jointAccountName, String jointAccountStory,
-			int followerCount, int postCount, Boolean userFollowing,
-			String profilePic, String firstUserProfilePic,
-			String secondUserProfilePic) {
+	public JointAccountVO(String jointAccountId, String firstUserId, String firstUserName, String secondUserName,
+			String secondUserId, String jointAccountName, String momentsPics, int followerCount, int postCount,
+			Boolean userFollowing, String profilePic, String firstUserProfilePic, String secondUserProfilePic,
+			String relationship, String firstUserAnswer, String secondUserAnswer, int privacyMode) {
 		super();
 		this.jointAccountId = jointAccountId;
 		this.firstUserId = firstUserId;
@@ -166,14 +203,22 @@ public class JointAccountVO implements Serializable{
 		this.secondUserName = secondUserName;
 		this.secondUserId = secondUserId;
 		this.jointAccountName = jointAccountName;
-		this.jointAccountStory = jointAccountStory;
+		this.momentsPics = momentsPics;
 		this.followerCount = followerCount;
 		this.postCount = postCount;
 		this.userFollowing = userFollowing;
 		this.profilePic = profilePic;
 		this.firstUserProfilePic = firstUserProfilePic;
 		this.secondUserProfilePic = secondUserProfilePic;
+		this.relationship = relationship;
+		this.firstUserAnswer = firstUserAnswer;
+		this.secondUserAnswer = secondUserAnswer;
+		this.privacyMode = privacyMode;
 	}
+
+
+
+
 
 
 	

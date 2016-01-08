@@ -14,10 +14,13 @@ public interface RatingDao {
 	
 	public List<RatingVO> getRatingsByPost(String postId);
 	
+	public List<RatingVO>  getRatingByUserId(String userId);
+
 	public Long updateRating(RatingVO ratingVO);
 	
 	public Long deleteAllRatingsByPost(String postId);
 	
 	public Long deleteRating(String ratingId);
+	
 
 }

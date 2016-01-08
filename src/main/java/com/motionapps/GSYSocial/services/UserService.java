@@ -23,6 +23,47 @@ public class UserService {
 	private UserDao userDao;
 	
 	private UserVO userVO;
+	
+	@Autowired
+	private JointAccountService jointAccountService;
+	
+	@Autowired
+	private RatingService ratingService;
+	
+	@Autowired
+	private FollowerService followerService;
+	
+	@Autowired
+	private CommentService commentService;
+	
+	@Autowired
+	private InviteRequestService inviteRequestService;
+	
+
+	public void setInviteRequestService(InviteRequestService inviteRequestService) {
+		this.inviteRequestService = inviteRequestService;
+	}
+
+
+	public void setCommentService(CommentService commentService) {
+		this.commentService = commentService;
+	}
+
+
+	public void setJointAccountService(JointAccountService jointAccountService) {
+		this.jointAccountService = jointAccountService;
+	}
+
+
+	public void setRatingService(RatingService ratingService) {
+		this.ratingService = ratingService;
+	}
+
+
+	public void setFollowerService(FollowerService followerService) {
+		this.followerService = followerService;
+	}
+
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
@@ -111,6 +152,31 @@ public class UserService {
 		return (long)1;
 	}
 	
+	public Long deleteUser(String userId) {
+
+		//delete follower
+		followerService.deleteAllFollowersByUserId(userId);
+		
+		//delete invite request
+		
+		inviteRequestService.deleteInviteRequest(userId);
+		
+		//delete comment by user
+		
+		commentService.deleteAllCommentsByUserId(userId);
+		
+		//deleting ratings
+		ratingService.deleteRatingsByUserId(userId);
+		UserVO userVO=getUser(userId);
+		
+		//deleting joint acc will delete all posts automatically
+		if(userVO.getJointAccountId()!=null&userVO.getJointAccountId()!="")
+		{
+			
+			jointAccountService.deleteJointAccount(userVO.getJointAccountId());
+		}
+		return userDao.deleteUser(userId);
+	}
 	
 	public List<UserVO> getUsers() {
 		return userDao.getUsers();

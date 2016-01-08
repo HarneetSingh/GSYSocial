@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.dao.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class CommentVO implements Serializable{
 	
@@ -15,14 +16,15 @@ public class CommentVO implements Serializable{
 	
 	private String commentText;
 
+	private String userId;
 
 	private String userName;
 	
 	private String profilePicUrl;
 	
-	private String createdTime;
+	private Date createdTime;
 	
-	private String lastUpdatedTime;
+	private Date lastUpdatedTime;
 
 
 
@@ -60,19 +62,19 @@ public class CommentVO implements Serializable{
 		this.profilePicUrl = profilePicUrl;
 	}
 
-	public String getCreatedTime() {
+	public Date getCreatedTime() {
 		return createdTime;
 	}
 
-	public void setCreatedTime(String createdTime) {
+	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
 	}
 
-	public String getLastUpdatedTime() {
+	public Date getLastUpdatedTime() {
 		return lastUpdatedTime;
 	}
 
-	public void setLastUpdatedTime(String lastUpdatedTime) {
+	public void setLastUpdatedTime(Date lastUpdatedTime) {
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
 	
@@ -85,21 +87,31 @@ public class CommentVO implements Serializable{
 		this.commentText = commentText;
 	}
 	
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
 	public CommentVO() {
 	}
 
-	public CommentVO(String commentId, String postId, String commentText,
-			String userName, String profilePicUrl,
-			String createdTime, String lastUpdatedTime) {
+	public CommentVO(String commentId, String postId, String commentText, String userId, String userName,
+			String profilePicUrl, Date createdTime, Date lastUpdatedTime) {
 		super();
 		this.commentId = commentId;
 		this.postId = postId;
 		this.commentText = commentText;
+		this.userId = userId;
 		this.userName = userName;
 		this.profilePicUrl = profilePicUrl;
 		this.createdTime = createdTime;
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
+
+
 
 
 

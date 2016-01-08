@@ -1,274 +1,281 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.motionapps.GSYSocial.dao.UserDao">
 
-    <resultMap id="userMap" type="User" >
-        <id column="user_id" property="userId"/>
-        <result column="email_id" property="emailId"  />
-        <result column="oauth_uid" property="oauthUid"/>
-        <result column="oauth_provider" property="oauthProvider"/>
-        <result column="user_name" property="userName"/>
-        <result column="password" property="password" />
-        <result column="date_of_birth" property="dateOfBirth"/>
-        <result column="mobile_number" property="mobileNumber" />
-        <result column="session_id" property="sessionId" />
-        <result column="profile_pic" property="profilePicUrl" />
-        <result column="joint_account_id" property="jointAccountId" />
-        <result column="gcm_device_id" property="gcmDeviceId" />
-        <result column="follow_count" property="followCount" />
-        <result column="invite_request_pending" property="inviteRequestPending"/>
-        <result column="gallery" property="gallery"/>
-	</resultMap>   
- 
-    
- 	<!-- ************** CREATE ************** -->
- 	<insert id="createUser" parameterType="User" useGeneratedKeys="true">
-		INSERT 
-			INTO user
-		SET 
-			user_id = #{userId},
-			oauth_uid = #{oauthUid},
-			oauth_provider= #{oauthProvider},
-			email_id = #{emailId},
-			user_name = #{userName},
-			password = #{password},
-			date_of_birth = #{dateOfBirth},
-			mobile_number = #{mobileNumber},
-			profile_pic=#{profilePicUrl},
-			gallery=#{gallery},
-			session_id=#{sessionId};
- 	</insert>   
+	<resultMap id="userMap" type="User">
+		<id column="user_id" property="userId" />
+		<result column="email_id" property="emailId" />
+		<result column="oauth_uid" property="oauthUid" />
+		<result column="oauth_provider" property="oauthProvider" />
+		<result column="user_name" property="userName" />
+		<result column="password" property="password" />
+		<result column="date_of_birth" property="dateOfBirth" />
+		<result column="mobile_number" property="mobileNumber" />
+		<result column="session_id" property="sessionId" />
+		<result column="profile_pic" property="profilePicUrl" />
+		<result column="joint_account_id" property="jointAccountId" />
+		<result column="gcm_device_id" property="gcmDeviceId" />
+		<result column="follow_count" property="followCount" />
+		<result column="invite_request_pending" property="inviteRequestPending" />
+		<result column="gallery" property="gallery" />
+	</resultMap>
+
+
+	<!-- ************** CREATE ************** -->
+	<insert id="createUser" parameterType="User" useGeneratedKeys="true">
+		INSERT
+		INTO user
+		SET
+		user_id = #{userId},
+		oauth_uid = #{oauthUid},
+		oauth_provider= #{oauthProvider},
+		email_id = #{emailId},
+		user_name = #{userName},
+		password = #{password},
+		date_of_birth = #{dateOfBirth},
+		mobile_number = #{mobileNumber},
+		profile_pic=#{profilePicUrl},
+		gallery=#{gallery},
+		session_id=#{sessionId};
+	</insert>
 	<!-- ************** READ ************** -->
-    <select id="getUsers" resultMap="userMap">
-        SELECT
-        	user_id,
-        	oauth_uid,
-        	oauth_provider,
-        	email_id,
-        	user_name,
-        	password,
-        	date_of_birth,
-        	mobile_number,
-        	profile_pic,
-        	gallery,
-        	session_id,
-        	joint_account_id,
-        	gcm_device_id,
-        	follow_count,
-        	invite_request_pending
-        FROM
-            user; 	            	
-    </select>
-    <select id="getUser" resultMap="userMap" parameterType="String">
-        SELECT
-            user_id,
-        	oauth_uid,
-        	oauth_provider,
-        	email_id,
-        	user_name,
-        	date_of_birth,
-        	mobile_number,
-        	profile_pic,
-        	gallery,
-        	session_id,
-        	joint_account_id,
-        	gcm_device_id,
-        	follow_count,
-        	invite_request_pending
-        FROM
-            user
-        WHERE
-        	user_id=#{value};          	
-    </select>
-    <select id="getUserByEmailId" resultMap="userMap" parameterType="String">
-        SELECT
-            user_id,
-        	oauth_uid,
-        	oauth_provider,
-        	email_id,
-        	user_name,
-        	date_of_birth,
-        	mobile_number,
-        	profile_pic,
-        	gallery,
-        	session_id,
-        	joint_account_id,
-        	gcm_device_id,
-        	follow_count,
-        	invite_request_pending
-        FROM
-            user
-        WHERE
-        	email_id=#{value};          	
-    </select>
-    <select id="getUserByOauthUid" resultMap="userMap" parameterType="String">
-        SELECT
-            user_id,
-        	oauth_uid,
-        	oauth_provider,
-        	email_id,
-        	user_name,
-        	date_of_birth,
-        	mobile_number,
-        	profile_pic,
-        	gallery,
-        	session_id,
-        	joint_account_id,
-        	gcm_device_id,
-        	follow_count,
-        	invite_request_pending
-        FROM
-            user
-        WHERE
-        	oauth_uid=#{value};          	
-    </select>
-    <select id="searchUser" resultMap="userMap" parameterType="String">
-        SELECT
-        	user_id,
-        	email_id,
-        	user_name,
-        	date_of_birth,
-        	mobile_number,
-        	profile_pic,
-        	gallery,
-        	joint_account_id,
-        	invite_request_pending
-        FROM
-            user
-        WHERE
-        	email_id LIKE #{value}
-       	OR
-       		user_name LIKE #{value};        	
-    </select>
-    <select id="getSessionId" resultType="String" parameterType="String">
-        SELECT
-        	session_id
-        FROM
-            user
-        WHERE      
-        	email_id=#{value}; 	            	
-    </select>
-    <select id="getPassword" resultType="String" parameterType="String">
-        SELECT
-        	password
-        FROM
-            user
-        WHERE      
-        	email_id=#{value}; 	            	
-    </select>
-    
-    <select id="checkIfEmailIdAlreadyExists" resultType="Int" parameterType="String">
-        SELECT
-        	count(*)
-        FROM
-            user
-        WHERE      
-        	email_id=#{value}; 	            	
-    </select>
-	
-	<select id="checkIfOauthUidAlreadyExists" resultType="Int" parameterType="String">
-        SELECT
-        	count(*)
-        FROM
-            user
-        WHERE      
-        	oauth_uid=#{value}; 	            	
-    </select> 
-    
-	     	
- 	<!-- ************** UPDATE ************** -->
- 	<update id="updateSessionId" parameterType="User">
-		UPDATE 
-			user
-		SET 
-			session_id = #{sessionId}
+	<select id="getUsers" resultMap="userMap">
+		SELECT
+		user_id,
+		oauth_uid,
+		oauth_provider,
+		email_id,
+		user_name,
+		password,
+		date_of_birth,
+		mobile_number,
+		profile_pic,
+		gallery,
+		session_id,
+		joint_account_id,
+		gcm_device_id,
+		follow_count,
+		invite_request_pending
+		FROM
+		user;
+	</select>
+	<select id="getUser" resultMap="userMap" parameterType="String">
+		SELECT
+		user_id,
+		oauth_uid,
+		oauth_provider,
+		email_id,
+		user_name,
+		date_of_birth,
+		mobile_number,
+		profile_pic,
+		gallery,
+		session_id,
+		joint_account_id,
+		gcm_device_id,
+		follow_count,
+		invite_request_pending
+		FROM
+		user
 		WHERE
-			email_id = #{emailId}
- 	</update>  
- 	
- 	<update id="updatePassword" parameterType="ChangePassword">
-		UPDATE 
-			user
-		SET 
-			password = #{newPassword}
+		user_id=#{value};
+	</select>
+	<select id="getUserByEmailId" resultMap="userMap" parameterType="String">
+		SELECT
+		user_id,
+		oauth_uid,
+		oauth_provider,
+		email_id,
+		user_name,
+		date_of_birth,
+		mobile_number,
+		profile_pic,
+		gallery,
+		session_id,
+		joint_account_id,
+		gcm_device_id,
+		follow_count,
+		invite_request_pending
+		FROM
+		user
 		WHERE
-			user_id = #{userId}
- 	</update> 
- 	
- 	<update id="incrementFollowCount" parameterType="String">
-		UPDATE 
-			user
-		SET 
-			follow_count = follow_count + 1
+		email_id=#{value};
+	</select>
+	<select id="getUserByOauthUid" resultMap="userMap"
+		parameterType="String">
+		SELECT
+		user_id,
+		oauth_uid,
+		oauth_provider,
+		email_id,
+		user_name,
+		date_of_birth,
+		mobile_number,
+		profile_pic,
+		gallery,
+		session_id,
+		joint_account_id,
+		gcm_device_id,
+		follow_count,
+		invite_request_pending
+		FROM
+		user
 		WHERE
-			user_id = #{value}
- 	</update>  
- 	
- 	<update id="decrementFollowCount" parameterType="String">
-		UPDATE 
-			user
-		SET 
-			follow_count = follow_count - 1
+		oauth_uid=#{value};
+	</select>
+	<select id="searchUser" resultMap="userMap" parameterType="String">
+		SELECT
+		user_id,
+		email_id,
+		user_name,
+		date_of_birth,
+		mobile_number,
+		profile_pic,
+		gallery,
+		joint_account_id,
+		invite_request_pending
+		FROM
+		user
 		WHERE
-			user_id = #{value}
- 	</update>  
- 	
- 	<update id="updateUser" parameterType="User">
-		UPDATE 
-			user
-		SET 
-			user_id = #{userId}
-		    <if test="emailId != null">
-				,email_id = #{emailId}
-			</if>
-			<if test="userName != null">
-				,user_name = #{userName}
-			</if>
-			<if test="dateOfBirth != null">
-				,date_of_birth = #{dateOfBirth}
-			</if>
-			<if test="mobileNumber != null">
-				,mobile_number = #{mobileNumber}
-			</if>
-			<if test="profilePicUrl != null">
-				,profile_pic = #{profilePicUrl}
-			</if>	
-			<if test="jointAccountId != null">
-				,joint_account_id = #{jointAccountId}
-			</if>	
-			<if test="gcmDeviceId != null">
-				,gcm_device_id = #{gcmDeviceId}
-			</if>	
-			<if test="gallery != null">
-				,gallery = #{gallery}
-			</if>	
+		email_id LIKE #{value}
+		OR
+		user_name LIKE #{value};
+	</select>
+	<select id="getSessionId" resultType="String" parameterType="String">
+		SELECT
+		session_id
+		FROM
+		user
 		WHERE
-			user_id = #{userId}
- 	</update>  
- 	
- 	<update id="updateInviteRequestStatus" parameterType="User">
-		UPDATE 
-			user
-		SET 
-			user_id = #{userId}
-			<if test="inviteRequestPending != null">
-				,invite_request_pending = #{inviteRequestPending}
-			</if>	
+		email_id=#{value};
+	</select>
+	<select id="getPassword" resultType="String" parameterType="String">
+		SELECT
+		password
+		FROM
+		user
 		WHERE
-			user_id = #{userId}
- 	</update>  
- 	<update id="clearGcmDeviceId" parameterType="String">
-		UPDATE 
-			user
-		SET 
-			gcm_device_id = null
+		email_id=#{value};
+	</select>
+
+	<select id="checkIfEmailIdAlreadyExists" resultType="Int"
+		parameterType="String">
+		SELECT
+		count(*)
+		FROM
+		user
 		WHERE
-			gcm_device_id = #{value}
- 	</update>  
- 	
- 	
- 	
-			
- 	
+		email_id=#{value};
+	</select>
+
+	<select id="checkIfOauthUidAlreadyExists" resultType="Int"
+		parameterType="String">
+		SELECT
+		count(*)
+		FROM
+		user
+		WHERE
+		oauth_uid=#{value};
+	</select>
+
+
+	<!-- ************** UPDATE ************** -->
+	<update id="updateSessionId" parameterType="User">
+		UPDATE
+		user
+		SET
+		session_id = #{sessionId}
+		WHERE
+		email_id = #{emailId}
+	</update>
+
+	<update id="updatePassword" parameterType="ChangePassword">
+		UPDATE
+		user
+		SET
+		password = #{newPassword}
+		WHERE
+		user_id = #{userId}
+	</update>
+
+	<update id="incrementFollowCount" parameterType="String">
+		UPDATE
+		user
+		SET
+		follow_count = follow_count + 1
+		WHERE
+		user_id = #{value}
+	</update>
+
+	<update id="decrementFollowCount" parameterType="String">
+		UPDATE
+		user
+		SET
+		follow_count = follow_count - 1
+		WHERE
+		user_id = #{value}
+	</update>
+
+	<update id="updateUser" parameterType="User">
+		UPDATE
+		user
+		SET
+		user_id = #{userId}
+		<if test="emailId != null">
+			,email_id = #{emailId}
+		</if>
+		<if test="userName != null">
+			,user_name = #{userName}
+		</if>
+		<if test="dateOfBirth != null">
+			,date_of_birth = #{dateOfBirth}
+		</if>
+		<if test="mobileNumber != null">
+			,mobile_number = #{mobileNumber}
+		</if>
+		<if test="profilePicUrl != null">
+			,profile_pic = #{profilePicUrl}
+		</if>
+		<if test="jointAccountId != null">
+			,joint_account_id = #{jointAccountId}
+		</if>
+		<if test="gcmDeviceId != null">
+			,gcm_device_id = #{gcmDeviceId}
+		</if>
+		<if test="gallery != null">
+			,gallery = #{gallery}
+		</if>
+		WHERE
+		user_id = #{userId}
+	</update>
+
+	<update id="updateInviteRequestStatus" parameterType="User">
+		UPDATE
+		user
+		SET
+		user_id = #{userId}
+		<if test="inviteRequestPending != null">
+			,invite_request_pending = #{inviteRequestPending}
+		</if>
+		WHERE
+		user_id = #{userId}
+	</update>
+	<update id="clearGcmDeviceId" parameterType="String">
+		UPDATE
+		user
+		SET
+		gcm_device_id = null
+		WHERE
+		gcm_device_id = #{value}
+	</update>
+
+
+	<delete id="deleteUser" parameterType="String">
+		DELETE FROM user WHERE
+		user_id = #{value}
+	</delete>
+
+
+
 </mapper>

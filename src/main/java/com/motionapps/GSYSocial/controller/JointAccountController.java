@@ -37,7 +37,6 @@ public class JointAccountController {
 		this.jointAccountService = jointAccountService;
 	}
 
-
 	
 	@POST
 	@Path("/update")

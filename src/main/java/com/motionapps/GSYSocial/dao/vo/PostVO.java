@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.dao.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,9 +25,11 @@ public class PostVO implements Serializable{
 	
 	private String postText;
 	
-	private int totalRating;
-	
-	private int noOfRatings;
+	private int ratingValueSad;//0
+
+	private int ratingValueOk;//1
+
+	private int ratingValueHappy;//2
 
 	private int newRating;
 	
@@ -36,9 +39,9 @@ public class PostVO implements Serializable{
 	
 	private String userId;
 	
-	private String createdTime;
+	private Date createdTime;
 	
-	private String lastUpdatedTime;
+	private Date lastUpdatedTime;
 	
 	private String thumbNameUrl;
 	
@@ -55,21 +58,6 @@ public class PostVO implements Serializable{
 		this.commentCount = commentCount;
 	}
 
-	public String getCreatedTime() {
-		return createdTime;
-	}
-
-	public void setCreatedTime(String createdTime) {
-		this.createdTime = createdTime;
-	}
-
-	public String getLastUpdatedTime() {
-		return lastUpdatedTime;
-	}
-
-	public void setLastUpdatedTime(String lastUpdatedTime) {
-		this.lastUpdatedTime = lastUpdatedTime;
-	}
 
 	public String getUserName() {
 		return userName;
@@ -87,9 +75,6 @@ public class PostVO implements Serializable{
 		this.profilePicUrl = profilePicUrl;
 	}
 
-
-
-	
 
 	public String getPostId() {
 		return postId;
@@ -131,22 +116,7 @@ public class PostVO implements Serializable{
 		this.fileType = fileType;
 	}
 
-	public int getTotalRating() {
-		return totalRating;
-	}
 
-	public void setTotalRating(int totalRating) {
-		this.totalRating = totalRating;
-	}
-
-	public int getNoOfRatings() {
-		return noOfRatings;
-	}
-
-	public void setNoOfRatings(int noOfRatings) {
-		this.noOfRatings = noOfRatings;
-	}
-	
 	public int getNewRating() {
 		return newRating;
 	}
@@ -171,22 +141,62 @@ public class PostVO implements Serializable{
 		this.thumbNameUrl = thumbNameUrl;
 	}
 	
+	public int getRatingValueSad() {
+		return ratingValueSad;
+	}
+
+	public void setRatingValueSad(int ratingValueSad) {
+		this.ratingValueSad = ratingValueSad;
+	}
+
+	public int getRatingValueOk() {
+		return ratingValueOk;
+	}
+
+	public void setRatingValueOk(int ratingValueOk) {
+		this.ratingValueOk = ratingValueOk;
+	}
+
+	public int getRatingValueHappy() {
+		return ratingValueHappy;
+	}
+
+	public void setRatingValueHappy(int ratingValueHappy) {
+		this.ratingValueHappy = ratingValueHappy;
+	}
+	
 	
 	public PostVO(){}
 
-	public PostVO(String postId, String jointAccountId, String fileUrl,
-			String fileType, String postText, int totalRating, int noOfRatings,
-			int newRating, String userName, String profilePicUrl,
-			String userId, String createdTime, String lastUpdatedTime,
-			String thumbNameUrl, String commentCount) {
+	public java.util.Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+
+	public java.util.Date getLastUpdatedTime() {
+		return lastUpdatedTime;
+	}
+
+	public void setLastUpdatedTime(Date lastUpdatedTime) {
+		this.lastUpdatedTime = lastUpdatedTime;
+	}
+
+	public PostVO(String postId, String jointAccountId, String fileUrl, String fileType, String postText,
+			int ratingValueSad, int ratingValueOk, int ratingValueHappy, int newRating, String userName,
+			String profilePicUrl, String userId, Date createdTime, Date lastUpdatedTime, String thumbNameUrl,
+			String commentCount) {
 		super();
 		this.postId = postId;
 		this.jointAccountId = jointAccountId;
 		this.fileUrl = fileUrl;
 		this.fileType = fileType;
 		this.postText = postText;
-		this.totalRating = totalRating;
-		this.noOfRatings = noOfRatings;
+		this.ratingValueSad = ratingValueSad;
+		this.ratingValueOk = ratingValueOk;
+		this.ratingValueHappy = ratingValueHappy;
 		this.newRating = newRating;
 		this.userName = userName;
 		this.profilePicUrl = profilePicUrl;
@@ -196,8 +206,6 @@ public class PostVO implements Serializable{
 		this.thumbNameUrl = thumbNameUrl;
 		this.commentCount = commentCount;
 	}
-
-
 
 
 

@@ -1,104 +1,115 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.motionapps.GSYSocial.dao.RatingDao">
 
-    <resultMap id="ratingMap" type="Rating" >
-        <id column="rating_id" property="ratingId"  />
-      	<result column="rating_value" property="ratingValue" />
-        <result column="post_id" property="postId" />
-        <result column="user_name" property="userName" />
-        <result column="profile_pic" property="profilePicUrl"/>
-        <result column="created_time" property="createdTime" />
-        <result column="last_updated_time" property="lastUpdatedTime" />	
-        
-	</resultMap>   
- 
-    
- 	<!-- ************** CREATE ************** -->
- 	<insert id="addRating" parameterType="Rating" useGeneratedKeys="true">
-		INSERT 
-			INTO rating
-		SET 
-			rating_id = #{ratingId},
-			rating_value=#{ratingValue},
-			post_id = #{postId},
-			user_name = #{userName},
-			profile_pic = #{profilePicUrl},
-			last_updated_time=now(),
-			created_time=now();
- 	</insert>   
-	
-    <!-- ************** READ ************** -->
+	<resultMap id="ratingMap" type="Rating">
+		<id column="rating_id" property="ratingId" />
+		<result column="rating_value" property="ratingValue" />
+		<result column="post_id" property="postId" />
+		<result column="user_id" property="userId" />
+		<result column="created_time" property="createdTime" />
+		<result column="last_updated_time" property="lastUpdatedTime" />
 
-    <select id="getRatingById" parameterType="String" resultMap="ratingMap">
-        SELECT
-			rating_id,
-			rating_value,
-			post_id,
-			user_name,
-			profile_pic,
-			created_time,
-			last_updated_time
-        FROM
-            rating
-		WHERE      
-        	rating_id=#{value}          	
-    </select>
-    
-    <select id="getRatingsByPost" parameterType="String" resultMap="ratingMap">
-        SELECT
-			rating_id,
-			rating_value,
-			post_id,
-			user_name,
-			profile_pic,
-			created_time,
-			last_updated_time
-        FROM
-            rating
-		WHERE      
-        	post_id=#{value}
-        ORDER BY
-        	created_time asc; 	            	
-    </select>
-    
-    <select id="getAllRatings" parameterType="String" resultMap="ratingMap">
-        SELECT
-			rating_id,
-			rating_value,
-			post_id,
-			user_name,
-			profile_pic,
-			created_time,
-			last_updated_time
-        FROM
-            rating; 	            	
-    </select>
-	     	
- 	<!-- ************** UPDATE ************** -->
- 
- 	<update id="updateRating" parameterType="Post">
-		UPDATE 
-			rating
-		SET 
-			rating_id = #{ratingId}
-			<if test="ratingValue != null">
-				,rating_value = #{ratingValue}
-				,last_updated_time=now()				
-			</if>
+	</resultMap>
+
+
+	<!-- ************** CREATE ************** -->
+	<insert id="addRating" parameterType="Rating" useGeneratedKeys="true">
+		INSERT
+		INTO rating
+		SET
+		rating_id = #{ratingId},
+		rating_value=#{ratingValue},
+		post_id = #{postId},
+		user_id = #{userId},
+		last_updated_time=now(),
+		created_time=now();
+	</insert>
+
+	<!-- ************** READ ************** -->
+
+	<select id="getRatingById" parameterType="String" resultMap="ratingMap">
+		SELECT
+		rating_id,
+		rating_value,
+		post_id,
+		user_id,
+		created_time,
+		last_updated_time
+		FROM
+		rating
 		WHERE
-			rating_id = #{ratingId}
- 	</update>  
+		rating_id=#{value}
+	</select>
 
- 	
- 		<!-- ************** DELETE ************** -->
- 	
- 	    <delete id="deleteRating" parameterType="String">
-		DELETE FROM rating WHERE rating_id = #{value}
-		</delete>
-		<delete id="deleteAllRatingsByPost" parameterType="String">
-		DELETE FROM rating WHERE post_id = #{value}
-		</delete>		
- 	
+	<select id="getRatingByUserId" parameterType="String" resultMap="ratingMap">
+		SELECT
+		rating_id,
+		rating_value,
+		post_id,
+		user_id,
+		created_time,
+		last_updated_time
+		FROM
+		rating
+		WHERE
+		user_id=#{value}
+	</select>
+
+	<select id="getRatingsByPost" parameterType="String" resultMap="ratingMap">
+		SELECT
+		rating_id,
+		rating_value,
+		post_id,
+		user_id,
+		created_time,
+		last_updated_time
+		FROM
+		rating
+		WHERE
+		post_id=#{value}
+		ORDER BY
+		created_time asc;
+	</select>
+
+	<select id="getAllRatings" parameterType="String" resultMap="ratingMap">
+		SELECT
+		rating_id,
+		rating_value,
+		post_id,
+		user_id,
+		created_time,
+		last_updated_time
+		FROM
+		rating;
+	</select>
+
+	<!-- ************** UPDATE ************** -->
+
+	<update id="updateRating" parameterType="Post">
+		UPDATE
+		rating
+		SET
+		rating_id = #{ratingId}
+		<if test="ratingValue != null">
+			,rating_value = #{ratingValue}
+			,last_updated_time=now()
+		</if>
+		WHERE
+		rating_id = #{ratingId}
+	</update>
+
+
+	<!-- ************** DELETE ************** -->
+
+	<delete id="deleteRating" parameterType="String">
+		DELETE FROM rating WHERE
+		rating_id = #{value}
+	</delete>
+	<delete id="deleteAllRatingsByPost" parameterType="String">
+		DELETE FROM
+		rating WHERE post_id = #{value}
+	</delete>
+
 </mapper>

@@ -62,6 +62,30 @@ public class FollowerController {
 	}
 	
 	@GET
+	@Path("/acceptfollowrequest")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response acceptFollowRequest(@QueryParam("followerRequestId") String followerRequestId)
+	{
+		status=followerService.acceptFollowRequest(followerRequestId);
+		
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
+	}
+	
+	@GET
+	@Path("/rejectfollowrequest")
+	public Response rejectFollowRequest(@QueryParam("followerRequestId") String followerRequestId)
+	{
+		status=followerService.rejectFollowRequest(followerRequestId);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
+	}
+
+	@GET
 	@Path("/jointAccountFollowers")
 	public Response getJointAccountFollowers(@QueryParam("jointAccountId") String jointAccountId)
 	{

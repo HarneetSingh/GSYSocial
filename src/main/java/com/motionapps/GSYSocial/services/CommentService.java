@@ -1,5 +1,6 @@
 package com.motionapps.GSYSocial.services;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.QueryParam;
@@ -13,7 +14,6 @@ import com.motionapps.GSYSocial.dao.vo.Notification;
 import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
-import com.motionapps.GSYSocial.dao.vo.RatingVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 public class CommentService {
@@ -78,14 +78,28 @@ public class CommentService {
 	
 	public CommentArrayVO getAllComments()
 	{
-		return new CommentArrayVO(commentDao.getAllComments());
+		List<CommentVO> commentVOList=commentDao.getAllComments();
+		for (int i=0;i<commentVOList.size();i++) 
+		{
+			commentVOList.set(i, addUserData(commentVOList.get(i)));
+		}
+		CommentArrayVO commentArrayVO = new CommentArrayVO(commentVOList);
+		return commentArrayVO;
 	}
 	
 	
 	public CommentArrayVO getCommentsByPost(@QueryParam("postId")String postId)
 	{
-		return new CommentArrayVO(commentDao.getCommentsByPost(postId));
+		List<CommentVO> commentVOList=commentDao.getCommentsByPost(postId);
+		for (int i=0;i<commentVOList.size();i++) 
+		{
+			commentVOList.set(i, addUserData(commentVOList.get(i)));
+		}
+		CommentArrayVO commentArrayVO = new CommentArrayVO(commentVOList);
+		return commentArrayVO;
 	}
+	
+	
 	
 	public Long deleteComment(String commentId) {
 		
@@ -100,6 +114,16 @@ public class CommentService {
 		return commentDao.deleteAllCommentsByPost(postId);
 	}
 	
+	public Long deleteAllCommentsByUserId(String userId)
+	{
+		List<CommentVO> commentVOList=commentDao.getCommentsByUserId(userId);
+		for (CommentVO commentVO : commentVOList) {
+			deleteComment(commentVO.getCommentId());
+		}
+		return 1L;
+	}
+	
+	
 
 	private NotificationRequestVO createNotificationObject(CommentVO commentVO,String notificationText)
 	{
@@ -112,13 +136,21 @@ public class CommentService {
 		notificationRequestVO.setTo(userVO.getGcmDeviceId());
 		Notification notification =new Notification();
 		notification.setTitle("Intactyou");
-		notification.setText(commentVO.getUserName()+notificationText);
+		userVO=userService.getUser(commentVO.getUserId());
+		notification.setText(userVO.getUserName()+notificationText);
+		notification.setIcon(userVO.getProfilePicUrl());
 		notificationRequestVO.setNotification(notification);
 		NotificationDataVO notificationDataVO=new NotificationDataVO(1,postVO);
 		notificationRequestVO.setData(notificationDataVO);
 		return notificationRequestVO;
 	}
 
-	
+	public CommentVO addUserData(CommentVO commentVO)
+	{
+		UserVO userVO=userService.getUser(commentVO.getUserId());
+		commentVO.setUserName(userVO.getUserName());
+		commentVO.setProfilePicUrl(userVO.getProfilePicUrl());
+		return commentVO;
+	}
 	
 }
