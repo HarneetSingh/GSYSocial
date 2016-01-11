@@ -7,6 +7,7 @@ import org.springframework.web.filter.RequestContextFilter;
 import com.motionapps.GSYSocial.controller.CommentController;
 import com.motionapps.GSYSocial.controller.FileController;
 import com.motionapps.GSYSocial.controller.FollowerController;
+import com.motionapps.GSYSocial.controller.GroupAccountController;
 import com.motionapps.GSYSocial.controller.InviteRequestController;
 import com.motionapps.GSYSocial.controller.JointAccountController;
 import com.motionapps.GSYSocial.controller.PostController;
@@ -27,6 +28,7 @@ public class MyMainApplication extends ResourceConfig{
 		register(CommentController.class);
 		register(RatingController.class);
 		register(NotificationService.class);
+		register(GroupAccountController.class);
 		register(JacksonFeature.class);		
 	}
 

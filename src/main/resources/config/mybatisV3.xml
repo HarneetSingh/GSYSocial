@@ -2,29 +2,44 @@
 <!DOCTYPE configuration
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
- 
+
 <configuration>
-    <typeAliases>
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.UserVO" alias="User"/>
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.FileVO" alias="File"/>
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.ChangePasswordVO" alias="ChangePassword"/>
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.InviteRequestVO" alias="InviteRequest"/>
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.JointAccountVO" alias="JointAccount"/>  
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.FollowerVO" alias="Follower"/>    
-        <typeAlias type="com.motionapps.GSYSocial.dao.vo.PostVO" alias="Post"/>     
-		<typeAlias type="com.motionapps.GSYSocial.dao.vo.CommentVO" alias="Comment"/>     
-		<typeAlias type="com.motionapps.GSYSocial.dao.vo.RatingVO" alias="Rating"/>     
-		
-        
-    </typeAliases>
-    <mappers>
-        <mapper resource="mappers/user.xml" />
-        <mapper resource="mappers/file.xml" />
-        <mapper resource="mappers/jointaccount.xml" />
-        <mapper resource="mappers/inviterequest.xml" />
-        <mapper resource="mappers/follower.xml" />
-        <mapper resource="mappers/post.xml" />
-        <mapper resource="mappers/comment.xml" />
-        <mapper resource="mappers/rating.xml" />
-    </mappers>
+	<typeAliases>
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.UserVO"
+			alias="User" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.FileVO"
+			alias="File" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.ChangePasswordVO"
+			alias="ChangePassword" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.InviteRequestVO"
+			alias="InviteRequest" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.JointAccountVO"
+			alias="JointAccount" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.FollowerVO"
+			alias="Follower" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.PostVO"
+			alias="Post" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.CommentVO"
+			alias="Comment" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.RatingVO"
+			alias="Rating" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.GroupAccountVO"
+			alias="GroupAccount" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.GroupMemberVO"
+			alias="GroupMember" />
+
+
+	</typeAliases>
+	<mappers>
+		<mapper resource="mappers/user.xml" />
+		<mapper resource="mappers/file.xml" />
+		<mapper resource="mappers/jointaccount.xml" />
+		<mapper resource="mappers/inviterequest.xml" />
+		<mapper resource="mappers/follower.xml" />
+		<mapper resource="mappers/post.xml" />
+		<mapper resource="mappers/comment.xml" />
+		<mapper resource="mappers/rating.xml" />
+		<mapper resource="mappers/groupaccount.xml" />
+
+	</mappers>
 </configuration>

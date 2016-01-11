@@ -1,0 +1,188 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.motionapps.GSYSocial.dao.GroupAccountDao">
+
+	<resultMap id="groupAccountMap" type="GroupAccount">
+		<id column="group_account_id" property="groupAccountId" />
+		<result column="group_admin_id" property="groupAdminId" />
+		<result column="group_account_name" property="groupAccountName" />
+		<result column="moments_pics" property="momentsPics" />
+		<result column="follower_count" property="followerCount" />
+		<result column="post_count" property="postCount" />
+		<result column="profile_pic" property="profilePic" />
+		<result column="relationship" property="relationship" />
+		<result column="answer" property="answer" />
+		<result column="privacy_mode" property="privacyMode" />
+	</resultMap>
+
+	<resultMap id="groupMemberMap" type="GroupMember">
+		<id column="group_account_id" property="groupAccountId" />
+		<result column="group_admin_id" property="groupAdminId" />
+		<result column="privacy_mode" property="privacyMode" />
+	</resultMap>
+
+
+	<!-- ************** CREATE ************** -->
+	<insert id="createGroupAccount" parameterType="GroupAccount"
+		useGeneratedKeys="true">
+		INSERT
+		INTO group_account
+		SET
+		group_account_id=#{groupAccountId},
+		group_admin_id = #{groupAdminId},
+		group_account_name = #{groupAccountName},
+		profile_pic=#{profilePic},
+		moments_pics=#{momentsPics},
+		relationship=#{relationship},
+		privacy_mode
+		= #{privacyMode},
+		answer=#{answer};
+	</insert>
+
+	<insert id="addGroupMember" parameterType="GroupAccount"
+		useGeneratedKeys="true">
+		INSERT
+		INTO group_account
+		SET
+		group_account_id=#{groupAccountId},
+		group_admin_id = #{groupAdminId},
+		group_account_name = #{groupAccountName},
+		profile_pic=#{profilePic},
+		moments_pics=#{momentsPics},
+		relationship=#{relationship},
+		privacy_mode
+		= #{privacyMode},
+		answer=#{answer};
+	</insert>
+
+	<!-- ************** UPDATE ************** -->
+
+	<update id="updateGroupAccount" parameterType="GroupAccount">
+		UPDATE
+		group_account
+		SET
+		group_account_id = #{groupAccountId}
+		<if test="groupAdminId != null">
+			,group_account_id = #{groupAdminId}
+		</if>
+		<if test="groupAccountName != null">
+			,group_account_name = #{groupAccountName}
+		</if>
+		<if test="momentsPics != null">
+			,moments_pics = #{momentsPics}
+		</if>
+		<if test="profilePic != null">
+			,profile_pic = #{profilePic}
+		</if>
+		<if test="relationship != null">
+			,relationship = #{relationship}
+		</if>
+		<if test="privacyMode != null">
+			,privacy_mode = #{privacyMode}
+		</if>
+		<if test="answer != null">
+			,answer = #{answer}
+		</if>
+		WHERE
+		group_account_id = #{groupAccountId}
+	</update>
+
+	<update id="incrementFollowCount" parameterType="String">
+		UPDATE
+		group_account
+		SET
+		follower_count = follower_count + 1
+		WHERE
+		group_account_id=#{value}
+	</update>
+
+	<update id="decrementFollowCount" parameterType="String">
+		UPDATE
+		group_account
+		SET
+		follower_count = follower_count - 1
+		WHERE
+		group_account_id=#{value}
+	</update>
+
+	<update id="incrementPostCount" parameterType="String">
+		UPDATE
+		group_account
+		SET
+		post_count = post_count + 1
+		WHERE
+		group_account_id=#{value}
+	</update>
+
+	<update id="decrementPostCount" parameterType="String">
+		UPDATE
+		group_account
+		SET
+		post_count = post_count - 1
+		WHERE
+		group_account_id=#{value}
+	</update>
+
+
+
+
+	<!-- ************** READ ************** -->
+	<select id="getGroupAccounts" resultMap="groupAccountMap">
+		SELECT
+		group_account_id,
+		group_admin_id,
+		group_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		answer,
+		privacy_mode
+		FROM
+		group_account;
+	</select>
+
+	<select id="getGroupAccount" resultMap="groupAccountMap"
+		parameterType="String">
+		SELECT
+		group_account_id,
+		group_admin_id,
+		group_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		answer,
+		privacy_mode
+		FROM
+		group_account
+		WHERE
+		group_account_id=#{value};
+	</select>
+	<select id="searchGroupAccount" resultMap="groupAccountMap"
+		parameterType="String">
+		SELECT
+		group_account_id,
+		group_admin_id,
+		group_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		answer,
+		privacy_mode
+		FROM
+		group_account
+		WHERE
+		group_account_name LIKE #{value};
+	</select>
+
+
+
+
+</mapper>	
+	

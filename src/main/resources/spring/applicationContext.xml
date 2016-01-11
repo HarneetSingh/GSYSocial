@@ -47,6 +47,11 @@
 		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.JointAccountDao" />
 	</bean>
 
+	<bean id="groupAccountDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.GroupAccountDao" />
+	</bean>
+	
 	<bean id="followerDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.FollowerDao" />
@@ -144,6 +149,15 @@
 		class="com.motionapps.GSYSocial.controller.JointAccountController">
 		<property name="jointAccountService" ref="jointAccountService" />
 	</bean>
+	<bean id="groupAccountController"
+		class="com.motionapps.GSYSocial.controller.GroupAccountController">
+		<property name="groupAccountService" ref="groupAccountService" />
+	</bean>
+
+	<bean id="groupAccountService" class="com.motionapps.GSYSocial.services.GroupAccountService">
+		<property name="groupAccountDao" ref="groupAccountDao" />
+	</bean>
+
 
 	<bean id="followerService" class="com.motionapps.GSYSocial.services.FollowerService">
 		<property name="followerDao" ref="followerDao" />
