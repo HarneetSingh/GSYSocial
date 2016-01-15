@@ -25,8 +25,16 @@ public interface GroupAccountDao {
 	
 	public Long decrementPostCount(String groupAccountId);
 	
-	public Long addGroupMember(GroupMemberVO groupMemberVO);
+	public Long inviteGroupMember(GroupMemberVO groupMemberVO);
 	
+	public Long inviteAccepted(GroupMemberVO groupMemberVO);
+	
+	public Long inviteRejected(GroupMemberVO groupMemberVO);
+
 	public List<GroupMemberVO> getGroupMembers(String groupAccountId);
+	
+	public List<GroupAccountVO> getGroupAccountsByUserId(String userId);
+	
+	
 
 }

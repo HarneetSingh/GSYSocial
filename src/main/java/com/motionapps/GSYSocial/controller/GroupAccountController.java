@@ -12,8 +12,10 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.motionapps.GSYSocial.dao.vo.GroupAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
 import com.motionapps.GSYSocial.dao.vo.GroupMemberVO;
+import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.services.GroupAccountService;
 
 @Controller
@@ -48,7 +50,7 @@ public class GroupAccountController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateGroupAccount(GroupAccountVO groupAccountVO)
 	{
-		status=groupAccountService.createGroupAccount(groupAccountVO);
+		status=groupAccountService.updateGroupAccount(groupAccountVO);
 		if(status==1)
 			return Response.ok().build();
 		else 
@@ -75,8 +77,18 @@ public class GroupAccountController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getGroupAccounts()
 	{
-		return Response.ok().entity(groupAccountService.getGroupAccounts()).build();
+		return Response.ok().entity(new GroupAccountSearchVO(groupAccountService.getGroupAccounts())).build();
 	}
+	
+	@GET
+	@Path("/getgroupaccounts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getGroupAccounts(@QueryParam("userId")String userId)
+	{
+		return Response.ok().entity(new GroupAccountSearchVO(groupAccountService.getGroupAccountsByUserId(userId))).build();
+	}
+	
+	
 	
 	
 	@GET
@@ -87,16 +99,52 @@ public class GroupAccountController {
 		return Response.ok().entity(groupAccountService.getGroupMembers(groupAccountId)).build();
 	}
 	
-	@POST
-	@Path("/addgroupmember")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addGroupMember(GroupMemberVO groupMemberVO)
+
+	
+	@GET
+	@Path("/searchusers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchUsers(@QueryParam("groupAccountId")String groupAccountId,@QueryParam("keyword")String keyword )
 	{
-		status=groupAccountService.addGroupMember(groupMemberVO);
+		return Response.ok().entity(new UserSearchVO(groupAccountService.searchUsers(groupAccountId,keyword))).build();
+	}
+	
+	@POST
+	@Path("/invite")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response inviteGroupMember(GroupMemberVO groupMemberVO)
+	{
+		status=groupAccountService.inviteGroupMember(groupMemberVO);
 		if(status==1)
 			return Response.ok().build();
 		else 
 			return Response.status(400).build();
+	}
+	
+	@POST
+	@Path("/accept")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response inviteAccepted(GroupMemberVO groupMemberVO)
+	{
+		status=groupAccountService.inviteAccepted(groupMemberVO);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
+		
+	}
+	
+	@POST
+	@Path("/reject")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response inviteRejected(GroupMemberVO groupMemberVO)
+	{
+		status=groupAccountService.inviteRejected(groupMemberVO);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
+		
 	}
 	
 

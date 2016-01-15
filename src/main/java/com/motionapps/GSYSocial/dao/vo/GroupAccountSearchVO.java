@@ -3,12 +3,9 @@ package com.motionapps.GSYSocial.dao.vo;
 import java.io.Serializable;
 import java.util.List;
 
-public class GroupAccountSearchVO implements Serializable{
+public class GroupAccountSearchVO{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5378135783403111129L;
+
 	
 	private List<GroupAccountVO> groupAccounts;
 

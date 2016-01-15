@@ -1,16 +1,11 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class ChangePasswordVO implements Serializable{
+public class ChangePasswordVO {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7053363776193298764L;
 	private String userId;
 	private String oldPassword;
 	private String newPassword;

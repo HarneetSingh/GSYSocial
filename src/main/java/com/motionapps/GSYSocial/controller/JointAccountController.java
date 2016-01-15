@@ -30,8 +30,6 @@ public class JointAccountController {
 
 	private Long status;
 
-
-
 	
 	public void setJointAccountService(JointAccountService jointAccountService) {
 		this.jointAccountService = jointAccountService;

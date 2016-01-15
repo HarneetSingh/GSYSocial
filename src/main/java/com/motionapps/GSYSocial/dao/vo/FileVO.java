@@ -1,6 +1,5 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -8,13 +7,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @XmlRootElement
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
-public class FileVO implements Serializable{
+public class FileVO {
 	
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1141439547095727054L;
 	private String fileId;
 	private String fileName;
 	private String fileType;

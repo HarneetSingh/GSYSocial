@@ -182,8 +182,8 @@ public class UserService {
 		return userDao.getUsers();
 	}
 	
-	public UserSearchVO  searchUser(String keyword) {
-		return new UserSearchVO(userDao.searchUser("%"+keyword+"%"));
+	public List<UserVO>  searchUser(String keyword) {
+		return userDao.searchUser("%"+keyword+"%");
 	}
 	
 	public UserVO getUser(String userId) {

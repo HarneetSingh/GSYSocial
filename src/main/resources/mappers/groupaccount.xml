@@ -18,8 +18,9 @@
 
 	<resultMap id="groupMemberMap" type="GroupMember">
 		<id column="group_account_id" property="groupAccountId" />
-		<result column="group_admin_id" property="groupAdminId" />
-		<result column="privacy_mode" property="privacyMode" />
+		<result column="user_id" property="userId" />
+		<result column="notification_mode" property="notificationMode" />
+		<result column="member_status" property="memberStatus" />
 	</resultMap>
 
 
@@ -40,20 +41,14 @@
 		answer=#{answer};
 	</insert>
 
-	<insert id="addGroupMember" parameterType="GroupAccount"
+	<insert id="inviteGroupMember" parameterType="GroupMember"
 		useGeneratedKeys="true">
 		INSERT
-		INTO group_account
+		INTO group_member
 		SET
 		group_account_id=#{groupAccountId},
-		group_admin_id = #{groupAdminId},
-		group_account_name = #{groupAccountName},
-		profile_pic=#{profilePic},
-		moments_pics=#{momentsPics},
-		relationship=#{relationship},
-		privacy_mode
-		= #{privacyMode},
-		answer=#{answer};
+		user_id = #{userId},
+		member_status=#{memberStatus};
 	</insert>
 
 	<!-- ************** UPDATE ************** -->
@@ -86,6 +81,18 @@
 		</if>
 		WHERE
 		group_account_id = #{groupAccountId}
+	</update>
+
+
+	<update id="inviteAccepted" parameterType="GroupMember">
+		UPDATE
+		group_member
+		SET
+		member_status = #{memberStatus}
+		WHERE
+		group_account_id=#{groupAccountId}
+		AND
+		user_id=#{userId};
 	</update>
 
 	<update id="incrementFollowCount" parameterType="String">
@@ -144,6 +151,8 @@
 		group_account;
 	</select>
 
+
+
 	<select id="getGroupAccount" resultMap="groupAccountMap"
 		parameterType="String">
 		SELECT
@@ -159,6 +168,33 @@
 		privacy_mode
 		FROM
 		group_account
+		WHERE
+		group_account_id=#{value};
+	</select>
+	<select id="getGroupAccountsByUserId" resultMap="groupAccountMap"
+		parameterType="String">
+		SELECT
+		group_account.group_account_id ,
+		group_account.group_account_name, 
+		group_account.profile_pic 
+		FROM
+		group_account 
+		INNER JOIN 
+		group_member 
+		ON
+		group_account.group_account_id=group_member.group_account_id AND
+		group_member.user_id=#{value};
+
+	</select>
+	<select id="getGroupMembers" resultMap="groupMemberMap"
+		parameterType="String">
+		SELECT
+		group_account_id,
+		user_id,
+		notification_mode,
+		member_status
+		FROM
+		group_member
 		WHERE
 		group_account_id=#{value};
 	</select>
@@ -181,8 +217,17 @@
 		group_account_name LIKE #{value};
 	</select>
 
+	<!-- ************** DELETE ************** -->
 
-
+	<delete id="inviteRejected" parameterType="GroupMember">
+		DELETE
+		FROM
+		group_member
+		WHERE
+		group_account_id=#{groupAccountId}
+		AND
+		user_id=#{userId};
+	</delete>
 
 </mapper>	
 	

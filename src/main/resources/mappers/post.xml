@@ -5,7 +5,8 @@
 
 	<resultMap id="postMap" type="Post">
 		<id column="post_id" property="postId" />
-		<result column="joint_account_id" property="jointAccountId" />
+		<result column="account_id" property="accountId" />
+		<result column="account_type" property="accountType" />
 		<result column="file_url" property="fileUrl" />
 		<result column="file_type" property="fileType" />
 		<result column="post_text" property="postText" />
@@ -27,10 +28,12 @@
 		INTO post
 		SET
 		post_id = #{postId},
-		joint_account_id =
-		#{jointAccountId},
+		account_id =
+		#{accountId},
+		account_type=#{accountType},
 		file_url = #{fileUrl},
-		file_type = #{fileType},
+		file_type =
+		#{fileType},
 		post_text = #{postText},
 		user_id = #{userId},
 		thumb_nail_url=
@@ -44,7 +47,8 @@
 		resultMap="postMap">
 		SELECT
 		post_id,
-		joint_account_id,
+		account_id,
+		account_type,
 		file_url,
 		file_type,
 		thumb_nail_url,
@@ -59,7 +63,7 @@
 		FROM
 		post
 		WHERE
-		joint_account_id=#{value}
+		account_id=#{value}
 		ORDER BY
 		created_time desc;
 	</select>
@@ -67,7 +71,8 @@
 	<select id="getPostById" parameterType="String" resultMap="postMap">
 		SELECT
 		post_id,
-		joint_account_id,
+		account_id,
+		account_type,
 		file_url,
 		file_type,
 		thumb_nail_url,
@@ -88,7 +93,8 @@
 	<select id="getPostForUser" parameterType="String" resultMap="postMap">
 		SELECT
 		post.post_id,
-		post.joint_account_id,
+		post.account_id,
+		post.account_type,
 		post.file_url,
 		post.file_type,
 		post.thumb_nail_url,
@@ -105,17 +111,19 @@
 		INNER JOIN
 		follower
 		ON
-		post.joint_account_id=follower.joint_account_id
+		post.account_id=follower.account_id
 		AND
 		follower.user_id=#{value}
-		ORDER BY
+		ORDER
+		BY
 		post.created_time desc;
 	</select>
 
 	<select id="getAllPosts" parameterType="String" resultMap="postMap">
 		SELECT
 		post_id,
-		joint_account_id,
+		account_id,
+		account_type,
 		file_url,
 		file_type,
 		user_id,

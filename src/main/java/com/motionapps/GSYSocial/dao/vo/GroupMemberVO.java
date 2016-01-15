@@ -14,7 +14,17 @@ public class GroupMemberVO {
 	
 	private String profilePicUrl;
 	
+	private int memberStatus;
 	
+	
+	public int getMemberStatus() {
+		return memberStatus;
+	}
+
+	public void setMemberStatus(int memberStatus) {
+		this.memberStatus = memberStatus;
+	}
+
 	public String getGroupAccountId() {
 		return groupAccountId;
 	}

@@ -1,14 +1,9 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class CommentVO implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -3535459433798309942L;
+public class CommentVO {
+
 	
 	private String commentId;
 

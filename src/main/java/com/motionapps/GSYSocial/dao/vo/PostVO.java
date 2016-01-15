@@ -1,23 +1,20 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement
-public class PostVO implements Serializable{
+public class PostVO{
 	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5915203332339230987L;
+
 
 	private String postId;
 	
-	private String jointAccountId;
+	private String accountId;
+	
+	private int accountType;
 	
 	private String fileUrl;
 	
@@ -84,12 +81,21 @@ public class PostVO implements Serializable{
 		this.postId = postId;
 	}
 
-	public String getJointAccountId() {
-		return jointAccountId;
+
+	public String getAccountId() {
+		return accountId;
 	}
 
-	public void setJointAccountId(String jointAccountId) {
-		this.jointAccountId = jointAccountId;
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+	public int getAccountType() {
+		return accountType;
+	}
+
+	public void setAccountType(int accountType) {
+		this.accountType = accountType;
 	}
 
 	public String getFileUrl() {
@@ -184,13 +190,14 @@ public class PostVO implements Serializable{
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
 
-	public PostVO(String postId, String jointAccountId, String fileUrl, String fileType, String postText,
+	public PostVO(String postId, String accountId, int accountType, String fileUrl, String fileType, String postText,
 			int ratingValueSad, int ratingValueOk, int ratingValueHappy, int newRating, String userName,
 			String profilePicUrl, String userId, Date createdTime, Date lastUpdatedTime, String thumbNameUrl,
 			String commentCount) {
 		super();
 		this.postId = postId;
-		this.jointAccountId = jointAccountId;
+		this.accountId = accountId;
+		this.accountType = accountType;
 		this.fileUrl = fileUrl;
 		this.fileType = fileType;
 		this.postText = postText;
@@ -206,6 +213,8 @@ public class PostVO implements Serializable{
 		this.thumbNameUrl = thumbNameUrl;
 		this.commentCount = commentCount;
 	}
+
+
 
 
 

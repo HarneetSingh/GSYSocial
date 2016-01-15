@@ -109,7 +109,7 @@ public class UserController {
 		@Path("/search")
 		@Produces(MediaType.APPLICATION_JSON)
 		public UserSearchVO searchUser(@QueryParam("keyword")String keyword) {
-			return userService.searchUser(keyword);
+			return new UserSearchVO(userService.searchUser(keyword));
 		}
 		@GET
 		@Path("/delete")

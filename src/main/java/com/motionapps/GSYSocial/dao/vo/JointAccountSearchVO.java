@@ -1,17 +1,13 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class JointAccountSearchVO implements Serializable {
+public class JointAccountSearchVO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6989280001788008602L;
+
 	
 	private List<JointAccountVO> jointAccounts;
 	

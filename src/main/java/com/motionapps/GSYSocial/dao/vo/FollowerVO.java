@@ -6,12 +6,8 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class FollowerVO implements Serializable{
+public class FollowerVO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4345715611490162866L;
 	
 	private String followId;
 	private String userId;

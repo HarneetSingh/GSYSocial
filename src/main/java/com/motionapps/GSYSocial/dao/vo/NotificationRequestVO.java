@@ -1,16 +1,11 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class NotificationRequestVO implements Serializable{
+public class NotificationRequestVO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 9090281447661486633L;
 	
 	private String to;
 	

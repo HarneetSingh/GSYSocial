@@ -1,17 +1,12 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement
-public class UserVO implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2342985461916530714L;
+public class UserVO{
+
 	
 	private String userId;
 
@@ -41,7 +36,19 @@ public class UserVO implements Serializable{
 	
 	private int followCount;
 	
+	private int groupAccountStatus;
+	
 	private boolean inviteRequestPending;
+
+	
+	public int getGroupAccountStatus() {
+		return groupAccountStatus;
+	}
+
+	public void setGroupAccountStatus(int groupAccountStatus) {
+		this.groupAccountStatus = groupAccountStatus;
+	}
+
 
 	public boolean isInviteRequestPending() {
 		return inviteRequestPending;

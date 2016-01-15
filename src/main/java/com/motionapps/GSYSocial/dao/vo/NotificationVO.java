@@ -1,14 +1,9 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 
-public class NotificationVO implements Serializable{
+public class NotificationVO {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4277924073869741592L;
-	
+
 	
 	private String notificationId;
 	

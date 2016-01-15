@@ -1,15 +1,10 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class RatingVO implements Serializable
+public class RatingVO
 {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -777169146469953445L;
 
 	private String ratingId;
 

@@ -34,6 +34,16 @@ public class PostService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private GroupAccountService groupAccountService;
+
+
+
+	public void setGroupAccountService(GroupAccountService groupAccountService) {
+		this.groupAccountService = groupAccountService;
+	}
+
 
 
 
@@ -76,7 +86,10 @@ public class PostService {
 
 		postVO.setPostId(UUID.randomUUID().toString());
 		Long status=postDao.createPost(postVO);
-		jointAccountService.incrementPostCount(postVO.getJointAccountId());
+		if(postVO.getAccountType()==0)
+			jointAccountService.incrementPostCount(postVO.getAccountId());
+		else if(postVO.getAccountType()==1)
+			groupAccountService.incrementPostCount(postVO.getAccountId());
 		return status;
 
 	}
@@ -182,11 +195,11 @@ public class PostService {
 		commentService.deleteAllCommentsByPost(postId);
 		//delete all ratings of a particular post
 		ratingService.deleteAllRatingsByPost(postId);
-
-		jointAccountService.decrementPostCount(postVO.getJointAccountId());
-
+		if(postVO.getAccountType()==0)
+			jointAccountService.decrementPostCount(postVO.getAccountId());
+		else if(postVO.getAccountType()==1)
+			groupAccountService.decrementPostCount(postVO.getAccountId());
 		Long status = postDao.deletePost(postId);
-
 		return status;
 	}
 
