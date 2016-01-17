@@ -47,11 +47,10 @@ public class InviteRequestController {
 	@POST
 	@Path("/accept")
 	@Transactional 
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response inviteAccepted(InviteRequestVO inviteRequestVO)
+	public Response inviteAccepted(@QueryParam("inviteRequestId") String inviteRequestId)
 	{
 
-		JointAccountVO jointAccountVO=inviteRequestService.inviteAccepted(inviteRequestVO);
+		JointAccountVO jointAccountVO=inviteRequestService.inviteAccepted(inviteRequestId);
 		if(jointAccountVO!=null)
 			return Response.ok().entity(jointAccountVO).type(MediaType.APPLICATION_JSON).build();
 		else
@@ -66,11 +65,10 @@ public class InviteRequestController {
 	@POST
 	@Path("/{a:reject|cancel}")
 	@Transactional 
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response inviteRejected(InviteRequestVO inviteRequestVO)
+	public Response inviteRejected(@QueryParam("inviteRequestId") String inviteRequestId)
 	{
 		
-		result=inviteRequestService.inviteRejected(inviteRequestVO);
+		result=inviteRequestService.inviteRejected(inviteRequestId);
 		
 		if(result==1){
 			return Response.ok().build();

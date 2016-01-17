@@ -4,8 +4,8 @@ package com.motionapps.GSYSocial.services;
 
 import java.util.UUID;
 
-
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.JointAccountDao;
@@ -27,6 +27,9 @@ public class JointAccountService {
 	
 	@Autowired
 	private UserService userService;
+	
+	private static final Logger logger = 
+			LoggerFactory.getLogger(JointAccountService.class);
 	
 	
 	public void setPostService(PostService postService) {
@@ -51,10 +54,10 @@ public class JointAccountService {
 	{
 		JointAccountVO jointAccountVO=new JointAccountVO();
 		jointAccountVO.setJointAccountId(UUID.randomUUID().toString());
-		System.out.println(inviteRequestVO.getInviterUserId());
+		logger.debug(inviteRequestVO.getInviterUserId());
 		jointAccountVO.setFirstUserId(inviteRequestVO.getInviterUserId());
 		UserVO firstUser=userService.getUser(inviteRequestVO.getInviterUserId());
-		System.out.println(firstUser.getUserName());
+		logger.debug(firstUser.getUserName());
 		jointAccountVO.setFirstUserName(firstUser.getUserName());
 		jointAccountVO.setFirstUserProfilePic(firstUser.getProfilePicUrl());
 		jointAccountVO.setSecondUserId(inviteRequestVO.getInviteeUserId());
@@ -63,7 +66,7 @@ public class JointAccountService {
 		jointAccountVO.setSecondUserProfilePic(secondUser.getProfilePicUrl());
 		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
 		jointAccountDao.createJointAccount(jointAccountVO);
-		userService.updateJointAccountDetails(jointAccountVO);
+		//userService.updateJointAccountDetails(jointAccountVO);
 		return getJointAccount(jointAccountVO.getJointAccountId());
 	}
 	

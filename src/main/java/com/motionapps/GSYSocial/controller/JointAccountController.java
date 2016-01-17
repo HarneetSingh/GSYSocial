@@ -74,6 +74,14 @@ public class JointAccountController {
 		
 	}
 	
+//	@GET
+//	@Path("/getjointaccounts")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response getJointAccounts(@QueryParam("userId")String userId) {
+//		return  Response.ok().entity(jointAccountService.getJointAccounts(userId)).build();
+//		
+//	}
+	
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -18,6 +18,7 @@ public class InviteRequestService {
 
 	
 	private NotificationRequestVO notificationRequestVO;
+	private InviteRequestVO inviteRequestVO;
 
 	@Autowired
 	private InviteRequestDao inviteRequestDao;
@@ -63,12 +64,12 @@ public class InviteRequestService {
 		inviteRequestDao.inviteUser(inviteRequestVO);
 		
 		//Setting the invite_request_pending flag in user table to true
-		UserVO userVO=new UserVO();
-		userVO.setUserId(inviteRequestVO.getInviteeUserId());
-		userVO.setInviteRequestPending(Boolean.TRUE);
-		userService.updateInviteRequestStatus(userVO);
-		userVO.setUserId(inviteRequestVO.getInviterUserId());
-		userService.updateInviteRequestStatus(userVO);
+//		UserVO userVO=new UserVO();
+//		userVO.setUserId(inviteRequestVO.getInviteeUserId());
+//		userVO.setInviteRequestPending(Boolean.TRUE);
+//		userService.updateInviteRequestStatus(userVO);
+//		userVO.setUserId(inviteRequestVO.getInviterUserId());
+//		userService.updateInviteRequestStatus(userVO);
 
 		notificationRequestVO=createNotificationObject(inviteRequestVO," invited you to join joint account");
 		if(notificationRequestVO!=null)
@@ -77,17 +78,17 @@ public class InviteRequestService {
 
 	}
 	
-	public JointAccountVO inviteAccepted(InviteRequestVO inviteRequestVO)
+	public JointAccountVO inviteAccepted(String inviteRequestId)
 	{
 //		inviteRequestVO.setInviteAccepted(Boolean.TRUE);
 		
-		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
-		UserVO userVO=new UserVO();
-		userVO.setUserId(inviteRequestVO.getInviteeUserId());
-		userVO.setInviteRequestPending(Boolean.FALSE);
-		userService.updateInviteRequestStatus(userVO);
-		userVO.setUserId(inviteRequestVO.getInviterUserId());
-		userService.updateInviteRequestStatus(userVO);
+		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestId);
+//		UserVO userVO=new UserVO();
+//		userVO.setUserId(inviteRequestVO.getInviteeUserId());
+//		userVO.setInviteRequestPending(Boolean.FALSE);
+//		userService.updateInviteRequestStatus(userVO);
+//		userVO.setUserId(inviteRequestVO.getInviterUserId());
+//		userService.updateInviteRequestStatus(userVO);
 		
 		Long result=inviteRequestDao.inviteDeleted(inviteRequestVO);	
 		
@@ -111,18 +112,18 @@ public class InviteRequestService {
 
 	}
 	
-	public Long inviteRejected(InviteRequestVO inviteRequestVO)
+	public Long inviteRejected(String inviteRequestId)
 	{
 		
-		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestVO.getInviteRequestId());
-
-		//Setting the invite_request_pending flag in user table to false
-		UserVO userVO=new UserVO();
-		userVO.setUserId(inviteRequestVO.getInviteeUserId());
-		userVO.setInviteRequestPending(Boolean.FALSE);
-		userService.updateInviteRequestStatus(userVO);
-		userVO.setUserId(inviteRequestVO.getInviterUserId());
-		userService.updateInviteRequestStatus(userVO);
+		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestId);
+//
+//		//Setting the invite_request_pending flag in user table to false
+//		UserVO userVO=new UserVO();
+//		userVO.setUserId(inviteRequestVO.getInviteeUserId());
+//		userVO.setInviteRequestPending(Boolean.FALSE);
+//		userService.updateInviteRequestStatus(userVO);
+//		userVO.setUserId(inviteRequestVO.getInviterUserId());
+//		userService.updateInviteRequestStatus(userVO);
 		return inviteRequestDao.inviteDeleted(inviteRequestVO);
 	}
 	
@@ -136,7 +137,7 @@ public class InviteRequestService {
 		InviteRequestVO inviteRequestVO=pendingRequests(userId);
 		if(inviteRequestVO!=null)
 		{
-			inviteRejected(inviteRequestVO);
+			inviteRejected(inviteRequestVO.getInviteRequestId());
 		}
 		return 1L;
 	}
