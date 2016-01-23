@@ -2,15 +2,22 @@ package com.motionapps.GSYSocial.services;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+import javax.print.DocFlavor.STRING;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.UserDao;
+import com.motionapps.GSYSocial.dao.vo.AccountsVO;
 import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
+import com.motionapps.GSYSocial.dao.vo.GroupAccountSearchVO;
+import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
+import com.motionapps.GSYSocial.dao.vo.InviteRequestSearchVO;
+import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
@@ -38,6 +45,9 @@ public class UserService {
 	
 	@Autowired
 	private InviteRequestService inviteRequestService;
+	
+	@Autowired
+	private GroupAccountService groupAccountService;
 	
 
 	public void setInviteRequestService(InviteRequestService inviteRequestService) {
@@ -182,6 +192,8 @@ public class UserService {
 		return userDao.getUsers();
 	}
 	
+	
+	
 	public List<UserVO>  searchUser(String keyword) {
 		return userDao.searchUser("%"+keyword+"%");
 	}
@@ -271,6 +283,33 @@ public class UserService {
 		}
 
 	}
+	
+	public AccountsVO getAccountsDetails(String userId)
+	{
+		List<JointAccountVO> jointAccounts =jointAccountService.getJointAccountsofUserId(userId);
+		List<GroupAccountVO> groupAccounts=groupAccountService.getGroupAccountsByUserId(userId);
+		List<InviteRequestVO> inviteRequests=inviteRequestService.getInviteRequests(userId);
+		return new AccountsVO(jointAccounts, inviteRequests, groupAccounts);
+	}
+
+	public AccountsVO searchUsersAccount(String keyword)
+	{
+		List<UserVO> userVOs=searchUser(keyword);
+		List<JointAccountVO> jointAccounts=new ArrayList<JointAccountVO>();
+		List<GroupAccountVO> groupAccounts=new ArrayList<GroupAccountVO>();
+		for(UserVO userVO:userVOs)
+		{
+		String userId=userVO.getUserId();
+		jointAccounts.addAll(jointAccountService.getJointAccountsofUserId(userId));
+		groupAccounts.addAll(groupAccountService.getGroupAccountsByUserId(userId));
+		}
+		return new AccountsVO(jointAccounts, groupAccounts);
+	}
+
+	public void setGroupAccountService(GroupAccountService groupAccountService) {
+		this.groupAccountService = groupAccountService;
+	}
+	
 	
 	
 }

@@ -36,11 +36,6 @@
 		first_user_id = #{firstUserId},
 		second_user_id =
 		#{secondUserId},
-		first_user_name= #{firstUserName},
-		first_user_profile_pic= #{firstUserProfilePic},
-		second_user_name=
-		#{secondUserName},
-		second_user_profile_pic= #{secondUserProfilePic},
 		joint_account_name = #{jointAccountName};
 	</insert>
 
@@ -51,10 +46,6 @@
 		joint_account_id,
 		first_user_id,
 		second_user_id,
-		first_user_name,
-		first_user_profile_pic,
-		second_user_name,
-		second_user_profile_pic,
 		joint_account_name,
 		moments_pics,
 		follower_count,
@@ -73,10 +64,6 @@
 		joint_account_id,
 		first_user_id,
 		second_user_id,
-		first_user_name,
-		first_user_profile_pic,
-		second_user_name,
-		second_user_profile_pic,
 		joint_account_name,
 		moments_pics,
 		follower_count,
@@ -91,16 +78,34 @@
 		WHERE
 		joint_account_id=#{value};
 	</select>
+	<select id="getJointAccountsofUserId" resultMap="jointAccountMap"
+		parameterType="String">
+		SELECT
+		joint_account_id,
+		first_user_id,
+		second_user_id,
+		joint_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		first_user_answer,
+		second_user_answer,
+		privacy_mode
+		FROM
+		joint_account
+		WHERE
+		first_user_id=#{value}
+		OR
+		second_user_id=#{value};
+	</select>
 	<select id="getJointAccountWithUserId" resultMap="jointAccountMap"
 		parameterType="map">
 		SELECT
 		joint_account_id,
 		first_user_id,
 		second_user_id,
-		first_user_name,
-		first_user_profile_pic,
-		second_user_name,
-		second_user_profile_pic,
 		joint_account_name,
 		moments_pics,
 		follower_count,
@@ -125,10 +130,6 @@
 		joint_account_id,
 		first_user_id,
 		second_user_id,
-		first_user_name,
-		first_user_profile_pic,
-		second_user_name,
-		second_user_profile_pic,
 		joint_account_name,
 		moments_pics,
 		follower_count,

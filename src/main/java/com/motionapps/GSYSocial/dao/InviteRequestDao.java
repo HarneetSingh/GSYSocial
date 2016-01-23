@@ -1,5 +1,7 @@
 package com.motionapps.GSYSocial.dao;
 
+import java.util.List;
+
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
 
 
@@ -15,5 +17,7 @@ public interface InviteRequestDao {
 	public InviteRequestVO getInviteRequestDetails(String inviteRequestId);
 	
 	public InviteRequestVO getInviteRequest(String userId);
+
+	public List<InviteRequestVO> getInviteRequests(String userId);
 
 }

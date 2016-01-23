@@ -175,15 +175,18 @@
 		parameterType="String">
 		SELECT
 		group_account.group_account_id ,
+		group_account.group_admin_id,
 		group_account.group_account_name, 
-		group_account.profile_pic 
+		group_account.profile_pic,
+		group_account.privacy_mode
 		FROM
 		group_account 
 		INNER JOIN 
 		group_member 
 		ON
 		group_account.group_account_id=group_member.group_account_id AND
-		group_member.user_id=#{value};
+		group_member.user_id=#{value} AND
+		group_member.member_status=2;
 
 	</select>
 	<select id="getGroupMembers" resultMap="groupMemberMap"

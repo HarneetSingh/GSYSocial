@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-
+import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.services.JointAccountService;
 
@@ -74,13 +74,13 @@ public class JointAccountController {
 		
 	}
 	
-//	@GET
-//	@Path("/getjointaccounts")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response getJointAccounts(@QueryParam("userId")String userId) {
-//		return  Response.ok().entity(jointAccountService.getJointAccounts(userId)).build();
-//		
-//	}
+	@GET
+	@Path("/getjointaccounts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getJointAccountsofUserId(@QueryParam("userId")String userId) {
+		return  Response.ok().entity(new JointAccountSearchVO(jointAccountService.getJointAccountsofUserId(userId))).build();
+		
+	}
 	
 	@GET
 	@Path("/search")

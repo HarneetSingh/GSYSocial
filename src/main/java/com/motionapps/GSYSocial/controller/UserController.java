@@ -160,7 +160,21 @@ public class UserController {
 
 		}
 		
+		@GET
+		@Path("/getAccounts")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response getAccountsDetails(@QueryParam("userId")String userId)
+		{
+			return Response.status(200).entity(userService.getAccountsDetails(userId)).build();
+		}
 		
+		@GET
+		@Path("/searchUsersAccount")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response searchUsersAccount(@QueryParam("keyword")String keyword)
+		{
+			return Response.status(200).entity(userService.searchUsersAccount(keyword)).build();
+		}
 		
 		
 }	

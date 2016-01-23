@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.services;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -131,6 +132,13 @@ public class InviteRequestService {
 	{
 		return inviteRequestDao.getInviteRequest(userId);
 	}
+	
+	public List<InviteRequestVO> getInviteRequests(String userId)
+	{
+		return inviteRequestDao.getInviteRequests(userId);
+	}
+	
+	
 	
 	public Long deleteInviteRequest(String userId)
 	{

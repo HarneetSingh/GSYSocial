@@ -2,7 +2,9 @@ package com.motionapps.GSYSocial.services;
 
 
 
+import java.util.List;
 import java.util.UUID;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,14 +58,14 @@ public class JointAccountService {
 		jointAccountVO.setJointAccountId(UUID.randomUUID().toString());
 		logger.debug(inviteRequestVO.getInviterUserId());
 		jointAccountVO.setFirstUserId(inviteRequestVO.getInviterUserId());
-		UserVO firstUser=userService.getUser(inviteRequestVO.getInviterUserId());
-		logger.debug(firstUser.getUserName());
-		jointAccountVO.setFirstUserName(firstUser.getUserName());
-		jointAccountVO.setFirstUserProfilePic(firstUser.getProfilePicUrl());
+//		UserVO firstUser=userService.getUser(inviteRequestVO.getInviterUserId());
+//		logger.debug(firstUser.getUserName());
+//		jointAccountVO.setFirstUserName(firstUser.getUserName());
+//		jointAccountVO.setFirstUserProfilePic(firstUser.getProfilePicUrl());
 		jointAccountVO.setSecondUserId(inviteRequestVO.getInviteeUserId());
-		UserVO secondUser=userService.getUser(inviteRequestVO.getInviteeUserId());
-		jointAccountVO.setSecondUserName(secondUser.getUserName());
-		jointAccountVO.setSecondUserProfilePic(secondUser.getProfilePicUrl());
+//		UserVO secondUser=userService.getUser(inviteRequestVO.getInviteeUserId());
+//		jointAccountVO.setSecondUserName(secondUser.getUserName());
+//		jointAccountVO.setSecondUserProfilePic(secondUser.getProfilePicUrl());
 		jointAccountVO.setJointAccountName(inviteRequestVO.getJointAccountName());
 		jointAccountDao.createJointAccount(jointAccountVO);
 		//userService.updateJointAccountDetails(jointAccountVO);
@@ -78,8 +80,21 @@ public class JointAccountService {
 	}
 
 	public JointAccountVO  getJointAccount(String jointAccountId) {
-		return jointAccountDao.getJointAccount(jointAccountId);
+		JointAccountVO jointAccountVO=jointAccountDao.getJointAccount(jointAccountId);
+		UserVO userVO=userService.getUser(jointAccountVO.getFirstUserId());
+		jointAccountVO.setFirstUserName(userVO.getUserName());
+		jointAccountVO.setFirstUserProfilePic(userVO.getProfilePicUrl());
+		userVO=userService.getUser(jointAccountVO.getSecondUserId());
+		jointAccountVO.setSecondUserName(userVO.getUserName());
+		jointAccountVO.setSecondUserProfilePic(userVO.getProfilePicUrl());
+		return jointAccountVO;
 	}
+	
+
+	public List<JointAccountVO>  getJointAccountsofUserId(String userId) {
+		return jointAccountDao.getJointAccountsofUserId(userId);
+	}
+	
 	
 	public JointAccountVO getJointAccountWithUserId(String jointAccountId,String userId)
 	{

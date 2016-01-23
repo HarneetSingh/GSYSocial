@@ -44,7 +44,7 @@ public class InviteRequestController {
 		return Response.status(200).entity(tempInviteRequestVO).type(MediaType.APPLICATION_JSON).build();
 	}
 	
-	@POST
+	@GET
 	@Path("/accept")
 	@Transactional 
 	public Response inviteAccepted(@QueryParam("inviteRequestId") String inviteRequestId)
@@ -62,7 +62,7 @@ public class InviteRequestController {
 	
 
 	
-	@POST
+	@GET
 	@Path("/{a:reject|cancel}")
 	@Transactional 
 	public Response inviteRejected(@QueryParam("inviteRequestId") String inviteRequestId)

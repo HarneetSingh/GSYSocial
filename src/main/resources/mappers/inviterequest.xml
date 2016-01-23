@@ -1,60 +1,74 @@
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.motionapps.GSYSocial.dao.InviteRequestDao">
 
- 	<resultMap id="inviteRequestMap" type="InviteRequest" >
-        <id column="invite_id" property="inviteRequestId"  />
-        <result column="inviter_user_id" property="inviterUserId"/>
-        <result column="invitee_user_id" property="inviteeUserId" />
-        <result column="joint_account_name" property="jointAccountName"/>
-	</resultMap>   
-    
- 	<!-- ************** CREATE ************** -->
- 	<insert id="inviteUser" parameterType="InviteRequest" useGeneratedKeys="true">
-		INSERT 
-			INTO invite_request
-		SET 
-			invite_id = #{inviteRequestId},
-			inviter_user_id = #{inviterUserId},
-			invitee_user_id = #{inviteeUserId},
-			joint_account_name = #{jointAccountName};
- 	</insert>   
- 	
- 	
- 	<select id="getInviteRequestDetails" parameterType="String" resultMap="inviteRequestMap">
- 	    SELECT
- 	    	invite_id,
- 	    	inviter_user_id,
- 	    	invitee_user_id,
- 	    	joint_account_name
- 	    FROM
- 	    	invite_request
- 	    WHERE
- 	    	invite_id = #{value};
- 	</select>
- 	
- 	 	<select id="getInviteRequest" parameterType="String" resultMap="inviteRequestMap">
- 	    SELECT
- 	    	invite_id,
- 	    	inviter_user_id,
- 	    	invitee_user_id,
- 	    	joint_account_name
- 	    FROM
- 	    	invite_request
- 	    WHERE
- 	    	inviter_user_id = #{value}
- 	    OR
- 	    	invitee_user_id = #{value};
- 	</select>
- 		     	
+	<resultMap id="inviteRequestMap" type="InviteRequest">
+		<id column="invite_id" property="inviteRequestId" />
+		<result column="inviter_user_id" property="inviterUserId" />
+		<result column="invitee_user_id" property="inviteeUserId" />
+		<result column="joint_account_name" property="jointAccountName" />
+	</resultMap>
 
- 	<delete id="inviteDeleted" parameterType="InviteRequest">
-		DELETE 
-		FROM 
-			invite_request
+	<!-- ************** CREATE ************** -->
+	<insert id="inviteUser" parameterType="InviteRequest"
+		useGeneratedKeys="true">
+		INSERT
+		INTO invite_request
+		SET
+		invite_id = #{inviteRequestId},
+		inviter_user_id = #{inviterUserId},
+		invitee_user_id = #{inviteeUserId},
+		joint_account_name = #{jointAccountName};
+	</insert>
+
+
+	<select id="getInviteRequestDetails" parameterType="String"
+		resultMap="inviteRequestMap">
+		SELECT
+		invite_id,
+		inviter_user_id,
+		invitee_user_id,
+		joint_account_name
+		FROM
+		invite_request
 		WHERE
-			invite_id = #{inviteRequestId}
- 	</delete>  
- </mapper>	
+		invite_id = #{value};
+	</select>
+
+	<select id="getInviteRequest" parameterType="String" resultMap="inviteRequestMap">
+		SELECT
+		invite_id,
+		inviter_user_id,
+		invitee_user_id,
+		joint_account_name
+		FROM
+		invite_request
+		WHERE
+		inviter_user_id = #{value}
+		OR
+		invitee_user_id = #{value};
+	</select>
+
+
+	<select id="getInviteRequests" parameterType="String" resultMap="inviteRequestMap">
+		SELECT
+		invite_id,
+		inviter_user_id,
+		invitee_user_id,
+		joint_account_name
+		FROM
+		invite_request
+		WHERE
+		inviter_user_id = #{value};
+	</select>
+
+	<delete id="inviteDeleted" parameterType="InviteRequest">
+		DELETE
+		FROM
+		invite_request
+		WHERE
+		invite_id = #{inviteRequestId}
+	</delete>
+</mapper>	
  	

@@ -18,6 +18,8 @@ public interface JointAccountDao {
 	
 	public JointAccountVO getJointAccountWithUserId(@Param("jointAccountId")String jointAccountId,@Param("userId")String userId);
 
+	public List<JointAccountVO> getJointAccountsofUserId(String userId);
+	
 	public List<JointAccountVO> searchJointAccounts(String string);
 	
 	public Long incrementFollowCount(String jointAccountId);

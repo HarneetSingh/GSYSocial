@@ -24,6 +24,8 @@ public class GroupAccountService {
 	
 	private GroupAccountVO groupAccountVO;
 	
+	private GroupMemberVO groupMemberVO;
+	
 	
 	public void setGroupAccountDao(GroupAccountDao groupAccountDao) {
 		this.groupAccountDao = groupAccountDao;
@@ -32,8 +34,15 @@ public class GroupAccountService {
 
 	public Long createGroupAccount(GroupAccountVO groupAccountVO)
 	{
+		
 		groupAccountVO.setGroupAccountId(UUID.randomUUID().toString());
 		groupAccountDao.createGroupAccount(groupAccountVO);
+		groupMemberVO=new GroupMemberVO();
+		groupMemberVO.setGroupAccountId(groupAccountVO.getGroupAccountId());
+		groupMemberVO.setUserId(groupAccountVO.getGroupAdminId());
+		groupMemberVO.setMemberStatus(2);
+		groupAccountDao.inviteGroupMember(groupMemberVO);
+		
 		return 1L;
 	}
 	
