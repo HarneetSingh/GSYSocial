@@ -1,10 +1,8 @@
 package com.motionapps.GSYSocial.services;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.InviteRequestDao;
@@ -63,14 +61,7 @@ public class InviteRequestService {
 		inviteRequestVO.setInviteRequestId(inviteRequestId);
 		
 		inviteRequestDao.inviteUser(inviteRequestVO);
-		
-		//Setting the invite_request_pending flag in user table to true
-//		UserVO userVO=new UserVO();
-//		userVO.setUserId(inviteRequestVO.getInviteeUserId());
-//		userVO.setInviteRequestPending(Boolean.TRUE);
-//		userService.updateInviteRequestStatus(userVO);
-//		userVO.setUserId(inviteRequestVO.getInviterUserId());
-//		userService.updateInviteRequestStatus(userVO);
+
 
 		notificationRequestVO=createNotificationObject(inviteRequestVO," invited you to join joint account");
 		if(notificationRequestVO!=null)
@@ -79,26 +70,19 @@ public class InviteRequestService {
 
 	}
 	
-	public JointAccountVO inviteAccepted(String inviteRequestId)
+	public JointAccountVO inviteAccepted(String inviteRequestId,String notificationId)
 	{
-//		inviteRequestVO.setInviteAccepted(Boolean.TRUE);
+
 		
 		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestId);
-//		UserVO userVO=new UserVO();
-//		userVO.setUserId(inviteRequestVO.getInviteeUserId());
-//		userVO.setInviteRequestPending(Boolean.FALSE);
-//		userService.updateInviteRequestStatus(userVO);
-//		userVO.setUserId(inviteRequestVO.getInviterUserId());
-//		userService.updateInviteRequestStatus(userVO);
+
 		
 		Long result=inviteRequestDao.inviteDeleted(inviteRequestVO);	
-		
-//		notificationRequestVO=createNotificationObject(join," invited you to join joint account");
-//		if(notificationRequestVO!=null)
-//			notificationService.sendNotification(notificationRequestVO);
+
 
 		if(result==1){
 			jointAccountVO=jointAccountService.createJointAccount(inviteRequestVO);
+			notificationService.removeNotificationRequest(notificationId);
 			notificationRequestVO=createJointAccNotificationObject(jointAccountVO," joint account is created");
 			if(notificationRequestVO!=null)
 				notificationService.sendNotification(notificationRequestVO);
@@ -107,24 +91,18 @@ public class InviteRequestService {
 		}else
 			{
 			return jointAccountVO;
-//			ErrorVO errorVO=new ErrorVO("No Pending Request Found");
-//			return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+
 			}
 
 	}
 	
-	public Long inviteRejected(String inviteRequestId)
+	public Long inviteRejected(String inviteRequestId,String notificationId)
 	{
 		
 		inviteRequestVO=inviteRequestDao.getInviteRequestDetails(inviteRequestId);
 //
-//		//Setting the invite_request_pending flag in user table to false
-//		UserVO userVO=new UserVO();
-//		userVO.setUserId(inviteRequestVO.getInviteeUserId());
-//		userVO.setInviteRequestPending(Boolean.FALSE);
-//		userService.updateInviteRequestStatus(userVO);
-//		userVO.setUserId(inviteRequestVO.getInviterUserId());
-//		userService.updateInviteRequestStatus(userVO);
+		notificationService.removeNotificationRequest(notificationId);
+
 		return inviteRequestDao.inviteDeleted(inviteRequestVO);
 	}
 	
@@ -145,61 +123,47 @@ public class InviteRequestService {
 		InviteRequestVO inviteRequestVO=pendingRequests(userId);
 		if(inviteRequestVO!=null)
 		{
-			inviteRejected(inviteRequestVO.getInviteRequestId());
+			inviteRejected(inviteRequestVO.getInviteRequestId(),null);
 		}
 		return 1L;
 	}
 	
 	private NotificationRequestVO createNotificationObject(InviteRequestVO inviteRequestVO,String notificationText)
 	{
-		ObjectMapper objectMapper=new ObjectMapper();
-		try {
-			System.out.println(objectMapper.writeValueAsString(inviteRequestVO));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-//		PostVO postVO=postService.getPostById(commentVO.getPostId());
+
 		UserVO inviteeUserVO=userService.getUser(inviteRequestVO.getInviteeUserId());
 		UserVO inviterUserVO=userService.getUser(inviteRequestVO.getInviterUserId());
-		//String gcmId=userVO.getGcmDeviceId();
-		if(inviteeUserVO.getGcmDeviceId()==null)
-			return null;
-		try {
-			System.out.println(objectMapper.writeValueAsString(inviteeUserVO));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
-		notificationRequestVO.setTo(inviteeUserVO.getGcmDeviceId());
+
 		Notification notification =new Notification();
 		notification.setTitle("Intactyou");
 		notification.setText(inviterUserVO.getUserName()+notificationText);
 		notification.setIcon(inviterUserVO.getProfilePicUrl());
-		notificationRequestVO.setNotification(notification);
-		NotificationDataVO notificationDataVO=new NotificationDataVO(2,inviteRequestVO);
-		notificationRequestVO.setData(notificationDataVO);
-		return notificationRequestVO;
+
+		NotificationDataVO notificationDataVO=new NotificationDataVO(21,inviteeUserVO.getUserId(),true,inviteRequestVO);
+
+		notificationRequestVO=notificationService.createNotificationObject(inviteeUserVO.getGcmDeviceId(),notification, notificationDataVO);
+		if(inviteeUserVO.getGcmDeviceId()==null&&inviteeUserVO.getGcmDeviceId().equals(""))
+			return null;
+		else 
+			return notificationRequestVO;
 	}
 	private NotificationRequestVO createJointAccNotificationObject(JointAccountVO jointAccountVO,String notificationText)
 	{
-//		PostVO postVO=postService.getPostById(commentVO.getPostId());
-//		UserVO inviteeUserVO=userService.getUser(inviteRequestVO.getInviteeUserId());
+
 		UserVO userVO=userService.getUser(jointAccountVO.getFirstUserId());
-		//String gcmId=userVO.getGcmDeviceId();
-		if(userVO.getGcmDeviceId()==null)
-			return null;
-		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
-		notificationRequestVO.setTo(userVO.getGcmDeviceId());
+
 		Notification notification =new Notification();
 		notification.setTitle("Intactyou");
 		notification.setText(jointAccountVO.getJointAccountName()+notificationText);
-		notificationRequestVO.setNotification(notification);
-		NotificationDataVO notificationDataVO=new NotificationDataVO(3,jointAccountVO);
-		notificationRequestVO.setData(notificationDataVO);
-		return notificationRequestVO;
+
+		NotificationDataVO notificationDataVO=new NotificationDataVO(1,userVO.getUserId(),false,jointAccountVO);
+
+		
+		notificationRequestVO=notificationService.createNotificationObject(userVO.getGcmDeviceId(), notification, notificationDataVO);
+			if(userVO.getGcmDeviceId()==null||userVO.getGcmDeviceId().equals(""))
+				return null;
+			else 
+				return notificationRequestVO;
 	}
 
 	

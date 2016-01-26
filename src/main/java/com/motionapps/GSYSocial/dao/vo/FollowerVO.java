@@ -1,7 +1,6 @@
 package com.motionapps.GSYSocial.dao.vo;
 
 
-import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,7 +10,8 @@ public class FollowerVO {
 	
 	private String followId;
 	private String userId;
-	private String jointAccountId;
+	private String accountId;
+	private int accountType;
 	
 	
 	public String getFollowId() {
@@ -27,22 +27,32 @@ public class FollowerVO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getJointAccountId() {
-		return jointAccountId;
+
+
+	public String getAccountId() {
+		return accountId;
 	}
-	public void setJointAccountId(String jointAccountId) {
-		this.jointAccountId = jointAccountId;
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
+	public int getAccountType() {
+		return accountType;
+	}
+	public void setAccountType(int accountType) {
+		this.accountType = accountType;
+	}
+
+
 	public FollowerVO()
 	{}
-	public FollowerVO(String followId, String userId, String jointAccountId) {
+	
+	public FollowerVO(String followId, String userId, String accountId, int accountType) {
 		super();
 		this.followId = followId;
 		this.userId = userId;
-		this.jointAccountId = jointAccountId;
+		this.accountId = accountId;
+		this.accountType = accountType;
 	}
-
-	
 	
 
 }

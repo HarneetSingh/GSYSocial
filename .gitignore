@@ -10,6 +10,8 @@
 *.png
 *.docx
 *.log
+.*
+
 
 # generated files
 target/

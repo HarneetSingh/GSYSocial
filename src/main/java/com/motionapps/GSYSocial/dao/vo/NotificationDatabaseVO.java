@@ -1,21 +1,24 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-
-public class NotificationVO {
-
-
-	
+public class NotificationDatabaseVO {
 	
 	private String notificationId;
 	
 	private Boolean isRequest;
 	
+	public Boolean getIsRequest() {
+		return isRequest;
+	}
+
+	public void setIsRequest(Boolean isRequest) {
+		this.isRequest = isRequest;
+	}
+
 	private String userId;
 	
-	private Notification notification;
+	private String notification;
 	
-	private NotificationDataVO data;
-	
+	private String data;
 
 	public String getNotificationId() {
 		return notificationId;
@@ -33,35 +36,27 @@ public class NotificationVO {
 		this.userId = userId;
 	}
 
-	public Notification getNotification() {
+	public String getNotification() {
 		return notification;
 	}
 
-	public void setNotification(Notification notification) {
+	public void setNotification(String notification) {
 		this.notification = notification;
 	}
 
-	public NotificationDataVO getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(NotificationDataVO data) {
+	public void setData(String data) {
 		this.data = data;
 	}
-
-	public Boolean getIsRequest() {
-		return isRequest;
-	}
-
-	public void setIsRequest(Boolean isRequest) {
-		this.isRequest = isRequest;
-	}
-
-	public NotificationVO() {
-	}
 	
-	public NotificationVO(String notificationId, Boolean isRequest, String userId, Notification notification,
-			NotificationDataVO data) {
+	public NotificationDatabaseVO() {
+	}
+
+	public NotificationDatabaseVO(String notificationId, Boolean isRequest, String userId, String notification,
+			String data) {
 		super();
 		this.notificationId = notificationId;
 		this.isRequest = isRequest;
@@ -69,7 +64,14 @@ public class NotificationVO {
 		this.notification = notification;
 		this.data = data;
 	}
-		
-	
 
+
+
+
+
+
+
+
+
+	
 }

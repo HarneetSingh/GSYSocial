@@ -11,6 +11,26 @@ public class NotificationDataVO {
 
 	private int notificationType;
 	
+	private String userIdTo;
+	
+	private Boolean isRequest;
+
+	public Boolean getIsRequest() {
+		return isRequest;
+	}
+
+	public void setIsRequest(Boolean isRequest) {
+		this.isRequest = isRequest;
+	}
+
+	public String getUserIdTo() {
+		return userIdTo;
+	}
+
+	public void setUserIdTo(String userIdTo) {
+		this.userIdTo = userIdTo;
+	}
+
 	private Object dataObject;
 
 	public int getNotificationType() {
@@ -28,13 +48,17 @@ public class NotificationDataVO {
 	public void setDataObject(Object dataObject) {
 		this.dataObject = dataObject;
 	}
-
-	public NotificationDataVO(int notificationType, Object dataObject) {
+	public NotificationDataVO() {
+		// TODO Auto-generated constructor stub
+	}
+	public NotificationDataVO(int notificationType, String userIdTo, Boolean isRequest, Object dataObject) {
 		super();
 		this.notificationType = notificationType;
+		this.userIdTo = userIdTo;
+		this.isRequest = isRequest;
 		this.dataObject = dataObject;
 	}
-	
 
-	
+
+
 }

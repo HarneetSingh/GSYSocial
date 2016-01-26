@@ -27,6 +27,7 @@ public class InviteRequestController {
 	
 	@Autowired
 	public InviteRequestService inviteRequestService;
+
 		
 	public void setInviteRequestService(InviteRequestService inviteRequestService) {
 		this.inviteRequestService = inviteRequestService;
@@ -41,16 +42,16 @@ public class InviteRequestController {
 	public Response inviteUser(InviteRequestVO inviteRequestVO)
 	{
 		InviteRequestVO tempInviteRequestVO=inviteRequestService.inviteUser(inviteRequestVO);
-		return Response.status(200).entity(tempInviteRequestVO).type(MediaType.APPLICATION_JSON).build();
+		return Response.ok().build();
 	}
 	
 	@GET
 	@Path("/accept")
 	@Transactional 
-	public Response inviteAccepted(@QueryParam("inviteRequestId") String inviteRequestId)
+	public Response inviteAccepted(@QueryParam("inviteRequestId") String inviteRequestId,@QueryParam("notificationId") String notificationId)
 	{
 
-		JointAccountVO jointAccountVO=inviteRequestService.inviteAccepted(inviteRequestId);
+		JointAccountVO jointAccountVO=inviteRequestService.inviteAccepted(inviteRequestId,notificationId);
 		if(jointAccountVO!=null)
 			return Response.ok().entity(jointAccountVO).type(MediaType.APPLICATION_JSON).build();
 		else
@@ -65,12 +66,13 @@ public class InviteRequestController {
 	@GET
 	@Path("/{a:reject|cancel}")
 	@Transactional 
-	public Response inviteRejected(@QueryParam("inviteRequestId") String inviteRequestId)
+	public Response inviteRejected(@QueryParam("inviteRequestId") String inviteRequestId,@QueryParam("notificationId") String notificationId)
 	{
 		
-		result=inviteRequestService.inviteRejected(inviteRequestId);
+		result=inviteRequestService.inviteRejected(inviteRequestId,notificationId);
 		
 		if(result==1){
+			
 			return Response.ok().build();
 		}else
 		{

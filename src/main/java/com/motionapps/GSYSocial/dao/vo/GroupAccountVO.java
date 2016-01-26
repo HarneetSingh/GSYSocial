@@ -1,6 +1,5 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
 
 public class GroupAccountVO {
 
@@ -21,6 +20,15 @@ public class GroupAccountVO {
 	
 	private String relationship;
 	
+	private Boolean userFollowing;
+	
+	public Boolean getUserFollowing() {
+		return userFollowing;
+	}
+
+	public void setUserFollowing(Boolean userFollowing) {
+		this.userFollowing = userFollowing;
+	}
 	private String answer;
 		
 	private String momentsPics;
@@ -129,9 +137,11 @@ public class GroupAccountVO {
 
 	public GroupAccountVO()
 	{}
+
 	public GroupAccountVO(String groupAccountId, String groupAdminId, String groupAdminName,
 			String groupAdminProfilePic, String groupAccountName, int privacyMode, String profilePic,
-			String relationship, String answer, String momentsPics, int followerCount, int postCount) {
+			String relationship, Boolean userFollowing, String answer, String momentsPics, int followerCount,
+			int postCount) {
 		super();
 		this.groupAccountId = groupAccountId;
 		this.groupAdminId = groupAdminId;
@@ -141,6 +151,7 @@ public class GroupAccountVO {
 		this.privacyMode = privacyMode;
 		this.profilePic = profilePic;
 		this.relationship = relationship;
+		this.userFollowing = userFollowing;
 		this.answer = answer;
 		this.momentsPics = momentsPics;
 		this.followerCount = followerCount;

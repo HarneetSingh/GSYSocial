@@ -55,12 +55,21 @@ public class RatingService {
 	{
 		if(ratingVO.getRatingValue()>2)
 			return 0L;
-		ratingVO.setRatingId(UUID.randomUUID().toString());
+		RatingVO ratingVO2=ratingDao.getRating(ratingVO);
+		if(ratingVO2==null)
+		{
+		ratingVO.setRatingId(UUID.randomUUID().toString());		
 		ratingDao.addRating(ratingVO);
 		postService.addRating(ratingVO);
 		notificationRequestVO=createNotificationObject(ratingVO," rated your post");
 		if(notificationRequestVO!=null)
 			notificationService.sendNotification(notificationRequestVO);
+		}
+		else
+		{
+			ratingVO.setRatingId(ratingVO2.getRatingId());
+			updateRating(ratingVO);
+		}
 		return 1L;
 		
 	}
@@ -85,10 +94,11 @@ public class RatingService {
 		//	5 1 =1-5 = -4
         //   1 5 =5-1 =4
 		ratingVO.setPostId(currentRatingVO.getPostId());
-		int ratingDifference=ratingVO.getRatingValue()-currentRatingVO.getRatingValue();
-		ratingVO.setRatingValue(ratingDifference);
-		postService.updateRating(ratingVO);
-		notificationRequestVO=createNotificationObject(currentRatingVO," changed his rating");
+		//int ratingDifference=ratingVO.getRatingValue()-currentRatingVO.getRatingValue();
+		//ratingVO.setRatingValue(ratingDifference);
+		postService.removeRating(currentRatingVO);
+		postService.addRating(ratingVO);
+		notificationRequestVO=createNotificationObject(currentRatingVO," updated his rating");
 		if(notificationRequestVO!=null)
 			notificationService.sendNotification(notificationRequestVO);
 		return 1L;
@@ -123,20 +133,30 @@ public class RatingService {
 	{
 		PostVO postVO=postService.getPostById(ratingVO.getPostId());
 		UserVO userVO=userService.getUser(postVO.getUserId());
-		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
+		//NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
 		String gcmId=userVO.getGcmDeviceId();
-		if(userVO.getGcmDeviceId()==null)
-			return null;
-		notificationRequestVO.setTo(userVO.getGcmDeviceId());
+
+		//notificationRequestVO.setTo(userVO.getGcmDeviceId());
+		
+		
+		
 		Notification notification =new Notification();
 		notification.setTitle("Intactyou");
-		userVO=userService.getUser(ratingVO.getUserId());
-		notification.setText(userVO.getUserName()+notificationText);
-		notification.setIcon(userVO.getProfilePicUrl());
-		notificationRequestVO.setNotification(notification);
-		NotificationDataVO notificationDataVO=new NotificationDataVO(1,postVO);
-		notificationRequestVO.setData(notificationDataVO);
-		return notificationRequestVO;
+		UserVO userVO2=userService.getUser(ratingVO.getUserId());
+		notification.setText(userVO2.getUserName()+notificationText);
+		notification.setIcon(userVO2.getProfilePicUrl());
+		
+		NotificationDataVO notificationDataVO=new NotificationDataVO(2,userVO.getUserId(),false,postVO);
+
+		//notificationRequestVO.setNotification(notification);
+		//notificationRequestVO.setData(notificationDataVO);
+		notificationRequestVO=notificationService.createNotificationObject(userVO.getGcmDeviceId(),notification, notificationDataVO);
+
+		if(userVO.getGcmDeviceId()==null||userVO.getGcmDeviceId().equals(""))
+			return null;
+		else
+			return notificationRequestVO;
+
 	}
 	
 	public RatingVO addUserData(RatingVO ratingVO)

@@ -15,6 +15,8 @@ public interface RatingDao {
 	public List<RatingVO> getRatingsByPost(String postId);
 	
 	public List<RatingVO>  getRatingByUserId(String userId);
+	
+	public RatingVO getRating(RatingVO ratingVO);
 
 	public Long updateRating(RatingVO ratingVO);
 	

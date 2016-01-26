@@ -208,7 +208,7 @@
 		post_id = #{postId}
 	</update>
 
-	<update id="updateRating" parameterType="Post">
+<!-- 	<update id="updateRating" parameterType="Post">
 		UPDATE
 		post
 		SET
@@ -220,7 +220,7 @@
 		WHERE
 		post_id = #{postId}
 	</update>
-
+ -->
 	<update id="incrementCommentCount" parameterType="String">
 		UPDATE
 		post

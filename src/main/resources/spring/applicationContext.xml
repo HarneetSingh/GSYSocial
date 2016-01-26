@@ -51,7 +51,7 @@
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.GroupAccountDao" />
 	</bean>
-	
+
 	<bean id="followerDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.FollowerDao" />
@@ -62,6 +62,10 @@
 		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.PostDao" />
 	</bean>
 
+	<bean id="notificationDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="mapperInterface" value="com.motionapps.GSYSocial.dao.NotificationDao" />
+	</bean>
 
 	<bean id="commentDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
@@ -170,6 +174,10 @@
 	</bean>
 
 	<bean id="notificationService" class="com.motionapps.GSYSocial.services.NotificationService">
+		<property name="notificationDao" ref="notificationDao" />
+	</bean>
+	<bean id="notificationController" class="com.motionapps.GSYSocial.controller.NotificationController">
+		<property name="notificationService" ref="notificationService" />
 	</bean>
 
 	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 

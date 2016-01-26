@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
 import com.motionapps.GSYSocial.dao.vo.GroupMemberVO;
@@ -24,9 +25,11 @@ public class GroupAccountController {
 	
 	
 	private Long status;
-	
+
+
 	@Autowired
 	private GroupAccountService groupAccountService;
+	
 
 	
 	public void setGroupAccountService(GroupAccountService groupAccountService) {
@@ -71,6 +74,14 @@ public class GroupAccountController {
 	public Response getGroupAccount(@QueryParam("groupAccountId")String groupAccountId)
 	{
 		return Response.ok().entity(groupAccountService.getGroupAccount(groupAccountId)).build();
+	}
+	
+	@GET
+	@Path("/detailsWithUserId")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getJointAccount(@QueryParam("groupAccountId")String groupAccountId,@QueryParam("userId")String userId) {
+		return  Response.ok().entity(groupAccountService.getGroupAccountWithUserId(groupAccountId,userId)).build();
+		
 	}
 	
 	@GET
@@ -121,12 +132,26 @@ public class GroupAccountController {
 			return Response.status(400).build();
 	}
 	
-	@POST
+	@GET
 	@Path("/accept")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response inviteAccepted(GroupMemberVO groupMemberVO)
+	public Response inviteAccepted(@QueryParam("groupAccountId")String groupAccountId,@QueryParam("userId")String userId,@QueryParam("notificationId") String notificationId)
 	{
-		status=groupAccountService.inviteAccepted(groupMemberVO);
+		status=groupAccountService.inviteAccepted(groupAccountId,userId,notificationId);
+		
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).build();
+		
+	}
+	
+	@GET
+	@Path("/reject")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response inviteRejected(@QueryParam("groupAccountId")String groupAccountId,@QueryParam("userId")String userId,@QueryParam("notificationId") String notificationId)
+	{
+		status=groupAccountService.inviteRejected(groupAccountId,userId,notificationId);
 		if(status==1)
 			return Response.ok().build();
 		else 
@@ -135,11 +160,11 @@ public class GroupAccountController {
 	}
 	
 	@POST
-	@Path("/reject")
+	@Path("/removeMember")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response inviteRejected(GroupMemberVO groupMemberVO)
+	public Response removeMember(GroupMemberVO groupMemberVO)
 	{
-		status=groupAccountService.inviteRejected(groupMemberVO);
+		status=groupAccountService.removeMember(groupMemberVO);
 		if(status==1)
 			return Response.ok().build();
 		else 

@@ -27,6 +27,8 @@
 			alias="GroupAccount" />
 		<typeAlias type="com.motionapps.GSYSocial.dao.vo.GroupMemberVO"
 			alias="GroupMember" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.NotificationDatabaseVO"
+			alias="Notification" />
 
 
 	</typeAliases>
@@ -40,6 +42,7 @@
 		<mapper resource="mappers/comment.xml" />
 		<mapper resource="mappers/rating.xml" />
 		<mapper resource="mappers/groupaccount.xml" />
+		<mapper resource="mappers/notification.xml" />
 
 	</mappers>
 </configuration>

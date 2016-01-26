@@ -18,7 +18,7 @@ public interface FollowerDao {
 
 	public Long removeFollowRequest(String followerRequestId);
 		
-	public List<UserVO> getJointAccountFollowers(String jointAccountId);
+	public List<UserVO> getAccountFollowers(String jointAccountId);
 	
 	public List<JointAccountVO> getJointAccountsFollowedByUser(String userId);
 		

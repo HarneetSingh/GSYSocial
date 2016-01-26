@@ -116,7 +116,7 @@
 		second_user_answer,
 		privacy_mode,
 		EXISTS(SELECT * FROM follower where
-		joint_account_id=#{jointAccountId} AND
+		account_id=#{jointAccountId} AND
 		user_id=#{userId}) AS
 		user_following
 		FROM

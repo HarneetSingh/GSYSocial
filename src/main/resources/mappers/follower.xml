@@ -6,7 +6,8 @@
 	<resultMap id="followerMap" type="Follower">
 		<id column="follow_id" property="followId" />
 		<result column="user_id" property="userId" />
-		<result column="joint_account_id" property="jointAccountId" />
+		<result column="account_id" property="accountId" />
+		<result column="account_type" property="accountType"/>
 	</resultMap>
 
 	<resultMap id="followerRequestMap" type="Follower">
@@ -53,7 +54,8 @@
 		follow_id=#{followId},
 		user_id =
 		#{userId},
-		joint_account_id = #{jointAccountId};
+		account_id = #{accountId},
+		account_type=#{accountType};
 	</insert>
 
 	<insert id="sendFollowRequest" parameterType="Follower"
@@ -67,7 +69,7 @@
 		#{jointAccountId};
 	</insert>
 	<!-- ************** READ ************** -->
-	<select id="getJointAccountFollowers" parameterType="String"
+	<select id="getAccountFollowers" parameterType="String"
 		resultMap="userMap">
 		SELECT
 		user.user_id,
@@ -85,7 +87,7 @@
 		ON
 		user.user_id=follower.user_id
 		AND
-		follower.joint_account_id=#{value}
+		follower.account_id=#{value}
 		ORDER BY
 		user.user_name;
 	</select>
@@ -94,7 +96,7 @@
 		SELECT
 		follow_id,
 		user_id,
-		joint_account_id
+		account_id
 		FROM
 		follower
 		WHERE
@@ -129,7 +131,7 @@
 		INNER JOIN
 		follower
 		ON
-		joint_account.joint_account_id=follower.joint_account_id
+		joint_account.joint_account_id=follower.account_id
 		AND
 		follower.user_id=#{value}
 		ORDER BY
@@ -142,7 +144,7 @@
 		SELECT
 		follow_id,
 		user_id,
-		joint_account_id
+		account_id
 		FROM
 		follower
 		WHERE
@@ -157,7 +159,7 @@
 		WHERE
 		user_id = #{userId}
 		AND
-		joint_account_id = #{jointAccountId};
+		account_id = #{accountId};
 	</delete>
 	<delete id="removeFollowRequest" parameterType="String">
 		DELETE

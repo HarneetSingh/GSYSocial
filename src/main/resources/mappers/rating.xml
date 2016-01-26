@@ -28,6 +28,23 @@
 	</insert>
 
 	<!-- ************** READ ************** -->
+	
+	
+	<select id="getRating" parameterType="Rating" resultMap="ratingMap">
+		SELECT
+		rating_id,
+		rating_value,
+		post_id,
+		user_id,
+		created_time,
+		last_updated_time
+		FROM
+		rating
+		WHERE
+		post_id=#{postId}
+		AND
+		user_id = #{userId}
+	</select>
 
 	<select id="getRatingById" parameterType="String" resultMap="ratingMap">
 		SELECT

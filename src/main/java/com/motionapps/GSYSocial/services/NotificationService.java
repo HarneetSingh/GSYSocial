@@ -2,40 +2,50 @@ package com.motionapps.GSYSocial.services;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.apache.ibatis.builder.annotation.MapperAnnotationBuilder;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.glassfish.jersey.client.ClientResponse;
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.motionapps.GSYSocial.dao.vo.FollowerVO;
+import com.motionapps.GSYSocial.dao.NotificationDao;
 import com.motionapps.GSYSocial.dao.vo.Notification;
+import com.motionapps.GSYSocial.dao.vo.NotificationArrayVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
+import com.motionapps.GSYSocial.dao.vo.NotificationDatabaseVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationResponseVO;
-import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.dao.vo.NotificationVO;
 
-@Controller
-@Path("/")
+
 public class NotificationService {
 	
 	private WebTarget target;
 	private String BASE_URI="https://gcm-http.googleapis.com/gcm";
-	private String key="AIzaSyAdVloxTUW2IlZ0BVjoGTm-AZLkQNLZOMc";
+	private String key="AIzaSyBPypcdN8uju8VBNe6HVvsoLrqzzp9oNFo";//"AIzaSyAdVloxTUW2IlZ0BVjoGTm-AZLkQNLZOMc";
+	
+	
+	@Autowired
+	private NotificationDao notificationDao;
+	
+	
+
+	public void setNotificationDao(NotificationDao notificationDao) {
+		this.notificationDao = notificationDao;
+	}
+
 	
 //	@GET
 //	@Path("/test")
@@ -92,10 +102,11 @@ public class NotificationService {
 			e.printStackTrace();
 		}
 		NotificationResponseVO notificationResponseVO = target.path("/send").request(MediaType.APPLICATION_JSON).header("Authorization", "key="+key).post(Entity.json(notificationRequestVO),NotificationResponseVO.class);
+		//saveNotificationInDatabase(notificationRequestVO);
 		return notificationResponseVO;
 	}
 	
-	public NotificationRequestVO createNotificationObject(UserVO userVO,NotificationDataVO notificationDataVO,String notificationText)
+	public NotificationRequestVO createNotificationObject(String to,Notification notification,NotificationDataVO notificationDataVO)
 	{
 //		ObjectMapper objectMapper=new ObjectMapper();
 //		try {
@@ -108,8 +119,8 @@ public class NotificationService {
 //		PostVO postVO=postService.getPostById(commentVO.getPostId());
 
 		//String gcmId=userVO.getGcmDeviceId();
-		if(userVO.getGcmDeviceId()==null)
-			return null;
+//		if(userVO.getGcmDeviceId()==null)
+//			return null;
 //		try {
 //			System.out.println(objectMapper.writeValueAsString(inviteeUserVO));
 //		} catch (IOException e) {
@@ -117,14 +128,104 @@ public class NotificationService {
 //			e.printStackTrace();
 //		}
 		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
-		notificationRequestVO.setTo(userVO.getGcmDeviceId());
-		Notification notification =new Notification();
-		notification.setTitle("Intactyou");
-		notification.setText(userVO.getUserName()+" "+notificationText);
-		notification.setIcon(userVO.getProfilePicUrl());
+		notificationRequestVO.setTo(to);
+//		Notification notification =new Notification();
+//		notification.setTitle("Intactyou");
+//		notification.setText(userVO.getUserName()+" "+notificationText);
+//		notification.setIcon(userVO.getProfilePicUrl());
 		notificationRequestVO.setNotification(notification);
 		notificationRequestVO.setData(notificationDataVO);
+		ObjectMapper objectMapper=new ObjectMapper();
+		try {
+			System.out.println(objectMapper.writeValueAsString(notificationRequestVO));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		saveNotificationInDatabase(notificationRequestVO);
 		return notificationRequestVO;
+	}
+	
+	
+	private Long saveNotificationInDatabase(NotificationRequestVO notificationRequestVO)
+	{
+		ObjectMapper objectMapper=new ObjectMapper();
+		NotificationDatabaseVO notificationDatabaseVO=new NotificationDatabaseVO();
+		notificationDatabaseVO.setNotificationId(UUID.randomUUID().toString());
+		notificationDatabaseVO.setUserId(notificationRequestVO.getData().getUserIdTo());
+		notificationDatabaseVO.setIsRequest (notificationRequestVO.getData().getIsRequest());
+	
+		try {
+			notificationDatabaseVO.setData(objectMapper.writeValueAsString(notificationRequestVO.getData()));
+			notificationDatabaseVO.setNotification(objectMapper.writeValueAsString(notificationRequestVO.getNotification()));
+
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return notificationDao.saveNotificationInDatabase(notificationDatabaseVO);
+		}
+
+	public NotificationArrayVO getNotificationRequests(String userId)
+	{
+		ObjectMapper objectMapper=new ObjectMapper();
+		List<NotificationDatabaseVO> notificationDatabaseVOs= notificationDao.getNotificationRequests(userId);
+		List<NotificationVO> notificationVOs=new ArrayList<NotificationVO>();
+		for(NotificationDatabaseVO notificationDatabaseVO : notificationDatabaseVOs)
+		{
+			NotificationVO notificationVO=new NotificationVO();
+			notificationVO.setNotificationId(notificationDatabaseVO.getNotificationId());
+			notificationVO.setIsRequest(notificationDatabaseVO.getIsRequest());
+			notificationVO.setUserId(notificationDatabaseVO.getUserId());
+			try {
+				notificationVO.setData(objectMapper.readValue(notificationDatabaseVO.getData(),NotificationDataVO.class ));
+				notificationVO.setNotification(objectMapper.readValue(notificationDatabaseVO.getNotification(),Notification.class ));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			notificationVOs.add(notificationVO);
+					
+		}
+	
+		return new NotificationArrayVO(notificationVOs);
+	}
+	
+	public NotificationArrayVO getNotifications(String userId)
+	{
+		ObjectMapper objectMapper=new ObjectMapper();
+		List<NotificationDatabaseVO> notificationDatabaseVOs= notificationDao.getNotifications(userId);
+		List<NotificationVO> notificationVOs=new ArrayList<NotificationVO>();
+		for(NotificationDatabaseVO notificationDatabaseVO : notificationDatabaseVOs)
+		{
+			NotificationVO notificationVO=new NotificationVO();
+			notificationVO.setNotificationId(notificationDatabaseVO.getNotificationId());
+			notificationVO.setIsRequest(notificationDatabaseVO.getIsRequest());
+			notificationVO.setUserId(notificationDatabaseVO.getUserId());
+			try {
+				notificationVO.setData(objectMapper.readValue(notificationDatabaseVO.getData(),NotificationDataVO.class ));
+				notificationVO.setNotification(objectMapper.readValue(notificationDatabaseVO.getNotification(),Notification.class ));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			notificationVOs.add(notificationVO);
+					
+		}
+	
+		return new NotificationArrayVO(notificationVOs);
+	}
+	
+	public Long removeNotificationRequest(String notificationId)
+	{
+		return notificationDao.removeNotificationRequest(notificationId);
 	}
 
 }

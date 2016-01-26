@@ -121,14 +121,14 @@ public class PostService {
 		return postDao.deleteRating(postVO); 
 	}
 
-	public Long updateRating(RatingVO ratingVO) {
-
-		String postId=ratingVO.getPostId();
-		PostVO postVO=new PostVO();
-		postVO.setPostId(postId);
-		postVO.setNewRating(ratingVO.getRatingValue());
-		return postDao.updateRating(postVO); 
-	}
+//	public Long updateRating(RatingVO ratingVO) {
+//
+//		String postId=ratingVO.getPostId();
+//		PostVO postVO=new PostVO();
+//		postVO.setPostId(postId);
+//		postVO.setNewRating(ratingVO.getRatingValue());
+//		return postDao.updateRating(postVO); 
+//	}
 
 
 	public PostArrayVO getPostByJointAccount(String jointAccountId) {

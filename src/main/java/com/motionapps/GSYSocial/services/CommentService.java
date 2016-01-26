@@ -127,22 +127,23 @@ public class CommentService {
 
 	private NotificationRequestVO createNotificationObject(CommentVO commentVO,String notificationText)
 	{
-		PostVO postVO=postService.getPostById(commentVO.getPostId());
-		UserVO userVO=userService.getUser(postVO.getUserId());
-		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
-		//String gcmId=userVO.getGcmDeviceId();
-		if(userVO.getGcmDeviceId()==null)
-			return null;
-		notificationRequestVO.setTo(userVO.getGcmDeviceId());
-		Notification notification =new Notification();
-		notification.setTitle("Intactyou");
-		userVO=userService.getUser(commentVO.getUserId());
-		notification.setText(userVO.getUserName()+notificationText);
-		notification.setIcon(userVO.getProfilePicUrl());
-		notificationRequestVO.setNotification(notification);
-		NotificationDataVO notificationDataVO=new NotificationDataVO(1,postVO);
-		notificationRequestVO.setData(notificationDataVO);
-		return notificationRequestVO;
+//		PostVO postVO=postService.getPostById(commentVO.getPostId());
+//		UserVO userVO=userService.getUser(postVO.getUserId());
+//		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
+//		//String gcmId=userVO.getGcmDeviceId();
+//		if(userVO.getGcmDeviceId()==null)
+//			return null;
+//		notificationRequestVO.setTo(userVO.getGcmDeviceId());
+//		Notification notification =new Notification();
+//		notification.setTitle("Intactyou");
+//		userVO=userService.getUser(commentVO.getUserId());
+//		notification.setText(userVO.getUserName()+notificationText);
+//		notification.setIcon(userVO.getProfilePicUrl());
+//		notificationRequestVO.setNotification(notification);
+//		NotificationDataVO notificationDataVO=new NotificationDataVO(1,postVO);
+//		notificationRequestVO.setData(notificationDataVO);
+//		return notificationRequestVO;
+		return null;
 	}
 
 	public CommentVO addUserData(CommentVO commentVO)

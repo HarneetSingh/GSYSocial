@@ -11,6 +11,7 @@
 		<result column="follower_count" property="followerCount" />
 		<result column="post_count" property="postCount" />
 		<result column="profile_pic" property="profilePic" />
+		<result column="user_following" property="userFollowing" />
 		<result column="relationship" property="relationship" />
 		<result column="answer" property="answer" />
 		<result column="privacy_mode" property="privacyMode" />
@@ -150,6 +151,16 @@
 		FROM
 		group_account;
 	</select>
+	
+<!-- 		<select id="getGroupAccountsByAdminId" resultMap="int"
+		parameterType="String">
+		SELECT
+			COUNT(group_account_id)
+		FROM
+		group_account
+		WHERE
+		group_admin_id=#{value};
+	</select> -->
 
 
 
@@ -171,18 +182,41 @@
 		WHERE
 		group_account_id=#{value};
 	</select>
+
+	<select id="getGroupAccountWithUserId" resultMap="groupAccountMap"
+		parameterType="map">
+		SELECT
+		group_account_id,
+		group_admin_id,
+		group_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		answer,
+		privacy_mode,
+		EXISTS(SELECT * FROM follower where
+		account_id=#{groupAccountId} AND
+		user_id=#{userId}) AS
+		user_following
+		FROM
+		group_account
+		WHERE
+		group_account_id=#{groupAccountId};
+	</select>
 	<select id="getGroupAccountsByUserId" resultMap="groupAccountMap"
 		parameterType="String">
 		SELECT
 		group_account.group_account_id ,
 		group_account.group_admin_id,
-		group_account.group_account_name, 
+		group_account.group_account_name,
 		group_account.profile_pic,
 		group_account.privacy_mode
 		FROM
-		group_account 
-		INNER JOIN 
-		group_member 
+		group_account
+		INNER JOIN
+		group_member
 		ON
 		group_account.group_account_id=group_member.group_account_id AND
 		group_member.user_id=#{value} AND
@@ -199,7 +233,9 @@
 		FROM
 		group_member
 		WHERE
-		group_account_id=#{value};
+		group_account_id=#{value}
+		AND
+		member_status=2;
 	</select>
 	<select id="searchGroupAccount" resultMap="groupAccountMap"
 		parameterType="String">
@@ -222,6 +258,16 @@
 
 	<!-- ************** DELETE ************** -->
 
+	<delete id="removeMember" parameterType="GroupMember">
+		DELETE
+		FROM
+		group_member
+		WHERE
+		group_account_id=#{groupAccountId}
+		AND
+		user_id=#{userId};
+	</delete>
+	
 	<delete id="inviteRejected" parameterType="GroupMember">
 		DELETE
 		FROM

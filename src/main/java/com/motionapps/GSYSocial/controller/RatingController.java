@@ -39,18 +39,18 @@ public class RatingController {
 	}
 	
 	
-	@POST
-	@Path("/update")
-	public Response updateRating(RatingVO ratingVO)
-	{
-		status=ratingService.updateRating(ratingVO);
-		
-		if(status==1)
-			return Response.ok().build();
-		else
-			return Response.status(400).build();
-		
-	}
+//	@POST
+//	@Path("/update")
+//	public Response updateRating(RatingVO ratingVO)
+//	{
+//		status=ratingService.updateRating(ratingVO);
+//		
+//		if(status==1)
+//			return Response.ok().build();
+//		else
+//			return Response.status(400).build();
+//		
+//	}
 	
 	@GET
 	@Path("/delete")

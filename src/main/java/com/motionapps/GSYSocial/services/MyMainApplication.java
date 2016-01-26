@@ -10,6 +10,7 @@ import com.motionapps.GSYSocial.controller.FollowerController;
 import com.motionapps.GSYSocial.controller.GroupAccountController;
 import com.motionapps.GSYSocial.controller.InviteRequestController;
 import com.motionapps.GSYSocial.controller.JointAccountController;
+import com.motionapps.GSYSocial.controller.NotificationController;
 import com.motionapps.GSYSocial.controller.PostController;
 import com.motionapps.GSYSocial.controller.RatingController;
 import com.motionapps.GSYSocial.controller.UserController;
@@ -27,7 +28,7 @@ public class MyMainApplication extends ResourceConfig{
 		register(PostController.class);
 		register(CommentController.class);
 		register(RatingController.class);
-		register(NotificationService.class);
+		register(NotificationController.class);
 		register(GroupAccountController.class);
 		register(JacksonFeature.class);		
 	}

@@ -86,10 +86,10 @@ public class FollowerController {
 	}
 
 	@GET
-	@Path("/jointAccountFollowers")
-	public Response getJointAccountFollowers(@QueryParam("jointAccountId") String jointAccountId)
+	@Path("/accountFollowers")
+	public Response getAccountFollowers(@QueryParam("accountId") String accountId)
 	{
-		return Response.ok().entity(followerService.getJointAccountFollowers(jointAccountId)).type(MediaType.APPLICATION_JSON).build();
+		return Response.ok().entity(followerService.getAccountFollowers(accountId)).type(MediaType.APPLICATION_JSON).build();
 	}
 	
 	@GET
