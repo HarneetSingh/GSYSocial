@@ -2,6 +2,9 @@ package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
 
+
+import org.apache.ibatis.annotations.Param;
+
 import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
@@ -22,7 +25,7 @@ public interface UserDao {
 
 	public String getSessionId(String emailId);
 	
-	public String getPassword(String userId);
+	public String getPassword(String emailId);
 	
 	public Long updateSessionId(UserVO user);
 	
@@ -43,5 +46,11 @@ public interface UserDao {
 	public Long deleteUser(String userId);
 	
 	public Long clearGcmDeviceId(String gcmDeviceId);
+	
+	public Long verifyEmailAddress(@Param("userId")String userId, @Param("emailId") String emailId );
+
+	public Long setTempPassword(UserVO userVO);
+	
+	public String getTempPassword(String emailId);
 
 }

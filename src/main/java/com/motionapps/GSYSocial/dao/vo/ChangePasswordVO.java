@@ -6,16 +6,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class ChangePasswordVO {
 	
-	private String userId;
+	private String emailId;
 	private String oldPassword;
 	private String newPassword;
 	
 
-	public String getUserId() {
-		return userId;
+
+	public String getEmailId() {
+		return emailId;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 	public String getOldPassword() {
 		return oldPassword;

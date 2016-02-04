@@ -131,9 +131,9 @@ public class PostService {
 //	}
 
 
-	public PostArrayVO getPostByJointAccount(String jointAccountId) {
+	public PostArrayVO getPostByAccount(String accountId) {
 
-		List<PostVO> postVOList=postDao.getPostByJointAccount(jointAccountId);
+		List<PostVO> postVOList=postDao.getPostByAccount(accountId);
 
 
 		for (int i=0;i<postVOList.size();i++) 
@@ -204,9 +204,9 @@ public class PostService {
 	}
 
 
-	public Long deleteAllPostsByJointAccount(String jointAccountId)
+	public Long deleteAllPostsByAccount(String accountId)
 	{
-		List<PostVO> postList=postDao.getPostByJointAccount(jointAccountId);
+		List<PostVO> postList=postDao.getPostByAccount(accountId);
 		for(PostVO temp:postList)
 		{
 			deletePost(temp.getPostId());

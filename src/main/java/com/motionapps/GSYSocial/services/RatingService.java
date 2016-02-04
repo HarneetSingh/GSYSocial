@@ -9,7 +9,6 @@ import com.motionapps.GSYSocial.dao.RatingDao;
 import com.motionapps.GSYSocial.dao.vo.Notification;
 import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
-import com.motionapps.GSYSocial.dao.vo.PostArrayVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
 import com.motionapps.GSYSocial.dao.vo.RatingArrayVO;
 import com.motionapps.GSYSocial.dao.vo.RatingVO;

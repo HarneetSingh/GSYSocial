@@ -118,7 +118,7 @@ public class JointAccountService {
 		
 		JointAccountVO mJointAccountVO=jointAccountDao.getJointAccount(jointAccountId);
 		//Before deleting jointAccount Delete, all posts
-		postService.deleteAllPostsByJointAccount(jointAccountId);
+		postService.deleteAllPostsByAccount(jointAccountId);
 		//Delete all followers
 		followerService.deleteAllFollowersByJointAccount(jointAccountId);
 		mJointAccountVO.setJointAccountId("");

@@ -3,6 +3,8 @@ package com.motionapps.GSYSocial.dao.vo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 @XmlRootElement
 public class UserVO{
@@ -39,8 +41,29 @@ public class UserVO{
 	private int groupAccountStatus;
 	
 	private boolean inviteRequestPending;
+	
+	private boolean emailVerified;
+	
+//	@JsonIgnore
+//	private String tempPassword;
 
 	
+//	public String getTempPassword() {
+//		return tempPassword;
+//	}
+//
+//	public void setTempPassword(String tempPassword) {
+//		this.tempPassword = tempPassword;
+//	}
+
+	public boolean isEmailVerified() {
+		return emailVerified;
+	}
+
+	public void setEmailVerified(boolean emailVerified) {
+		this.emailVerified = emailVerified;
+	}
+
 	public int getGroupAccountStatus() {
 		return groupAccountStatus;
 	}
@@ -183,11 +206,10 @@ public class UserVO{
 		this.password = password;
 	}
 
-	public UserVO(String userId, String userName, String oauthUid,
-			String oauthProvider, String emailId, String password,
-			String dateOfBirth, String mobileNumber, String sessionId,
-			String profilePicUrl, String gallery, String jointAccountId,
-			String gcmDeviceId, int followCount, boolean inviteRequestPending) {
+	public UserVO(String userId, String userName, String oauthUid, String oauthProvider, String emailId,
+			String password, String dateOfBirth, String mobileNumber, String sessionId, String profilePicUrl,
+			String gallery, String jointAccountId, String gcmDeviceId, int followCount, int groupAccountStatus,
+			boolean inviteRequestPending, boolean emailVerified) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -203,8 +225,12 @@ public class UserVO{
 		this.jointAccountId = jointAccountId;
 		this.gcmDeviceId = gcmDeviceId;
 		this.followCount = followCount;
+		this.groupAccountStatus = groupAccountStatus;
 		this.inviteRequestPending = inviteRequestPending;
+		this.emailVerified = emailVerified;
 	}
+
+
 
 	
 

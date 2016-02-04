@@ -74,12 +74,13 @@ public class PostController {
 	
 	
 	@GET
-	@Path("/getPostByJointAccount")
-	public Response getPostByJointAccount(@QueryParam("jointAccountId")String jointAccountId) {
+	@Path("/getPostByAccount")
+	public Response getPostByJointAccount(@QueryParam("accountId")String accountId) {
 		
-		return Response.status(200).entity(postService.getPostByJointAccount(jointAccountId)).build();
+		return Response.status(200).entity(postService.getPostByAccount(accountId)).build();
 		
 	}
+
 	
 	@GET
 	@Path("/getPostForUser")

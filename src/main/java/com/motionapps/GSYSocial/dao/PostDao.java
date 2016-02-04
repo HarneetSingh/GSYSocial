@@ -12,7 +12,7 @@ public interface PostDao {
 	
 	public Long deletePost(String postId);
 	
-	public List<PostVO> getPostByJointAccount(String jointAccountId);
+	public List<PostVO> getPostByAccount(String accountId);
 	
 	public List<PostVO> getPostForUser(String userId);
 	

@@ -56,7 +56,7 @@ public class InviteRequestController {
 			return Response.ok().entity(jointAccountVO).type(MediaType.APPLICATION_JSON).build();
 		else
 		{
-			ErrorVO errorVO=new ErrorVO("No Pending Request Found");
+			ErrorVO errorVO=new ErrorVO(400,"No Pending Request Found");
 			return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
 		}
 	}
@@ -76,7 +76,7 @@ public class InviteRequestController {
 			return Response.ok().build();
 		}else
 		{
-			ErrorVO errorVO=new ErrorVO("No Pending Request Found");
+			ErrorVO errorVO=new ErrorVO(400,"No Pending Request Found");
 			return Response.status(400).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
 		}
 

@@ -16,9 +16,12 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.motionapps.GSYSocial.dao.UserDao;
 import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
+import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.services.EmailService;
 import com.motionapps.GSYSocial.services.UserService;
 
 @Controller
@@ -31,12 +34,18 @@ public class UserController {
 		@Autowired
 		private UserService userService;
 		
+		@Autowired
+		private EmailService emailService;
+		
 		Long status;
 
 		public void setUserService(UserService userService) {
 			this.userService = userService;
 		}
 	
+		public void setEmailService(EmailService emailService) {
+			this.emailService = emailService;
+		}
 		
 		/************************************ CREATE ************************************/
 
@@ -54,13 +63,26 @@ public class UserController {
 		@Transactional
 		public Response normalregisteration(UserVO user) {
 			
-			UserVO userVO=userService.normalregisteration(user);
-			if(userVO!=null)
+			Object object=userService.normalregisteration(user);
+			if(object instanceof UserVO)
+			{	UserVO userVO=(UserVO)object;
 				return Response.status(200).entity(userVO).type(MediaType.APPLICATION_JSON).build();
-			else
-				return Response.status(400).build();
+			}
+			else if(object instanceof ErrorVO)
+			{
+				ErrorVO errorVO=(ErrorVO)object;
+				return Response.status(401).entity(errorVO).type(MediaType.APPLICATION_JSON).build();
+			}
+			else 
+ 				return Response.status(400).build();
+
 			
 		}	
+		
+		
+
+
+
 		@POST 
 		@Path("/oauthregisteration")
 		@Consumes({MediaType.APPLICATION_JSON})
@@ -77,6 +99,22 @@ public class UserController {
 				return Response.status(400).build();
 			
 		}	
+		
+		
+		@GET
+		@Path("/verifyemailaddress")
+		public Response verifyEmailAddress(@QueryParam("userId") String userId, @QueryParam("emailId") String emailId )
+		{
+			//System.out.println("Inside IF verifyEmailAddress");
+
+			status=userService.verifyEmailAddress(userId, emailId);
+			if(status==1)
+			{
+				return Response.status(200).entity("EmailId Successfully Verified").type(MediaType.TEXT_PLAIN).build();
+			}
+			else
+				return Response.status(400).build();
+		}
 
 
 		
@@ -138,12 +176,31 @@ public class UserController {
 		@Path("/login")
 		public Response loginUser(UserVO user) {
 			
-			UserVO userVO=userService.loginUser(user);
-			if(userVO!=null)
+			Object object=userService.loginUser(user);
+			if(object instanceof UserVO)
+			{
+				UserVO userVO=(UserVO) object;
 				return Response.ok().entity(userVO).build();
-			else
-				return Response.status(401).build();
+			}
+			else if(object instanceof ErrorVO)
+			{
+				ErrorVO errorVO=(ErrorVO)object;
+				return Response.status(errorVO.getStatus()).entity(errorVO).build();
+			}
+			else 
+				return Response.status(400).build();
 		}	
+		
+		@GET
+		@Path("/forgetPassword")
+		public Response forgetPassword(@QueryParam("emailId")String emailId)
+		{
+			status=userService.forgetPassword(emailId);
+			if(status==1)
+				return Response.ok().build();
+			else
+				return Response.status(400).build();
+		}
 		
 		@POST 
 		@Consumes({MediaType.APPLICATION_JSON})
@@ -177,4 +234,15 @@ public class UserController {
 		}
 		
 		
+		@GET
+		@Path("/testEmail")
+		public Response testEmail()
+		{
+			status=emailService.sendEmail("harneetsingh17@gmail.com","test","test");
+			if(status==1)
+				return Response.ok().build();
+			else
+				return Response.status(400).build();
+			
+		}
 }	

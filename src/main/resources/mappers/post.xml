@@ -43,7 +43,7 @@
 	</insert>
 
 	<!-- ************** READ ************** -->
-	<select id="getPostByJointAccount" parameterType="String"
+	<select id="getPostByAccount" parameterType="String"
 		resultMap="postMap">
 		SELECT
 		post_id,

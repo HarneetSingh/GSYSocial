@@ -10,7 +10,18 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class ErrorVO  {
 
 
+	private int status;
+	
 	private String error;
+
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	public String getError() {
 		return error;
@@ -20,10 +31,13 @@ public class ErrorVO  {
 		this.error = error;
 	}
 
-	public ErrorVO(String error) {
+	public ErrorVO(int status, String error) {
 		super();
+		this.status = status;
 		this.error = error;
 	}
+
+
 	
 	
 }

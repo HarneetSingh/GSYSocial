@@ -90,6 +90,8 @@
 
 	<bean id="userController" class="com.motionapps.GSYSocial.controller.UserController">
 		<property name="userService" ref="userService" />
+		<property name="emailService" ref="emailService" />
+
 	</bean>
 
 	<bean id="userService" class="com.motionapps.GSYSocial.services.UserService">
@@ -176,9 +178,15 @@
 	<bean id="notificationService" class="com.motionapps.GSYSocial.services.NotificationService">
 		<property name="notificationDao" ref="notificationDao" />
 	</bean>
-	<bean id="notificationController" class="com.motionapps.GSYSocial.controller.NotificationController">
+	<bean id="notificationController"
+		class="com.motionapps.GSYSocial.controller.NotificationController">
 		<property name="notificationService" ref="notificationService" />
 	</bean>
+
+	<bean id="emailService" class="com.motionapps.GSYSocial.services.EmailService">
+	</bean>
+
+
 
 	<!-- <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"/> <property 

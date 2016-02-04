@@ -19,6 +19,7 @@
 		<result column="follow_count" property="followCount" />
 		<result column="invite_request_pending" property="inviteRequestPending" />
 		<result column="gallery" property="gallery" />
+		<result column="email_verified" property="emailVerified" />
 	</resultMap>
 
 
@@ -31,7 +32,8 @@
 		oauth_uid = #{oauthUid},
 		oauth_provider= #{oauthProvider},
 		email_id = #{emailId},
-		user_name = #{userName},
+		user_name =
+		#{userName},
 		password = #{password},
 		date_of_birth = #{dateOfBirth},
 		mobile_number = #{mobileNumber},
@@ -39,6 +41,8 @@
 		gallery=#{gallery},
 		session_id=#{sessionId};
 	</insert>
+
+
 	<!-- ************** READ ************** -->
 	<select id="getUsers" resultMap="userMap">
 		SELECT
@@ -96,7 +100,8 @@
 		joint_account_id,
 		gcm_device_id,
 		follow_count,
-		invite_request_pending
+		invite_request_pending,
+		email_verified
 		FROM
 		user
 		WHERE
@@ -158,7 +163,16 @@
 		WHERE
 		email_id=#{value};
 	</select>
+	<select id="getTempPassword" resultType="String" parameterType="String">
+		SELECT
+		temp_password
+		FROM
+		user
+		WHERE
+		email_id=#{value};
+	</select>
 
+	
 	<select id="checkIfEmailIdAlreadyExists" resultType="Int"
 		parameterType="String">
 		SELECT
@@ -194,9 +208,11 @@
 		UPDATE
 		user
 		SET
-		password = #{newPassword}
+		password
+		= #{newPassword},
+		temp_password=null
 		WHERE
-		user_id = #{userId}
+		email_id = #{emailId}
 	</update>
 
 	<update id="incrementFollowCount" parameterType="String">
@@ -260,6 +276,27 @@
 		</if>
 		WHERE
 		user_id = #{userId}
+	</update>
+	<update id="setTempPassword" parameterType="User">
+		UPDATE
+		user
+		SET
+		email_id=#{emailId}
+		<if test="password!= null">
+			,temp_password = #{password}
+		</if>
+		WHERE
+		email_id=#{emailId};
+	</update>
+	<update id="verifyEmailAddress" parameterType="map">
+		UPDATE
+		user
+		SET
+		email_verified = 1
+		WHERE
+		user_id = #{userId}
+		AND
+		email_id = #{emailId}
 	</update>
 	<update id="clearGcmDeviceId" parameterType="String">
 		UPDATE

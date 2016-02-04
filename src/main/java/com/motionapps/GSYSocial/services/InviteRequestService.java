@@ -142,8 +142,10 @@ public class InviteRequestService {
 		NotificationDataVO notificationDataVO=new NotificationDataVO(21,inviteeUserVO.getUserId(),true,inviteRequestVO);
 
 		notificationRequestVO=notificationService.createNotificationObject(inviteeUserVO.getGcmDeviceId(),notification, notificationDataVO);
-		if(inviteeUserVO.getGcmDeviceId()==null&&inviteeUserVO.getGcmDeviceId().equals(""))
+		if(inviteeUserVO.getGcmDeviceId()==null)
 			return null;
+		else if (inviteeUserVO.getGcmDeviceId().equals(""))
+				return null;
 		else 
 			return notificationRequestVO;
 	}

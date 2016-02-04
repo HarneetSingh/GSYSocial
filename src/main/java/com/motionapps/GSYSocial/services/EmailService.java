@@ -2,6 +2,7 @@ package com.motionapps.GSYSocial.services;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -11,25 +12,26 @@ import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
+import com.motionapps.GSYSocial.util.Constants;
 
 public class EmailService {
 	
 	
-	 static final String FROM = "SENDER@EXAMPLE.COM";  // Replace with your "From" address. This address must be verified.
-	    static final String TO = "RECIPIENT@EXAMPLE.COM"; // Replace with a "To" address. If you have not yet requested
-	                                                      // production access, this address must be verified.
-	    static final String BODY = "This email was sent through Amazon SES by using the AWS SDK for Java.";
-	    static final String SUBJECT = "Amazon SES test (AWS SDK for Java)";
+	 static final String FROM = "IntactYou <support@intactyou.com>";  // Replace with your "From" address. This address must be verified.
+//	 static final String TO = "harneetsingh17@gmail.com"; // Replace with a "To" address. If you have not yet requested
+//	                                                      // production access, this address must be verified.
+//	    static final String BODY = "This email was sent through Amazon SES by using the AWS SDK for Java.";
+//	    static final String SUBJECT = "Amazon SES test (AWS SDK for Java)";
 
 	    
-	    public void sendEmail()
+	    public Long sendEmail(String to, String subjectText, String bodyText)
 	    {
 	    	// Construct an object to contain the recipient address.
-	        Destination destination = new Destination().withToAddresses(new String[]{TO});
+	        Destination destination = new Destination().withToAddresses(new String[]{to});
 
 	        // Create the subject and body of the message.
-	        Content subject = new Content().withData(SUBJECT);
-	        Content textBody = new Content().withData(BODY);
+	        Content subject = new Content().withData(subjectText);
+	        Content textBody = new Content().withData(bodyText);
 	        Body body = new Body().withText(textBody);
 
 	        // Create a message with the specified subject and body.
@@ -51,7 +53,8 @@ public class EmailService {
 	             */
 	            AWSCredentials credentials = null;
 	            try {
-	                credentials = new ProfileCredentialsProvider().getCredentials();
+	                //credentials = new ProfileCredentialsProvider().getCredentials();
+	                credentials=new BasicAWSCredentials(Constants.aws_access_key_id, Constants.aws_secret_access_key);
 	            } catch (Exception e) {
 	                throw new AmazonClientException(
 	                        "Cannot load the credentials from the credential profiles file. " +
@@ -74,10 +77,12 @@ public class EmailService {
 	            // Send the email.
 	            client.sendEmail(request);
 	            System.out.println("Email sent!");
+	            return 1L;
 
 	        } catch (Exception ex) {
 	            System.out.println("The email was not sent.");
 	            System.out.println("Error message: " + ex.getMessage());
+	            return 0L;
 	        }
 	    }
 	    
