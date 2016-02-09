@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -12,15 +13,15 @@ public interface JointAccountDao {
 	
 	public Long updateJointAccountDetails(JointAccountVO jointAccountVO);
 
-	public List<JointAccountVO> getJointAccounts();
+	public Set<JointAccountVO> getJointAccounts();
 	
 	public JointAccountVO getJointAccount(String string);
 	
 	public JointAccountVO getJointAccountWithUserId(@Param("jointAccountId")String jointAccountId,@Param("userId")String userId);
 
-	public List<JointAccountVO> getJointAccountsofUserId(String userId);
+	public Set<JointAccountVO> getJointAccountsofUserId(String userId);
 	
-	public List<JointAccountVO> searchJointAccounts(String string);
+	public Set<JointAccountVO> searchJointAccounts(String string);
 	
 	public Long incrementFollowCount(String jointAccountId);
 	

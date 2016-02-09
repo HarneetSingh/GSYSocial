@@ -18,7 +18,14 @@
 		<result column="user_id" property="userId" />
 		<result column="thumb_nail_url" property="thumbNameUrl" />
 		<result column="comment_count" property="commentCount" />
+		<result column="no_of_likes" property="noOfLikes" />
+		<result column="is_liked" property="isLiked" />
 
+	</resultMap>
+
+	<resultMap id="likeDislikeMap" type="LikeDislike">
+		<id column="post_id" property="postId" />
+		<id column="user_id" property="userId" />
 	</resultMap>
 
 
@@ -42,9 +49,18 @@
 		created_time=now();
 	</insert>
 
+	<insert id="addLikeDislikeEntry" parameterType="LikeDislike"
+		useGeneratedKeys="true">
+		INSERT
+		INTO
+		like_dislike
+		SET
+		post_id=#{postId},
+		user_id=#{userId};
+	</insert>
+
 	<!-- ************** READ ************** -->
-	<select id="getPostByAccount" parameterType="String"
-		resultMap="postMap">
+	<select id="getPostByAccount" parameterType="String" resultMap="postMap">
 		SELECT
 		post_id,
 		account_id,
@@ -59,11 +75,53 @@
 		rating_value_ok,
 		rating_value_happy,
 		created_time,
-		last_updated_time
+		last_updated_time,
 		FROM
 		post
 		WHERE
 		account_id=#{value}
+		ORDER BY
+		created_time desc;
+	</select>
+	<select id="getPostByAccountForUserId" parameterType="Map" resultMap="postMap">
+		SELECT
+		post.post_id,
+		post.account_id,
+		post.account_type,
+		post.file_url,
+		post.file_type,
+		post.thumb_nail_url,
+		post.post_text,
+		post.user_id,
+		post.comment_count,
+		post.rating_value_sad,
+		post.rating_value_ok,
+		post.rating_value_happy,
+		post.created_time,
+		post.last_updated_time,
+		(SELECT 
+		COUNT(*)  
+		FROM 
+		like_dislike
+		WHERE
+		post.post_id =like_dislike.post_id 
+		)
+		AS  
+		no_of_likes,
+		EXISTS(
+		SELECT * FROM like_dislike 
+		where
+		(
+		post.post_id =like_dislike.post_id 
+		AND
+		user_id=#{userId}
+		)) 
+		AS
+		is_liked
+		FROM
+		post
+		WHERE
+		account_id=#{accountId}
 		ORDER BY
 		created_time desc;
 	</select>
@@ -105,7 +163,26 @@
 		post.rating_value_ok,
 		post.rating_value_happy,
 		post.created_time,
-		post.last_updated_time
+		post.last_updated_time,
+		(SELECT 
+		COUNT(*)  
+		FROM 
+		like_dislike
+		WHERE
+		post.post_id =like_dislike.post_id 
+		)
+		AS  
+		no_of_likes,
+		EXISTS(
+		SELECT * FROM like_dislike 
+		where
+		(
+		post.post_id =like_dislike.post_id 
+		AND
+		like_dislike.user_id=#{value}
+		)) 
+		AS
+		is_liked
 		FROM
 		post
 		INNER JOIN
@@ -137,6 +214,19 @@
 		last_updated_time
 		FROM
 		post;
+	</select>
+
+	<select id="getLikeDislikeEntry" parameterType="Map" resultMap="likeDislikeMap">
+		SELECT
+		post_id,
+		user_id,
+		type
+		FROM
+		like_dislike
+		WHERE
+		post_id=#{postId}
+		AND
+		user_id=#{userId}
 	</select>
 
 	<!-- ************** UPDATE ************** -->
@@ -208,19 +298,24 @@
 		post_id = #{postId}
 	</update>
 
-<!-- 	<update id="updateRating" parameterType="Post">
+<!-- 	<update id="updateLikeDislikeEntry" parameterType="LikeDislike">
 		UPDATE
-		post
+		like_dislike
 		SET
-		post_id = #{postId}
-		<if test="newRating != null">
-			,total_rating=total_rating + #{newRating}
-			,last_updated_time=now()
+		post_id=#{postId},
+		user_id=#{userId}
+		<if test="type!=null">
+			,type=#{type}
 		</if>
 		WHERE
+		(
 		post_id = #{postId}
-	</update>
- -->
+		AND
+		user_id=#{userId}
+		);
+	</update> -->
+
+
 	<update id="incrementCommentCount" parameterType="String">
 		UPDATE
 		post
@@ -245,6 +340,17 @@
 		DELETE FROM post WHERE
 		post_id = #{value}
 	</delete>
+
+	<delete id="removeLikeDislikeEntry" parameterType="Map">
+		DELETE
+		FROM
+		like_dislike
+		WHERE
+		(post_id=#{postId}
+		AND
+		user_id=#{userId})
+	</delete>
+
 
 
 </mapper>

@@ -1,23 +1,22 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 public class GroupAccountSearchVO{
 	
 
 	
-	private List<GroupAccountVO> groupAccounts;
+	private Set<GroupAccountVO> groupAccounts;
 
-	public List<GroupAccountVO> getGroupAccounts() {
+	public Set<GroupAccountVO> getGroupAccounts() {
 		return groupAccounts;
 	}
 
-	public void setGroupAccounts(List<GroupAccountVO> groupAccounts) {
+	public void setGroupAccounts(Set<GroupAccountVO> groupAccounts) {
 		this.groupAccounts = groupAccounts;
 	}
 
-	public GroupAccountSearchVO(List<GroupAccountVO> groupAccounts) {
+	public GroupAccountSearchVO(Set<GroupAccountVO> groupAccounts) {
 		super();
 		this.groupAccounts = groupAccounts;
 	}

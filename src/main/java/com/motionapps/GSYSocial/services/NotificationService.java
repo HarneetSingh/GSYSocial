@@ -108,31 +108,10 @@ public class NotificationService {
 	
 	public NotificationRequestVO createNotificationObject(String to,Notification notification,NotificationDataVO notificationDataVO)
 	{
-//		ObjectMapper objectMapper=new ObjectMapper();
-//		try {
-//			System.out.println(objectMapper.writeValueAsString(followerVO));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-//		PostVO postVO=postService.getPostById(commentVO.getPostId());
 
-		//String gcmId=userVO.getGcmDeviceId();
-//		if(userVO.getGcmDeviceId()==null)
-//			return null;
-//		try {
-//			System.out.println(objectMapper.writeValueAsString(inviteeUserVO));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
 		notificationRequestVO.setTo(to);
-//		Notification notification =new Notification();
-//		notification.setTitle("Intactyou");
-//		notification.setText(userVO.getUserName()+" "+notificationText);
-//		notification.setIcon(userVO.getProfilePicUrl());
+
 		notificationRequestVO.setNotification(notification);
 		notificationRequestVO.setData(notificationDataVO);
 		ObjectMapper objectMapper=new ObjectMapper();

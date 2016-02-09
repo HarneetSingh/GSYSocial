@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
 import com.motionapps.GSYSocial.dao.vo.GroupMemberVO;
@@ -60,14 +59,14 @@ public class GroupAccountController {
 			return Response.status(400).build();
 	}
 	
-	@GET
-	@Path("/search")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchGroupAccount(@QueryParam("keyword")String keyword)
-	{
-		return Response.ok().entity(groupAccountService.searchGroupAccount(keyword)).build();
-	}
-	
+//	@GET
+//	@Path("/search")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response searchGroupAccount(@QueryParam("keyword")String keyword)
+//	{
+//		return Response.ok().entity(groupAccountService.searchGroupAccount(keyword)).build();
+//	}
+//	
 	@GET
 	@Path("/details")
 	@Produces(MediaType.APPLICATION_JSON)

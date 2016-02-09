@@ -1,16 +1,16 @@
 package com.motionapps.GSYSocial.services;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
-import java.util.ListIterator;
 import java.util.UUID;
+
+import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 import com.motionapps.GSYSocial.dao.PostDao;
+import com.motionapps.GSYSocial.dao.vo.LikeDislikeVO;
 import com.motionapps.GSYSocial.dao.vo.PostArrayVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
 import com.motionapps.GSYSocial.dao.vo.RatingVO;
@@ -37,6 +37,8 @@ public class PostService {
 	
 	@Autowired
 	private GroupAccountService groupAccountService;
+	
+	private LikeDislikeVO likeDislikeVO;
 
 
 
@@ -131,9 +133,9 @@ public class PostService {
 //	}
 
 
-	public PostArrayVO getPostByAccount(String accountId) {
+	public PostArrayVO getPostByAccountForUserId(String accountId,String userId) {
 
-		List<PostVO> postVOList=postDao.getPostByAccount(accountId);
+		List<PostVO> postVOList=postDao.getPostByAccountForUserId(accountId,userId);
 
 
 		for (int i=0;i<postVOList.size();i++) 
@@ -226,4 +228,31 @@ public class PostService {
 		postVO.setProfilePicUrl(userVO.getProfilePicUrl());
 		return postVO;
 	}
+	
+	
+	public Long likePost( String postId,String userId)
+	{
+		likeDislikeVO=new LikeDislikeVO(postId,userId,true);
+		return postDao.addLikeDislikeEntry(likeDislikeVO);
+
+		//System.out.println("updateLikeDislikeEntry");
+
+//			if(postDao.getLikeDislikeEntry(postId, userId)!=null)
+//			{
+//				//System.out.println("updateLikeDislikeEntry");
+//				return postDao.updateLikeDislikeEntry(likeDislikeVO);
+//			}
+//			else 
+//			{
+//				System.out.println("addLikeDislikeEntry");
+
+//			}
+	}
+
+	public Long undoLikePost( String postId,String userId)
+	{
+		return postDao.removeLikeDislikeEntry(postId,userId);
+	}
+	
+
 }

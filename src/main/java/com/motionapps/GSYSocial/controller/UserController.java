@@ -199,7 +199,7 @@ public class UserController {
 			if(status==1)
 				return Response.ok().build();
 			else
-				return Response.status(400).build();
+				return Response.status(400).entity(new ErrorVO(400, "EmailId doesn't exists")).type(MediaType.APPLICATION_JSON).build();
 		}
 		
 		@POST 

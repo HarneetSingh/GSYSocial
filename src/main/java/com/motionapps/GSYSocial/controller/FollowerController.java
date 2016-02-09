@@ -64,9 +64,9 @@ public class FollowerController {
 	@GET
 	@Path("/acceptfollowrequest")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response acceptFollowRequest(@QueryParam("followerRequestId") String followerRequestId)
+	public Response acceptFollowRequest(@QueryParam("followerRequestId") String followerRequestId,@QueryParam("notificationId") String notificationId)
 	{
-		status=followerService.acceptFollowRequest(followerRequestId);
+		status=followerService.acceptFollowRequest(followerRequestId,notificationId);
 		
 		if(status==1)
 			return Response.ok().build();
@@ -76,9 +76,9 @@ public class FollowerController {
 	
 	@GET
 	@Path("/rejectfollowrequest")
-	public Response rejectFollowRequest(@QueryParam("followerRequestId") String followerRequestId)
+	public Response rejectFollowRequest(@QueryParam("followerRequestId") String followerRequestId,@QueryParam("notificationId") String notificationId)
 	{
-		status=followerService.rejectFollowRequest(followerRequestId);
+		status=followerService.rejectFollowRequest(followerRequestId,notificationId);
 		if(status==1)
 			return Response.ok().build();
 		else 

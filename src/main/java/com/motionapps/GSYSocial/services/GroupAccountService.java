@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.services;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -87,16 +88,16 @@ public class GroupAccountService {
 		return 1L;
 	}
 	
-	public GroupAccountSearchVO searchGroupAccount(String keyword)
+	public Set<GroupAccountVO> searchGroupAccount(String keyword)
 	{
-		List<GroupAccountVO> groupAccountVO=groupAccountDao.searchGroupAccount("%"+keyword+"%");
+		Set<GroupAccountVO> groupAccountVO=groupAccountDao.searchGroupAccount("%"+keyword+"%");
 
-		for (GroupAccountVO groupAccountVO2 : groupAccountVO) {
-			userVO=userService.getUser(groupAccountVO2.getGroupAdminId());
-			groupAccountVO2.setGroupAdminName(userVO.getUserName());
-			groupAccountVO2.setGroupAdminProfilePic(userVO.getProfilePicUrl());
-		}
-		return new GroupAccountSearchVO(groupAccountVO);
+//		for (GroupAccountVO groupAccountVO2 : groupAccountVO) {
+//			userVO=userService.getUser(groupAccountVO2.getGroupAdminId());
+//			groupAccountVO2.setGroupAdminName(userVO.getUserName());
+//			groupAccountVO2.setGroupAdminProfilePic(userVO.getProfilePicUrl());
+//		}
+		return groupAccountVO;
 	}
 
 	public GroupAccountVO getGroupAccount(String groupAccountId)
@@ -109,9 +110,9 @@ public class GroupAccountService {
 		return groupAccountVO;
 	}
 	
-	public List<GroupAccountVO> getGroupAccounts()
+	public Set<GroupAccountVO> getGroupAccounts()
 	{
-		List<GroupAccountVO> groupAccountVO=groupAccountDao.getGroupAccounts();
+		Set<GroupAccountVO> groupAccountVO=groupAccountDao.getGroupAccounts();
 
 		for (GroupAccountVO groupAccountVO2 : groupAccountVO) {
 			userVO=userService.getUser(groupAccountVO2.getGroupAdminId());
@@ -121,9 +122,9 @@ public class GroupAccountService {
 		return groupAccountVO;
 	}
 	
-	public List<GroupAccountVO> getGroupAccountsByUserId(String userId)
+	public Set<GroupAccountVO> getGroupAccountsByUserId(String userId)
 	{
-		List<GroupAccountVO> groupAccountVO=groupAccountDao.getGroupAccountsByUserId(userId);
+		Set<GroupAccountVO> groupAccountVO=groupAccountDao.getGroupAccountsByUserId(userId);
 		return groupAccountVO;
 	}
 	
@@ -200,7 +201,7 @@ public class GroupAccountService {
 	
 	public GroupMemberSearchVO getGroupMembers(String groupAccountId)
 	{
-		List<GroupMemberVO> groupMembers=groupAccountDao.getGroupMembers(groupAccountId);
+		Set<GroupMemberVO> groupMembers=groupAccountDao.getGroupMembers(groupAccountId);
 		for(GroupMemberVO groupMemberVO : groupMembers)
 		{
 			userVO=userService.getUser(groupMemberVO.getUserId());
@@ -213,7 +214,7 @@ public class GroupAccountService {
 	public List<UserVO> searchUsers(String groupAccountId,String keyword)
 	{
 		List<UserVO> users=userService.searchUser(keyword);
-		List<GroupMemberVO> groupMembers=groupAccountDao.getGroupMembers(groupAccountId);
+		Set<GroupMemberVO> groupMembers=groupAccountDao.getGroupMembers(groupAccountId);
 		for(UserVO userVO : users)
 		{
 			userVO.setGroupAccountStatus(0);
@@ -248,7 +249,12 @@ public class GroupAccountService {
 	
 	public GroupAccountVO getGroupAccountWithUserId(String groupAccountId,String userId)
 	{
-		return groupAccountDao.getGroupAccountWithUserId(groupAccountId, userId);
+		groupAccountVO=groupAccountDao.getGroupAccountWithUserId(groupAccountId, userId);
+		if(groupAccountVO!=null){
+		userVO=userService.getUser(groupAccountVO.getGroupAdminId());
+		groupAccountVO.setGroupAdminName(userVO.getUserName());
+		groupAccountVO.setGroupAdminProfilePic(userVO.getProfilePicUrl());}
+		return groupAccountVO;
 	}
 
 	public Long incrementPostCount(String groupAccountId)

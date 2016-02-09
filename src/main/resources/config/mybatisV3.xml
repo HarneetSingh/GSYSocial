@@ -29,6 +29,8 @@
 			alias="GroupMember" />
 		<typeAlias type="com.motionapps.GSYSocial.dao.vo.NotificationDatabaseVO"
 			alias="Notification" />
+		<typeAlias type="com.motionapps.GSYSocial.dao.vo.LikeDislikeVO"
+			alias="LikeDislike" />
 
 
 	</typeAliases>

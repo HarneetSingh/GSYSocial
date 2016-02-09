@@ -10,6 +10,9 @@
 *.png
 *.docx
 *.log
+*.pages
+*.txt
+Constants.java
 .*
 
 

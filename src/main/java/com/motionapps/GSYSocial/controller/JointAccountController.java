@@ -1,7 +1,5 @@
 package com.motionapps.GSYSocial.controller;
 
-
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -82,12 +80,12 @@ public class JointAccountController {
 		
 	}
 	
-	@GET
-	@Path("/search")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchJointAccounts(@QueryParam("keyword")String keyword) {
-		return  Response.ok().entity(jointAccountService.searchJointAccounts(keyword)).build();
-	}
+//	@GET
+//	@Path("/search")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response searchJointAccounts(@QueryParam("keyword")String keyword) {
+//		return  Response.ok().entity(jointAccountService.searchJointAccounts(keyword)).build();
+//	}
 	
 	@GET
 	@Path("/delete")

@@ -2,13 +2,13 @@ package com.motionapps.GSYSocial.services;
 
 
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -312,21 +312,23 @@ public class UserService {
 	
 	public AccountsVO getAccountsDetails(String userId)
 	{
-		List<JointAccountVO> jointAccounts =jointAccountService.getJointAccountsofUserId(userId);
-		List<GroupAccountVO> groupAccounts=groupAccountService.getGroupAccountsByUserId(userId);
-		List<InviteRequestVO> inviteRequests=inviteRequestService.getInviteRequests(userId);
+		Set<JointAccountVO> jointAccounts =jointAccountService.getJointAccountsofUserId(userId);
+		Set<GroupAccountVO> groupAccounts=groupAccountService.getGroupAccountsByUserId(userId);
+		Set<InviteRequestVO> inviteRequests=inviteRequestService.getInviteRequests(userId);
 		return new AccountsVO(jointAccounts, inviteRequests, groupAccounts);
 	}
 
 	public AccountsVO searchUsersAccount(String keyword)
 	{
 		List<UserVO> userVOs=searchUser(keyword);
-		List<JointAccountVO> jointAccounts=new ArrayList<JointAccountVO>();
-		List<GroupAccountVO> groupAccounts=new ArrayList<GroupAccountVO>();
+		Set<JointAccountVO> jointAccounts=new HashSet<JointAccountVO>();
+		Set<GroupAccountVO> groupAccounts=new HashSet<GroupAccountVO>();
+		jointAccounts.addAll(jointAccountService.searchJointAccounts(keyword));
+		groupAccounts.addAll(groupAccountService.searchGroupAccount(keyword));
 		for(UserVO userVO:userVOs)
 		{
 		String userId=userVO.getUserId();
-		jointAccounts.addAll(jointAccountService.getJointAccountsofUserId(userId));
+		jointAccounts.addAll(jointAccountService.searchJointAccounts(userId));
 		groupAccounts.addAll(groupAccountService.getGroupAccountsByUserId(userId));
 		}
 		return new AccountsVO(jointAccounts, groupAccounts);

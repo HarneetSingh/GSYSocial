@@ -1,41 +1,41 @@
 package com.motionapps.GSYSocial.dao.vo;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class AccountsVO {
 	
-	private List<JointAccountVO> jointAccounts;
+	private Set<JointAccountVO> jointAccounts;
 	
-	private List<InviteRequestVO> inviteRequests;
+	private Set<InviteRequestVO> inviteRequests;
 	
-	private List<GroupAccountVO> groupAccounts;
+	private Set<GroupAccountVO> groupAccounts;
 
 
 
-	public List<JointAccountVO> getJointAccounts() {
+	public Set<JointAccountVO> getJointAccounts() {
 		return jointAccounts;
 	}
 
-	public List<InviteRequestVO> getInviteRequests() {
+	public Set<InviteRequestVO> getInviteRequests() {
 		return inviteRequests;
 	}
 
-	public List<GroupAccountVO> getGroupAccounts() {
+	public Set<GroupAccountVO> getGroupAccounts() {
 		return groupAccounts;
 	}
 	
-	public AccountsVO(List<JointAccountVO> jointAccounts,
-			List<GroupAccountVO> groupAccounts) {
+	public AccountsVO(Set<JointAccountVO> jointAccounts,
+			Set<GroupAccountVO> groupAccounts) {
 		super();
 		this.jointAccounts = jointAccounts;
 		this.groupAccounts = groupAccounts;
 	}
 	
-	public AccountsVO(List<JointAccountVO> jointAccounts, List<InviteRequestVO> inviteRequests,
-			List<GroupAccountVO> groupAccounts) {
+	public AccountsVO(Set<JointAccountVO> jointAccounts, Set<InviteRequestVO> inviteRequests,
+			Set<GroupAccountVO> groupAccounts) {
 		super();
 		this.jointAccounts = jointAccounts;
 		this.inviteRequests = inviteRequests;

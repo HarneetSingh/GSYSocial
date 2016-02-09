@@ -67,21 +67,35 @@ public class FollowerService {
 	public Long followAccount(FollowerVO followerVO)
 	{
 		followerVO.setFollowId(UUID.randomUUID().toString());
-// 		int privacyMode=jointAccountVO.getPrivacyMode();
-//		if(privacyMode==0)
-//		{
-		followerDao.followAccount(followerVO);
+
 		if(followerVO.getAccountType()==0)
-			jointAccountService.incrementFollowCount(followerVO.getAccountId());
+		{
+			jointAccountVO=jointAccountService.getJointAccount(followerVO.getAccountId());
+	 		int privacyMode=jointAccountVO.getPrivacyMode();
+			if(privacyMode==0)//||privacyMode==1)
+			{
+				followerDao.followAccount(followerVO);
+				jointAccountService.incrementFollowCount(followerVO.getAccountId());
+				return userService.incrementFollowCount(followerVO.getUserId());
+
+			} 
+			else if(privacyMode==1) {
+				return sendFollowRequest(followerVO);
+				}
+			else {
+				return 0L;
+			}
+
+		}
 		else if(followerVO.getAccountType()==1)
+		{
 			groupAccountService.incrementFollowCount(followerVO.getAccountId());
-		return userService.incrementFollowCount(followerVO.getUserId());
-//		}
-//		else if (privacyMode==1) {
-//			return sendFollowRequest(followerVO);
-//		}
-//		else 
-//			return 0L;
+			followerDao.followAccount(followerVO);
+			return userService.incrementFollowCount(followerVO.getUserId());
+		}
+		else 
+			return 0L;
+
 		 
 	}
 	
@@ -96,20 +110,23 @@ public class FollowerService {
 		 
 	}
 	
-	public Long acceptFollowRequest(String followerRequestId)
+	public Long acceptFollowRequest(String followerRequestId, String notificationId)
 	{
 		FollowerVO followerVO=followerDao.getFollowRequest(followerRequestId);
 		followerDao.removeFollowRequest(followerRequestId);
 		followerDao.followAccount(followerVO);
 		jointAccountService.incrementFollowCount(followerVO.getAccountId ());
-		return userService.incrementFollowCount(followerVO.getUserId());
+		userService.incrementFollowCount(followerVO.getUserId());
+		return 	notificationService.removeNotificationRequest(notificationId);
+
 	}
 	
-//	public Long sendFollowRequest(FollowerVO followerVO)
-//	{
-//		followerDao.sendFollowRequest(followerVO);
-//		UserVO firstUserVO=userService.getUser(jointAccountVO.getFirstUserId());
-//		UserVO secondUserVO=userService.getUser(jointAccountVO.getSecondUserId());
+	public Long sendFollowRequest(FollowerVO followerVO)
+	{
+		followerDao.sendFollowRequest(followerVO);
+		notificationRequestVO=createNotificationObject(followerVO, " requested you to follow the joint account ");
+		if(notificationRequestVO!=null)
+			notificationService.sendNotification(notificationRequestVO);
 //		NotificationDataVO notificationDataVO=new NotificationDataVO(3, followerVO);
 //		notificationRequestVO=notificationService.createNotificationObject(firstUserVO,notificationDataVO,"requested you to follow joint account "+jointAccountVO.getJointAccountName());
 //		if(notificationRequestVO!=null)
@@ -117,14 +134,16 @@ public class FollowerService {
 //		notificationRequestVO=notificationService.createNotificationObject(secondUserVO,notificationDataVO,"requested you to follow joint account "+jointAccountVO.getJointAccountName());
 //		if(notificationRequestVO!=null)
 //			notificationService.sendNotification(notificationRequestVO);
-//		return 1L;
-//	}
+		return 1L;
+	}
 //	
 //	public getNotification
 	
-	public Long rejectFollowRequest(String followerRequestId)
+	public Long rejectFollowRequest(String followerRequestId,String notificationId)
 	{
-		return followerDao.removeFollowRequest(followerRequestId);
+		 followerDao.removeFollowRequest(followerRequestId);
+		return 	notificationService.removeNotificationRequest(notificationId);
+
 
 	}
 
@@ -160,4 +179,26 @@ public class FollowerService {
 		return 1L;
 	}
 
+	private NotificationRequestVO createNotificationObject(FollowerVO followerVO,String notificationText)
+	{
+
+		jointAccountVO=jointAccountService.getJointAccount(followerVO.getAccountId());
+		UserVO user=userService.getUser(followerVO.getUserId());
+		UserVO firstUserVO=userService.getUser(jointAccountVO.getFirstUserId());
+		//UserVO secondUserVO=userService.getUser(jointAccountVO.getSecondUserId());
+		Notification notification =new Notification();
+		notification.setTitle("Intactyou");
+		notification.setText(user.getUserName()+notificationText+jointAccountVO.getJointAccountName());
+		notification.setIcon(user.getProfilePicUrl());
+		
+		//first user
+		NotificationDataVO notificationDataVO=new NotificationDataVO(23,firstUserVO.getUserId(),true,followerVO);
+		notificationRequestVO=notificationService.createNotificationObject(firstUserVO.getGcmDeviceId(),notification, notificationDataVO);
+		if(firstUserVO.getGcmDeviceId()==null)
+			return null;
+		else if (firstUserVO.getGcmDeviceId().equals(""))
+				return null;
+		else 
+			return notificationRequestVO;
+	}
 }

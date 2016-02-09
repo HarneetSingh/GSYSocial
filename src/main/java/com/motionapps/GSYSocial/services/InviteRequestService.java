@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.services;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +112,7 @@ public class InviteRequestService {
 		return inviteRequestDao.getInviteRequest(userId);
 	}
 	
-	public List<InviteRequestVO> getInviteRequests(String userId)
+	public Set<InviteRequestVO> getInviteRequests(String userId)
 	{
 		return inviteRequestDao.getInviteRequests(userId);
 	}

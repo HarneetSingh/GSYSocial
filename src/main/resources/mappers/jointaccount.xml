@@ -21,6 +21,8 @@
 		<result column="first_user_answer" property="firstUserAnswer" />
 		<result column="second_user_answer" property="secondUserAnswer" />
 		<result column="privacy_mode" property="privacyMode" />
+		<result column="created_time" property="createdTime" />
+
 
 
 	</resultMap>
@@ -36,7 +38,8 @@
 		first_user_id = #{firstUserId},
 		second_user_id =
 		#{secondUserId},
-		joint_account_name = #{jointAccountName};
+		joint_account_name = #{jointAccountName},
+		created_time=now();
 	</insert>
 
 
@@ -54,7 +57,8 @@
 		relationship,
 		first_user_answer,
 		second_user_answer,
-		privacy_mode
+		privacy_mode,
+		created_time
 		FROM
 		joint_account;
 	</select>
@@ -72,7 +76,8 @@
 		relationship,
 		first_user_answer,
 		second_user_answer,
-		privacy_mode
+		privacy_mode,
+		created_time
 		FROM
 		joint_account
 		WHERE
@@ -92,7 +97,8 @@
 		relationship,
 		first_user_answer,
 		second_user_answer,
-		privacy_mode
+		privacy_mode,
+		created_time
 		FROM
 		joint_account
 		WHERE
@@ -115,6 +121,7 @@
 		first_user_answer,
 		second_user_answer,
 		privacy_mode,
+		created_time,
 		EXISTS(SELECT * FROM follower where
 		account_id=#{jointAccountId} AND
 		user_id=#{userId}) AS
@@ -142,13 +149,16 @@
 		FROM
 		joint_account
 		WHERE
-		first_user_id
-		LIKE #{value}
+		privacy_mode!=2
+		AND
+		(
+		first_user_id LIKE #{value}
 		OR
 		second_user_id LIKE #{value}
 		OR
 		joint_account_name LIKE
-		#{value};
+		#{value}
+		);
 	</select>
 
 

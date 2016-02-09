@@ -1,7 +1,12 @@
 package com.motionapps.GSYSocial.dao.vo;
 
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 
 
 @XmlRootElement()
@@ -40,8 +45,22 @@ public class JointAccountVO {
 	
 	private String secondUserAnswer;
 	
+	private Date createdTime;
+	
+	
+
+	// privacyMode field : 0  => public, 1=> follower, 2 => me and my partner
 	private int privacyMode;
 		
+	
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
+	}
+
 
 
 	public int getPrivacyMode() {
@@ -186,7 +205,7 @@ public class JointAccountVO {
 	public JointAccountVO(String jointAccountId, String firstUserId, String firstUserName, String secondUserName,
 			String secondUserId, String jointAccountName, String momentsPics, int followerCount, int postCount,
 			Boolean userFollowing, String profilePic, String firstUserProfilePic, String secondUserProfilePic,
-			String relationship, String firstUserAnswer, String secondUserAnswer, int privacyMode) {
+			String relationship, String firstUserAnswer, String secondUserAnswer, Date createdTime, int privacyMode) {
 		super();
 		this.jointAccountId = jointAccountId;
 		this.firstUserId = firstUserId;
@@ -204,9 +223,28 @@ public class JointAccountVO {
 		this.relationship = relationship;
 		this.firstUserAnswer = firstUserAnswer;
 		this.secondUserAnswer = secondUserAnswer;
+		this.createdTime = createdTime;
 		this.privacyMode = privacyMode;
 	}
 
+
+	@Override
+	public int hashCode() 
+	{
+		 return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+		            // if deriving: appendSuper(super.hashCode()).
+		            append(jointAccountId).
+		            toHashCode();		
+	}
+		@Override
+		public boolean equals(Object obj) {
+		      if (!(obj instanceof JointAccountVO))
+		            return false;
+		      	if (obj == this)
+		            return true; 
+		      	JointAccountVO jointAccountVO=(JointAccountVO)obj;
+		      	return jointAccountId.equals(jointAccountVO.getJointAccountId());
+		}
 
 
 

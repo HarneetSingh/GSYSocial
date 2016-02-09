@@ -2,7 +2,7 @@ package com.motionapps.GSYSocial.services;
 
 
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -91,7 +91,7 @@ public class JointAccountService {
 	}
 	
 
-	public List<JointAccountVO>  getJointAccountsofUserId(String userId) {
+	public Set<JointAccountVO>  getJointAccountsofUserId(String userId) {
 		return jointAccountDao.getJointAccountsofUserId(userId);
 	}
 	
@@ -102,9 +102,9 @@ public class JointAccountService {
 	}
 
 	
-    public JointAccountSearchVO searchJointAccounts(String keyword) {
+    public Set<JointAccountVO> searchJointAccounts(String keyword) {
     	
-		return new JointAccountSearchVO(jointAccountDao.searchJointAccounts("%"+keyword+"%"));
+		return jointAccountDao.searchJointAccounts("%"+keyword+"%");
 	}
 
     public JointAccountSearchVO getJointAccounts() {

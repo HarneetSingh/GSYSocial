@@ -44,7 +44,32 @@ public class PostVO{
 	
 	private String commentCount;
 	
+	private int noOfLikes;
 	
+	private Boolean isLiked;
+	
+
+
+
+
+	public Boolean getIsLiked() {
+		return isLiked;
+	}
+
+	public void setIsLiked(Boolean isLiked) {
+		this.isLiked = isLiked;
+	}
+
+
+
+	public int getNoOfLikes() {
+		return noOfLikes;
+	}
+
+	public void setNoOfLikes(int noOfLikes) {
+		this.noOfLikes = noOfLikes;
+	}
+
 
 
 	public String getCommentCount() {
@@ -193,7 +218,7 @@ public class PostVO{
 	public PostVO(String postId, String accountId, int accountType, String fileUrl, String fileType, String postText,
 			int ratingValueSad, int ratingValueOk, int ratingValueHappy, int newRating, String userName,
 			String profilePicUrl, String userId, Date createdTime, Date lastUpdatedTime, String thumbNameUrl,
-			String commentCount) {
+			String commentCount, int noOfLikes, Boolean isLiked) {
 		super();
 		this.postId = postId;
 		this.accountId = accountId;
@@ -212,8 +237,9 @@ public class PostVO{
 		this.lastUpdatedTime = lastUpdatedTime;
 		this.thumbNameUrl = thumbNameUrl;
 		this.commentCount = commentCount;
+		this.noOfLikes = noOfLikes;
+		this.isLiked = isLiked;
 	}
-
 
 
 

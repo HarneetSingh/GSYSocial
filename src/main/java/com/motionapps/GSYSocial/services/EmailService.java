@@ -1,5 +1,14 @@
 package com.motionapps.GSYSocial.services;
 
+import java.util.Properties;
+
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+
+
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -17,12 +26,12 @@ import com.motionapps.GSYSocial.util.Constants;
 public class EmailService {
 	
 	
-	 static final String FROM = "IntactYou <support@intactyou.com>";  // Replace with your "From" address. This address must be verified.
+	private static final String FROM = "IntactYou <support@intactyou.com>";  // Replace with your "From" address. This address must be verified.
 //	 static final String TO = "harneetsingh17@gmail.com"; // Replace with a "To" address. If you have not yet requested
 //	                                                      // production access, this address must be verified.
 //	    static final String BODY = "This email was sent through Amazon SES by using the AWS SDK for Java.";
 //	    static final String SUBJECT = "Amazon SES test (AWS SDK for Java)";
-
+	 private static Regions AWS_REGION = Regions.US_WEST_2;  
 	    
 	    public Long sendEmail(String to, String subjectText, String bodyText)
 	    {
@@ -86,5 +95,19 @@ public class EmailService {
 	        }
 	    }
 	    
+	    public Long sendRawEmail(String to, String subjectText, String bodyText)
+	    {
+	    	 Session session = Session.getDefaultInstance(new Properties());
+	         MimeMessage message = new MimeMessage(session);
+	         try {
+				message.setSubject(subjectText, "UTF-8");
+				message.setFrom(new InternetAddress(FROM));
+				message.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(to));
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return 1L;
+	    }
 }
 

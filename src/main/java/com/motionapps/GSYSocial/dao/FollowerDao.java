@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
@@ -20,7 +21,7 @@ public interface FollowerDao {
 		
 	public List<UserVO> getAccountFollowers(String jointAccountId);
 	
-	public List<JointAccountVO> getJointAccountsFollowedByUser(String userId);
+	public Set<JointAccountVO> getJointAccountsFollowedByUser(String userId);
 		
 	public List<FollowerVO> getFollowersVOByJointAccount(String jointAccountId);
 	

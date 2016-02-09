@@ -15,6 +15,8 @@
 		<result column="relationship" property="relationship" />
 		<result column="answer" property="answer" />
 		<result column="privacy_mode" property="privacyMode" />
+		<result column="created_time" property="createdTime" />
+
 	</resultMap>
 
 	<resultMap id="groupMemberMap" type="GroupMember">
@@ -37,9 +39,10 @@
 		profile_pic=#{profilePic},
 		moments_pics=#{momentsPics},
 		relationship=#{relationship},
-		privacy_mode
-		= #{privacyMode},
-		answer=#{answer};
+		privacy_mode= #{privacyMode},
+		answer=#{answer},
+		created_time=now();
+
 	</insert>
 
 	<insert id="inviteGroupMember" parameterType="GroupMember"
@@ -147,20 +150,15 @@
 		profile_pic,
 		relationship,
 		answer,
-		privacy_mode
+		privacy_mode,
+		created_time
 		FROM
 		group_account;
 	</select>
-	
-<!-- 		<select id="getGroupAccountsByAdminId" resultMap="int"
-		parameterType="String">
-		SELECT
-			COUNT(group_account_id)
-		FROM
-		group_account
-		WHERE
-		group_admin_id=#{value};
-	</select> -->
+
+	<!-- <select id="getGroupAccountsByAdminId" resultMap="int" parameterType="String"> 
+		SELECT COUNT(group_account_id) FROM group_account WHERE group_admin_id=#{value}; 
+		</select> -->
 
 
 
@@ -176,7 +174,8 @@
 		profile_pic,
 		relationship,
 		answer,
-		privacy_mode
+		privacy_mode,
+		created_time
 		FROM
 		group_account
 		WHERE
@@ -196,7 +195,9 @@
 		relationship,
 		answer,
 		privacy_mode,
-		EXISTS(SELECT * FROM follower where
+		created_time,
+		EXISTS(SELECT * FROM
+		follower where
 		account_id=#{groupAccountId} AND
 		user_id=#{userId}) AS
 		user_following
@@ -249,7 +250,8 @@
 		profile_pic,
 		relationship,
 		answer,
-		privacy_mode
+		privacy_mode,
+		created_time
 		FROM
 		group_account
 		WHERE
@@ -267,7 +269,7 @@
 		AND
 		user_id=#{userId};
 	</delete>
-	
+
 	<delete id="inviteRejected" parameterType="GroupMember">
 		DELETE
 		FROM
