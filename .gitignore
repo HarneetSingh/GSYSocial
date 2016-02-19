@@ -15,6 +15,7 @@
 Constants.java
 context.xml
 .*
+GFYSocial.war*
 
 
 # generated files
