@@ -41,7 +41,11 @@ public class InviteRequestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response inviteUser(InviteRequestVO inviteRequestVO)
 	{
-		InviteRequestVO tempInviteRequestVO=inviteRequestService.inviteUser(inviteRequestVO);
+		Object object=inviteRequestService.inviteUser(inviteRequestVO);
+		if(object instanceof ErrorVO)
+		{	ErrorVO temp=(ErrorVO)object;
+			return Response.status(temp.getStatus()).entity(temp).type(MediaType.APPLICATION_JSON).build();
+		}
 		return Response.ok().build();
 	}
 	

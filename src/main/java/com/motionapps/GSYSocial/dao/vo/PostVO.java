@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
+
 @XmlRootElement
 public class PostVO{
 	
@@ -16,6 +17,10 @@ public class PostVO{
 	
 	private int accountType;
 	
+	private String accountName;
+	
+
+
 	private String fileUrl;
 	
 	private String fileType;
@@ -29,6 +34,8 @@ public class PostVO{
 	private int ratingValueHappy;//2
 
 	private int newRating;
+	
+	private Boolean isRated;
 	
 	private String userName;
 	
@@ -97,6 +104,13 @@ public class PostVO{
 		this.profilePicUrl = profilePicUrl;
 	}
 
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
 
 	public String getPostId() {
 		return postId;
@@ -197,7 +211,14 @@ public class PostVO{
 	}
 	
 	
-	public PostVO(){}
+	public Boolean getIsRated() {
+		return isRated;
+	}
+
+	public void setIsRated(Boolean isRated) {
+		this.isRated = isRated;
+	}
+
 
 	public java.util.Date getCreatedTime() {
 		return createdTime;
@@ -215,14 +236,17 @@ public class PostVO{
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
 
-	public PostVO(String postId, String accountId, int accountType, String fileUrl, String fileType, String postText,
-			int ratingValueSad, int ratingValueOk, int ratingValueHappy, int newRating, String userName,
-			String profilePicUrl, String userId, Date createdTime, Date lastUpdatedTime, String thumbNameUrl,
-			String commentCount, int noOfLikes, Boolean isLiked) {
+	public PostVO(){}
+
+	public PostVO(String postId, String accountId, int accountType, String accountName, String fileUrl, String fileType,
+			String postText, int ratingValueSad, int ratingValueOk, int ratingValueHappy, int newRating,
+			Boolean isRated, String userName, String profilePicUrl, String userId, Date createdTime,
+			Date lastUpdatedTime, String thumbNameUrl, String commentCount, int noOfLikes, Boolean isLiked) {
 		super();
 		this.postId = postId;
 		this.accountId = accountId;
 		this.accountType = accountType;
+		this.accountName = accountName;
 		this.fileUrl = fileUrl;
 		this.fileType = fileType;
 		this.postText = postText;
@@ -230,6 +254,7 @@ public class PostVO{
 		this.ratingValueOk = ratingValueOk;
 		this.ratingValueHappy = ratingValueHappy;
 		this.newRating = newRating;
+		this.isRated = isRated;
 		this.userName = userName;
 		this.profilePicUrl = profilePicUrl;
 		this.userId = userId;
@@ -240,6 +265,8 @@ public class PostVO{
 		this.noOfLikes = noOfLikes;
 		this.isLiked = isLiked;
 	}
+
+
 
 
 

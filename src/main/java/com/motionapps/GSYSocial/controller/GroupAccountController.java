@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
 import com.motionapps.GSYSocial.dao.vo.GroupMemberVO;
@@ -78,7 +79,7 @@ public class GroupAccountController {
 	@GET
 	@Path("/detailsWithUserId")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJointAccount(@QueryParam("groupAccountId")String groupAccountId,@QueryParam("userId")String userId) {
+	public Response getGroupAccountWithUserId(@QueryParam("groupAccountId")String groupAccountId,@QueryParam("userId")String userId) {
 		return  Response.ok().entity(groupAccountService.getGroupAccountWithUserId(groupAccountId,userId)).build();
 		
 	}
@@ -169,6 +170,18 @@ public class GroupAccountController {
 		else 
 			return Response.status(400).build();
 		
+	}
+	
+	@GET
+	@Path("/deleteGroupAccount")
+	public Response deleteGroupAccount(@QueryParam("groupAccountId")String groupAccountId)
+	{
+		status=groupAccountService.deleteGroupAccount(groupAccountId);
+		if(status==1)
+			return Response.ok().build();
+		else 
+			return Response.status(400).entity(new ErrorVO(400, "Some error occurred")).build();
+			
 	}
 	
 

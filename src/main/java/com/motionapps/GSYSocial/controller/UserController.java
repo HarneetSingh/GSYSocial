@@ -16,7 +16,6 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.motionapps.GSYSocial.dao.UserDao;
 import com.motionapps.GSYSocial.dao.vo.ChangePasswordVO;
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
@@ -149,17 +148,7 @@ public class UserController {
 		public UserSearchVO searchUser(@QueryParam("keyword")String keyword) {
 			return new UserSearchVO(userService.searchUser(keyword));
 		}
-		@GET
-		@Path("/delete")
-		@Produces(MediaType.APPLICATION_JSON)
-		public Response deleteUser(@QueryParam("userId")String userId) {
-			status=userService.deleteUser(userId);
-			if(status==1)
-				return Response.ok().build();
-			else
-				return Response.status(400).build();
 
-		}
 		
 		@GET
 		@Path("/details")
@@ -238,11 +227,26 @@ public class UserController {
 		@Path("/testEmail")
 		public Response testEmail()
 		{
-			status=emailService.sendEmail("harneetsingh17@gmail.com","test","test");
+			status=1L;
+			//status=emailService.sendRawEmail("harneetsingh17@gmail.com","test","test");
+			userService.registrationEmail("232323","harneetsingh17@gmail.com","Harneet Singh");
 			if(status==1)
 				return Response.ok().build();
 			else
 				return Response.status(400).build();
 			
+		}
+		
+		
+		@GET
+		@Path("/delete")
+		@Produces(MediaType.APPLICATION_JSON)
+		public Response deleteUser(@QueryParam("userId")String userId) {
+			ErrorVO errorVO=userService.deleteUser(userId);
+			//if(status==1)
+			//	return Response.ok().build();
+			//else
+				return Response.status(errorVO.getStatus()).entity(errorVO).build();
+
 		}
 }	

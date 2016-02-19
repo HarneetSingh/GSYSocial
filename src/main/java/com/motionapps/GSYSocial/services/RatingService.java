@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.RatingDao;
+import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.Notification;
 import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
@@ -13,11 +15,18 @@ import com.motionapps.GSYSocial.dao.vo.PostVO;
 import com.motionapps.GSYSocial.dao.vo.RatingArrayVO;
 import com.motionapps.GSYSocial.dao.vo.RatingVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.util.Constants;
 
 public class RatingService {
 	
 
 	private NotificationRequestVO notificationRequestVO;
+	
+	private PostVO postVO;
+	
+	private JointAccountVO jointAccountVO;
+	
+	private GroupAccountVO groupAccountVO;
 	
 	@Autowired
 	private RatingDao ratingDao;
@@ -25,9 +34,24 @@ public class RatingService {
 	private PostService postService;
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	private GroupAccountService groupAccountService;
+	@Autowired
+	private JointAccountService jointAccountService;
+
 	@Autowired
 	private NotificationService notificationService;
+	
+	
+	public void setGroupAccountService(GroupAccountService groupAccountService) {
+		this.groupAccountService = groupAccountService;
+	}
+
+
+	public void setJointAccountService(JointAccountService jointAccountService) {
+		this.jointAccountService = jointAccountService;
+	}
+
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -60,9 +84,20 @@ public class RatingService {
 		ratingVO.setRatingId(UUID.randomUUID().toString());		
 		ratingDao.addRating(ratingVO);
 		postService.addRating(ratingVO);
-		notificationRequestVO=createNotificationObject(ratingVO," rated your post");
-		if(notificationRequestVO!=null)
-			notificationService.sendNotification(notificationRequestVO);
+		postVO=postService.getPostById(ratingVO.getPostId());
+		if(postVO.getAccountType()==0)
+		{
+			jointAccountVO=jointAccountService.getJointAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(ratingVO," has rated your post in joint "+jointAccountVO.getJointAccountName());
+		}
+		else
+		{
+			groupAccountVO=groupAccountService.getGroupAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(ratingVO," has rated your post in group "+groupAccountVO.getGroupAccountName());
+
+		}
+		if(notificationRequestVO!=null){
+			notificationService.sendNotification(notificationRequestVO);}
 		}
 		else
 		{
@@ -97,7 +132,18 @@ public class RatingService {
 		//ratingVO.setRatingValue(ratingDifference);
 		postService.removeRating(currentRatingVO);
 		postService.addRating(ratingVO);
-		notificationRequestVO=createNotificationObject(currentRatingVO," updated his rating");
+		postVO=postService.getPostById(ratingVO.getPostId());
+		if(postVO.getAccountType()==0)
+		{
+			jointAccountVO=jointAccountService.getJointAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(currentRatingVO," has updated the rating on your post in joint "+jointAccountVO.getJointAccountName());
+		}
+		else
+		{
+			groupAccountVO=groupAccountService.getGroupAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(currentRatingVO," has updated the rating on your post in group "+groupAccountVO.getGroupAccountName());
+
+		}
 		if(notificationRequestVO!=null)
 			notificationService.sendNotification(notificationRequestVO);
 		return 1L;
@@ -140,7 +186,7 @@ public class RatingService {
 		
 		
 		Notification notification =new Notification();
-		notification.setTitle("Intactyou");
+		notification.setTitle(Constants.notificationTitle);
 		UserVO userVO2=userService.getUser(ratingVO.getUserId());
 		notification.setText(userVO2.getUserName()+notificationText);
 		notification.setIcon(userVO2.getProfilePicUrl());

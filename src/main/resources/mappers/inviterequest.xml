@@ -62,6 +62,24 @@
 		WHERE
 		inviter_user_id = #{value};
 	</select>
+	<select id="checkIfInviteRequestAlreadyExists" parameterType="InviteRequest" resultType="Int">
+		SELECT
+			COUNT(invite_id)
+		FROM
+			invite_request
+		WHERE
+		(
+		invitee_user_id = #{inviteeUserId}
+		AND
+		inviter_user_id = #{inviterUserId}
+		)
+		OR
+		(
+		invitee_user_id = #{inviterUserId}
+		AND
+		inviter_user_id = #{inviteeUserId}
+		);
+	</select>
 
 	<delete id="inviteDeleted" parameterType="InviteRequest">
 		DELETE

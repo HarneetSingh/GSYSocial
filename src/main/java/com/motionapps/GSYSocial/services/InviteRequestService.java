@@ -1,12 +1,12 @@
 package com.motionapps.GSYSocial.services;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.InviteRequestDao;
+import com.motionapps.GSYSocial.dao.vo.ErrorVO;
 import com.motionapps.GSYSocial.dao.vo.InviteRequestVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.Notification;
@@ -26,6 +26,15 @@ public class InviteRequestService {
 	@Autowired
 	private NotificationService notificationService;
 	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private JointAccountService jointAccountService;
+	
+	
+	private JointAccountVO jointAccountVO;
+	
 	public void setNotificationService(NotificationService notificationService) {
 		this.notificationService = notificationService;
 	}
@@ -36,14 +45,7 @@ public class InviteRequestService {
 		this.userService = userService;
 	}
 
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private JointAccountService jointAccountService;
-	
-	
-	private JointAccountVO jointAccountVO;
+
 
 
 	public void setJointAccountService(JointAccountService jointAccountService) {
@@ -56,13 +58,22 @@ public class InviteRequestService {
 		this.inviteRequestDao = inviteRequestDao;
 	}
 	
-	public InviteRequestVO inviteUser(InviteRequestVO inviteRequestVO)
+	public Object inviteUser(InviteRequestVO inviteRequestVO)
 	{
 		String inviteRequestId=UUID.randomUUID().toString();
 		inviteRequestVO.setInviteRequestId(inviteRequestId);
 		
+		int count=inviteRequestDao.checkIfInviteRequestAlreadyExists(inviteRequestVO);
+		if(count!=0)
+		{
+			return new ErrorVO(400, "Invite Request Already Pending");
+		}
+		count=jointAccountService.checkIfJointAccountAlreadyExists(inviteRequestVO.getInviteeUserId(), inviteRequestVO.getInviterUserId());
+		if(count!=0)
+		{
+			return new ErrorVO(400, "Joint Account Already Available");
+		}
 		inviteRequestDao.inviteUser(inviteRequestVO);
-
 
 		notificationRequestVO=createNotificationObject(inviteRequestVO," invited you to join joint account");
 		if(notificationRequestVO!=null)

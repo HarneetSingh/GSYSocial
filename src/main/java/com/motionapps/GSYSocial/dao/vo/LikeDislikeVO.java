@@ -9,7 +9,6 @@ public class LikeDislikeVO {
 	
 	private String userId;
 	
-	private Boolean type;
 
 
 
@@ -29,23 +28,16 @@ public class LikeDislikeVO {
 		this.userId = userId;
 	}
 
-	public Boolean getType() {
-		return type;
-	}
 
-	public void setType(Boolean type) {
-		this.type = type;
-	}
 	
 	public LikeDislikeVO() {
 	}
 	
 	
-	public LikeDislikeVO(String postId, String userId, Boolean type) {
+	public LikeDislikeVO(String postId, String userId) {
 		super();
 		this.postId = postId;
 		this.userId = userId;
-		this.type = type;
 	}
 
 }

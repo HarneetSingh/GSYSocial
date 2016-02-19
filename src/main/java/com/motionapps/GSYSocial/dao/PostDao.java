@@ -1,6 +1,7 @@
 package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.QueryParam;
 
@@ -26,6 +27,8 @@ public interface PostDao {
 	
 	public List<PostVO> getAllPosts();
 	
+	public List<PostVO> getPostOfUser(String userId);
+	
 	public PostVO getPostById(String postId);
 	
 	public Long incrementCommentCount(String postId);
@@ -45,4 +48,10 @@ public interface PostDao {
 	public Long removeLikeDislikeEntry( @Param("postId") String postId,@Param("userId")String userId);
 	
 	public LikeDislikeVO getLikeDislikeEntry( @Param("postId") String postId,@Param("userId")String userId);
+	
+	public Set<LikeDislikeVO> getAllLikeEntry();
+
+	public Set<LikeDislikeVO> getAllLikesByPost(String postId);
+
+	public Long deleteAllLikesByPost(String postId);
 }

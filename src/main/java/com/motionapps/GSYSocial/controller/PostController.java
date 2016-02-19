@@ -1,7 +1,6 @@
 package com.motionapps.GSYSocial.controller;
 
 
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.motionapps.GSYSocial.dao.vo.ErrorVO;
+import com.motionapps.GSYSocial.dao.vo.LikeArrayVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
+import com.motionapps.GSYSocial.dao.vo.UserSearchVO;
 import com.motionapps.GSYSocial.services.PostService;
 
 @Controller
@@ -122,7 +123,18 @@ public class PostController {
 			return Response.status(400).entity(new ErrorVO(400,"Bad Request")).type(MediaType.APPLICATION_JSON).build();	
 	}
 
+	@GET
+	@Path("/getAllLikes")
+	public Response getAllLikeEntry()
+	{
+		return Response.status(200).entity(new LikeArrayVO(postService.getAllLikeEntry())).type(MediaType.APPLICATION_JSON).build();
+	}
 
-
+	@GET
+	@Path("/getAllLikesByPost")
+	public Response getAllLikesByPost(@QueryParam("postId") String postId)
+	{
+		return Response.status(200).entity(new UserSearchVO(postService.getAllLikesByPost(postId))).type(MediaType.APPLICATION_JSON).build();
+	}
 
 }

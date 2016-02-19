@@ -70,6 +70,14 @@
 	    AND
 	     	is_request=1; 
 	</delete>
+	
+	<delete id="deleteNotificationsOfUserId" parameterType="String">
+		DELETE
+	    FROM
+	    	notification	
+	    WHERE
+	        user_id=#{value};
+	</delete>
 
 
 </mapper>   

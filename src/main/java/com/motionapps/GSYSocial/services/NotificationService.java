@@ -206,7 +206,11 @@ public class NotificationService {
 	{
 		return notificationDao.removeNotificationRequest(notificationId);
 	}
-
+	
+	public Long deleteNotificationsOfUserId(String userId)
+	{
+		return notificationDao.deleteNotificationsOfUserId(userId);
+	}
 }
 
 

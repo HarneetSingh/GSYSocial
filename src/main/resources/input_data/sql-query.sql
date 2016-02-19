@@ -106,3 +106,19 @@ update gsysocial_db.user set user_id="sdsdsdds@gmail.com@gmail.com-23d32" where 
 
 
 alter table gsysocial_db.user add primary key(user_id) 
+
+
+//Truncate Queries
+
+truncate table intactyou.user;
+truncate table intactyou.comment;
+truncate table intactyou.follower;
+truncate table intactyou.follow_request;
+truncate table intactyou.group_account;
+truncate table intactyou.group_member;
+truncate table intactyou.invite_request;
+truncate table intactyou.joint_account;
+truncate table intactyou.like_dislike;
+truncate table intactyou.notification;
+truncate table intactyou.post;
+truncate table intactyou.rating;

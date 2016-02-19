@@ -35,10 +35,10 @@ public interface UserDao {
 	
 	public int checkIfOauthUidAlreadyExists(String oauthUid);
 	
+	public int checkIfMobileNoAlreadyExists(String mobileNumber);
+	
 	public Long updateUser(UserVO user);
-	
-	public Long updateInviteRequestStatus(UserVO userVO);
-	
+		
 	public Long incrementFollowCount(String userId);
 	
 	public Long decrementFollowCount(String userId);

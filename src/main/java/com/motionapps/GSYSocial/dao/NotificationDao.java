@@ -15,5 +15,7 @@ public interface NotificationDao {
 	
 	public Long removeNotificationRequest(String notificationId);
 
+	public Long deleteNotificationsOfUserId(String userId);
+
 
 }

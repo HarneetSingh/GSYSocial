@@ -20,6 +20,7 @@
 		<result column="comment_count" property="commentCount" />
 		<result column="no_of_likes" property="noOfLikes" />
 		<result column="is_liked" property="isLiked" />
+		
 
 	</resultMap>
 
@@ -75,7 +76,7 @@
 		rating_value_ok,
 		rating_value_happy,
 		created_time,
-		last_updated_time,
+		last_updated_time
 		FROM
 		post
 		WHERE
@@ -97,6 +98,26 @@
 		post.rating_value_sad,
 		post.rating_value_ok,
 		post.rating_value_happy,
+		EXISTS(
+		SELECT * FROM rating 
+		where
+		(
+		post.post_id =rating.post_id 
+		AND
+		user_id=#{userId}
+		)) 
+		AS
+		isRated,
+		(SELECT
+		 rating_value
+		 FROM
+		 rating
+		 WHERE
+		 user_id=#{userId}
+		 AND
+		 post_id=post.post_id)
+		 AS
+		 newRating,
 		post.created_time,
 		post.last_updated_time,
 		(SELECT 
@@ -147,6 +168,27 @@
 		WHERE
 		post_id=#{value}
 	</select>
+	<select id="getPostOfUser" parameterType="String" resultMap="postMap">
+		SELECT
+		post_id,
+		account_id,
+		account_type,
+		file_url,
+		file_type,
+		thumb_nail_url,
+		post_text,
+		user_id,
+		comment_count,
+		rating_value_sad,
+		rating_value_ok,
+		rating_value_happy,
+		created_time,
+		last_updated_time
+		FROM
+		post
+		WHERE
+		user_id=#{value}
+	</select>
 
 	<select id="getPostForUser" parameterType="String" resultMap="postMap">
 		SELECT
@@ -162,6 +204,26 @@
 		post.rating_value_sad,
 		post.rating_value_ok,
 		post.rating_value_happy,
+		EXISTS(
+		SELECT * FROM rating 
+		where
+		(
+		post.post_id =rating.post_id 
+		AND
+		user_id=#{userId}
+		)) 
+		AS
+		isRated,
+		(SELECT
+		 rating_value
+		 FROM
+		 rating
+		 WHERE
+		 user_id=#{userId}
+		 AND
+		 post_id=post.post_id)
+		 AS
+		 newRating,
 		post.created_time,
 		post.last_updated_time,
 		(SELECT 
@@ -219,8 +281,7 @@
 	<select id="getLikeDislikeEntry" parameterType="Map" resultMap="likeDislikeMap">
 		SELECT
 		post_id,
-		user_id,
-		type
+		user_id
 		FROM
 		like_dislike
 		WHERE
@@ -228,7 +289,22 @@
 		AND
 		user_id=#{userId}
 	</select>
-
+	<select id="getAllLikeEntry" resultMap="likeDislikeMap">
+		SELECT
+		post_id,
+		user_id
+		FROM
+		like_dislike
+	</select>
+	<select id="getAllLikesByPost" parameterType="String" resultMap="likeDislikeMap">
+		SELECT
+		post_id,
+		user_id
+		FROM
+		like_dislike
+		WHERE
+		post_id=#{postId}
+	</select>
 	<!-- ************** UPDATE ************** -->
 
 	<update id="updatePost" parameterType="Post">
@@ -349,6 +425,13 @@
 		(post_id=#{postId}
 		AND
 		user_id=#{userId})
+	</delete>
+	<delete id="deleteAllLikesByPost" parameterType="String">
+	    DELETE
+		FROM
+		like_dislike
+		WHERE
+		post_id=#{value};
 	</delete>
 
 

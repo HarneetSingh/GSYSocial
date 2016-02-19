@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.GroupAccountDao;
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
-import com.motionapps.GSYSocial.dao.vo.GroupAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
 import com.motionapps.GSYSocial.dao.vo.GroupMemberSearchVO;
 import com.motionapps.GSYSocial.dao.vo.GroupMemberVO;
@@ -28,6 +27,9 @@ public class GroupAccountService {
 	
 	@Autowired
 	private NotificationService notificationService;
+	
+	@Autowired
+	private PostService postService;
 
 
 	@Autowired
@@ -43,6 +45,9 @@ public class GroupAccountService {
 	
 	private NotificationRequestVO notificationRequestVO;
 	
+	public void setPostService(PostService postService) {
+		this.postService = postService;
+	}
 	
 	public void setGroupAccountDao(GroupAccountDao groupAccountDao) {
 		this.groupAccountDao = groupAccountDao;
@@ -128,7 +133,7 @@ public class GroupAccountService {
 		return groupAccountVO;
 	}
 	
-	public int getGroupAccountsByAdminId(String userId)
+	public Set<GroupAccountVO> getGroupAccountsByAdminId(String userId)
 	{
 		return groupAccountDao.getGroupAccountsByAdminId(userId);
 	}
@@ -214,17 +219,18 @@ public class GroupAccountService {
 	public List<UserVO> searchUsers(String groupAccountId,String keyword)
 	{
 		List<UserVO> users=userService.searchUser(keyword);
-		Set<GroupMemberVO> groupMembers=groupAccountDao.getGroupMembers(groupAccountId);
+		Set<GroupMemberVO> groupMembers=groupAccountDao.getAllGroupMembers(groupAccountId);
 		for(UserVO userVO : users)
 		{
 			userVO.setGroupAccountStatus(0);
+			//System.out.println("userId="+userVO.getUserId());
 			for(GroupMemberVO groupMemberVO : groupMembers)
 			{
-
+				//System.out.println("groupMemberId="+groupMemberVO.getUserId());
 
 				if(userVO.getUserId().equals(groupMemberVO.getUserId()))
 				{
-
+					//System.out.println("matchId="+groupMemberVO.getUserId());
 					userVO.setGroupAccountStatus(groupMemberVO.getMemberStatus());
 					break;
 				}
@@ -234,6 +240,11 @@ public class GroupAccountService {
 		return users;
 	}
 	
+	public Set<GroupAccountVO> getGroupAccountsFollowedByUser(String userId)
+	{
+		return groupAccountDao.getGroupAccountsFollowedByUser(userId);
+	}
+
 	
 	public Long removeMember(GroupMemberVO groupMemberVO)
 	{
@@ -259,6 +270,7 @@ public class GroupAccountService {
 
 	public Long incrementPostCount(String groupAccountId)
 	{
+		
 		return groupAccountDao.incrementPostCount(groupAccountId);
 	}
 	
@@ -275,5 +287,32 @@ public class GroupAccountService {
 	public Long decrementFollowCount(String groupAccountId)
 	{
 		return groupAccountDao.decrementFollowCount(groupAccountId);
+	}
+
+	public Long deleteAllGroupMembers(String groupAccountId)
+	{
+		Set<GroupMemberVO> groupMembers=groupAccountDao.getAllGroupMembers(groupAccountId);
+		for(GroupMemberVO groupMemberVO:groupMembers)
+		{
+			removeMember(groupMemberVO);
+		}
+		
+		return 1L;
+	}
+	
+	public Long removeGroupMemberByUserId(String userId)
+	{
+		return groupAccountDao.removeGroupMemberByUserId(userId);
+	}
+	
+	
+	public Long deleteGroupAccount(String groupAccountId) {
+		
+		postService.deleteAllPostsByAccount(groupAccountId);
+		deleteAllGroupMembers(groupAccountId);
+		//Delete all followers
+		followerService.deleteAllFollowersByAccount(groupAccountId);
+		
+		return groupAccountDao.deleteGroupAccount(groupAccountId);
 	}
 }

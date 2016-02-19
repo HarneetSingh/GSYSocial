@@ -31,7 +31,7 @@ public class JointAccountVO {
 	
 	private int postCount;
 	
-	private Boolean userFollowing;
+	private int userFollowing;
 	
 	private String profilePic;
 	
@@ -47,8 +47,6 @@ public class JointAccountVO {
 	
 	private Date createdTime;
 	
-	
-
 	// privacyMode field : 0  => public, 1=> follower, 2 => me and my partner
 	private int privacyMode;
 		
@@ -103,11 +101,11 @@ public class JointAccountVO {
 		this.profilePic = profilePic;
 	}
 
-	public Boolean getUserFollowing() {
+	public int getUserFollowing() {
 		return userFollowing;
 	}
 
-	public void setUserFollowing(Boolean userFollowing) {
+	public void setUserFollowing(int userFollowing) {
 		this.userFollowing = userFollowing;
 	}
 
@@ -204,7 +202,7 @@ public class JointAccountVO {
 
 	public JointAccountVO(String jointAccountId, String firstUserId, String firstUserName, String secondUserName,
 			String secondUserId, String jointAccountName, String momentsPics, int followerCount, int postCount,
-			Boolean userFollowing, String profilePic, String firstUserProfilePic, String secondUserProfilePic,
+			int userFollowing, String profilePic, String firstUserProfilePic, String secondUserProfilePic,
 			String relationship, String firstUserAnswer, String secondUserAnswer, Date createdTime, int privacyMode) {
 		super();
 		this.jointAccountId = jointAccountId;

@@ -14,10 +14,8 @@
 		<result column="mobile_number" property="mobileNumber" />
 		<result column="session_id" property="sessionId" />
 		<result column="profile_pic" property="profilePicUrl" />
-		<result column="joint_account_id" property="jointAccountId" />
 		<result column="gcm_device_id" property="gcmDeviceId" />
 		<result column="follow_count" property="followCount" />
-		<result column="invite_request_pending" property="inviteRequestPending" />
 		<result column="gallery" property="gallery" />
 		<result column="email_verified" property="emailVerified" />
 	</resultMap>
@@ -57,10 +55,8 @@
 		profile_pic,
 		gallery,
 		session_id,
-		joint_account_id,
 		gcm_device_id,
-		follow_count,
-		invite_request_pending
+		follow_count
 		FROM
 		user;
 	</select>
@@ -76,10 +72,8 @@
 		profile_pic,
 		gallery,
 		session_id,
-		joint_account_id,
 		gcm_device_id,
-		follow_count,
-		invite_request_pending
+		follow_count
 		FROM
 		user
 		WHERE
@@ -97,10 +91,8 @@
 		profile_pic,
 		gallery,
 		session_id,
-		joint_account_id,
 		gcm_device_id,
 		follow_count,
-		invite_request_pending,
 		email_verified
 		FROM
 		user
@@ -120,10 +112,8 @@
 		profile_pic,
 		gallery,
 		session_id,
-		joint_account_id,
 		gcm_device_id,
-		follow_count,
-		invite_request_pending
+		follow_count
 		FROM
 		user
 		WHERE
@@ -137,9 +127,7 @@
 		date_of_birth,
 		mobile_number,
 		profile_pic,
-		gallery,
-		joint_account_id,
-		invite_request_pending
+		gallery
 		FROM
 		user
 		WHERE
@@ -172,7 +160,7 @@
 		email_id=#{value};
 	</select>
 
-	
+
 	<select id="checkIfEmailIdAlreadyExists" resultType="Int"
 		parameterType="String">
 		SELECT
@@ -181,6 +169,15 @@
 		user
 		WHERE
 		email_id=#{value};
+	</select>
+	<select id="checkIfMobileNoAlreadyExists" resultType="Int"
+		parameterType="String">
+		SELECT
+		count(*)
+		FROM
+		user
+		WHERE
+		mobile_number=#{value};
 	</select>
 
 	<select id="checkIfOauthUidAlreadyExists" resultType="Int"
@@ -253,9 +250,6 @@
 		<if test="profilePicUrl != null">
 			,profile_pic = #{profilePicUrl}
 		</if>
-		<if test="jointAccountId != null">
-			,joint_account_id = #{jointAccountId}
-		</if>
 		<if test="gcmDeviceId != null">
 			,gcm_device_id = #{gcmDeviceId}
 		</if>
@@ -266,17 +260,6 @@
 		user_id = #{userId}
 	</update>
 
-	<update id="updateInviteRequestStatus" parameterType="User">
-		UPDATE
-		user
-		SET
-		user_id = #{userId}
-		<if test="inviteRequestPending != null">
-			,invite_request_pending = #{inviteRequestPending}
-		</if>
-		WHERE
-		user_id = #{userId}
-	</update>
 	<update id="setTempPassword" parameterType="User">
 		UPDATE
 		user

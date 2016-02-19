@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.motionapps.GSYSocial.dao.FollowerDao;
+import com.motionapps.GSYSocial.dao.vo.AccountsVO;
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountSearchVO;
 import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
@@ -39,9 +40,6 @@ public class FollowerService {
 	public void setNotificationService(NotificationService notificationService) {
 		this.notificationService = notificationService;
 	}
-
-
-	
 
 
 
@@ -146,24 +144,29 @@ public class FollowerService {
 
 
 	}
+	
+	public int isFollowRequestPending(String accountId,String userId)
+	{
+		return followerDao.isFollowRequestPending(new FollowerVO(null, userId, accountId, 0));
+	}
 
 	public UserSearchVO getAccountFollowers(String accountId)
 	{
 		return new UserSearchVO(followerDao.getAccountFollowers(accountId));
 	}
 	
-	public JointAccountSearchVO getJointAccountsFollowedByUser(String userId)
+	public AccountsVO getAccountsFollowedByUser(String userId)
 	{
-		return new JointAccountSearchVO(followerDao.getJointAccountsFollowedByUser(userId));
+		return new AccountsVO(jointAccountService.getJointAccountsFollowedByUser(userId),groupAccountService.getGroupAccountsFollowedByUser(userId));
 	}
 	
-	public Long deleteAllFollowersByJointAccount(String jointAccountId)
+	public Long deleteAllFollowersByAccount(String accountId)
 	{
-		List<FollowerVO> followersVO=followerDao.getFollowersVOByJointAccount(jointAccountId);
+		List<FollowerVO> followersVO=followerDao.getFollowersByAccountId(accountId);
 		for(FollowerVO tempFollowerVO:followersVO)
 		{
 			followerDao.unfollowAccount(tempFollowerVO);
-			//userService.decrementFollowCount(tempFollowerVO.getUserId());
+			userService.decrementFollowCount(tempFollowerVO.getUserId());
 		}
 		
 		return 1L;
@@ -176,6 +179,26 @@ public class FollowerService {
 			followerDao.unfollowAccount(tempFollowerVO);
 		}
 		
+		return 1L;
+	}
+	
+	public Long deteteAllFollowerRequestByAccountId(String accountId)
+	{
+		List<FollowerVO> followerVOs=followerDao.getFollowRequestByAcc(accountId);
+		for(FollowerVO followerVO : followerVOs)
+		{
+			followerDao.removeFollowRequest(followerVO.getFollowId());
+		}
+		return 1L;
+	}
+	
+	public Long deteteAllFollowerRequestByUserId(String userId)
+	{
+		List<FollowerVO> followerVOs=followerDao.getFollowRequestByUser(userId);
+		for(FollowerVO followerVO : followerVOs)
+		{
+			followerDao.removeFollowRequest(followerVO.getFollowId());
+		}
 		return 1L;
 	}
 
@@ -200,5 +223,14 @@ public class FollowerService {
 				return null;
 		else 
 			return notificationRequestVO;
+	}
+
+
+
+
+
+
+	public List<FollowerVO> getAllFollowers() {
+		return followerDao.getAllFollowers();
 	}
 }

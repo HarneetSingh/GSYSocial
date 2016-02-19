@@ -1,10 +1,8 @@
 package com.motionapps.GSYSocial.dao;
 
 import java.util.List;
-import java.util.Set;
 
 import com.motionapps.GSYSocial.dao.vo.FollowerVO;
-import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
 
 public interface FollowerDao {
@@ -20,10 +18,17 @@ public interface FollowerDao {
 	public Long removeFollowRequest(String followerRequestId);
 		
 	public List<UserVO> getAccountFollowers(String jointAccountId);
-	
-	public Set<JointAccountVO> getJointAccountsFollowedByUser(String userId);
-		
-	public List<FollowerVO> getFollowersVOByJointAccount(String jointAccountId);
+			
+	public List<FollowerVO> getFollowersByAccountId(String accountId);
 	
 	public List<FollowerVO> getFollowerVOByUserId(String userId);
+	
+	public List<FollowerVO> getAllFollowers();
+	
+	public List<FollowerVO> getFollowRequestByUser(String userId);
+	
+	public List<FollowerVO> getFollowRequestByAcc(String accountId);
+	
+	public int isFollowRequestPending(FollowerVO followerVO);
+
 }

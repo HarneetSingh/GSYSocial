@@ -1,25 +1,40 @@
 package com.motionapps.GSYSocial.services;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 import com.motionapps.GSYSocial.dao.PostDao;
+import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.LikeDislikeVO;
+import com.motionapps.GSYSocial.dao.vo.Notification;
+import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
+import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
 import com.motionapps.GSYSocial.dao.vo.PostArrayVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
 import com.motionapps.GSYSocial.dao.vo.RatingVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.util.Constants;
 
 public class PostService {
 
 
 
+	private PostVO postVO;
+	private JointAccountVO jointAccountVO;
+	private GroupAccountVO groupAccountVO;
+	private NotificationRequestVO notificationRequestVO;
+	private LikeDislikeVO likeDislikeVO;
+
+
+	
 	@Autowired
 	private PostDao postDao;
 
@@ -37,8 +52,10 @@ public class PostService {
 	
 	@Autowired
 	private GroupAccountService groupAccountService;
+
+	@Autowired
+	private NotificationService notificationService;
 	
-	private LikeDislikeVO likeDislikeVO;
 
 
 
@@ -47,6 +64,10 @@ public class PostService {
 	}
 
 
+
+	public void setNotificationService(NotificationService notificationService) {
+		this.notificationService = notificationService;
+	}
 
 
 	public void setUserService(UserService userService) {
@@ -151,10 +172,10 @@ public class PostService {
 	public PostArrayVO getPostForUser(String userId) {
 		
 		
-		
 		List<PostVO> postVOList=postDao.getPostForUser(userId);
 		for (int i=0;i<postVOList.size();i++) 
 		{
+			
 			postVOList.set(i, addUserData(postVOList.get(i)));
 		}
 		PostArrayVO postArrayVO = new PostArrayVO(postVOList);
@@ -197,6 +218,7 @@ public class PostService {
 		commentService.deleteAllCommentsByPost(postId);
 		//delete all ratings of a particular post
 		ratingService.deleteAllRatingsByPost(postId);
+		deleteAllLikesByPost(postId);
 		if(postVO.getAccountType()==0)
 			jointAccountService.decrementPostCount(postVO.getAccountId());
 		else if(postVO.getAccountType()==1)
@@ -215,6 +237,17 @@ public class PostService {
 		}
 		return 1L;
 	}
+	
+	public Long deleteAllPostsByUser(String userId)
+	{
+		List<PostVO> postList= postDao.getPostOfUser(userId);
+		for(PostVO temp:postList)
+		{
+			deletePost(temp.getPostId());
+		}
+		return 1L;
+		
+	}
 
 	public Long decrementCommentCount(String postId) {
 
@@ -224,16 +257,50 @@ public class PostService {
 	public PostVO addUserData(PostVO postVO)
 	{
 		UserVO userVO=userService.getUser(postVO.getUserId());
+		if(postVO.getAccountType()==0)
+		{
+			//System.out.println("jointAccountVO"+postVO.getAccountId());
+			JointAccountVO jointAccountVO=jointAccountService.getJointAccount(postVO.getAccountId());
+			postVO.setAccountName(jointAccountVO.getJointAccountName());
+		}
+		else
+		{
+			//System.out.println("groupAccountVO"+postVO.getAccountId());
+			GroupAccountVO groupAccountVO=groupAccountService.getGroupAccount(postVO.getAccountId());
+			if(groupAccountVO==null){
+				
+				JointAccountVO jointAccountVO=jointAccountService.getJointAccount(postVO.getAccountId());
+				postVO.setAccountName(jointAccountVO.getJointAccountName());
+			}
+			else 
+				postVO.setAccountName(groupAccountVO.getGroupAccountName());
+		}
 		postVO.setUserName(userVO.getUserName());
 		postVO.setProfilePicUrl(userVO.getProfilePicUrl());
+		
 		return postVO;
 	}
 	
 	
 	public Long likePost( String postId,String userId)
 	{
-		likeDislikeVO=new LikeDislikeVO(postId,userId,true);
-		return postDao.addLikeDislikeEntry(likeDislikeVO);
+		likeDislikeVO=new LikeDislikeVO(postId,userId);
+		postDao.addLikeDislikeEntry(likeDislikeVO);
+		postVO=getPostById(postId);
+		if(postVO.getAccountType()==0)
+		{
+			jointAccountVO=jointAccountService.getJointAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(likeDislikeVO," has liked your post in joint "+jointAccountVO.getJointAccountName());
+		}
+		else
+		{
+			groupAccountVO=groupAccountService.getGroupAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(likeDislikeVO," has liked your post in group "+groupAccountVO.getGroupAccountName());
+
+		}
+		if(notificationRequestVO!=null){
+			notificationService.sendNotification(notificationRequestVO);}
+		return 1L;
 
 		//System.out.println("updateLikeDislikeEntry");
 
@@ -252,6 +319,60 @@ public class PostService {
 	public Long undoLikePost( String postId,String userId)
 	{
 		return postDao.removeLikeDislikeEntry(postId,userId);
+	}
+	
+	public Set<LikeDislikeVO> getAllLikeEntry()
+	{
+		return postDao.getAllLikeEntry();
+	}
+
+
+
+
+	public List<UserVO> getAllLikesByPost(String postId) {
+		Set<LikeDislikeVO> likeDislikeVOs=postDao.getAllLikesByPost(postId);
+		List<UserVO> userVO=new ArrayList<UserVO>();
+		for(LikeDislikeVO likeDislikeVO:likeDislikeVOs)
+		{
+			userVO.add(userService.getUser(likeDislikeVO.getUserId()));
+		}
+		return userVO;
+		
+	}
+	public Long deleteAllLikesByPost(String postId) {
+		
+		return postDao.deleteAllLikesByPost(postId);
+	}
+	
+	
+	private NotificationRequestVO createNotificationObject(LikeDislikeVO likeDislikeVO,String notificationText)
+	{
+		PostVO postVO=getPostById(likeDislikeVO.getPostId());
+		UserVO userVO=userService.getUser(postVO.getUserId());
+		//NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
+		String gcmId=userVO.getGcmDeviceId();
+
+		//notificationRequestVO.setTo(userVO.getGcmDeviceId());
+		
+		
+		
+		Notification notification =new Notification();
+		notification.setTitle(Constants.notificationTitle);
+		UserVO userVO2=userService.getUser(likeDislikeVO.getUserId());
+		notification.setText(userVO2.getUserName()+notificationText);
+		notification.setIcon(userVO2.getProfilePicUrl());
+		
+		NotificationDataVO notificationDataVO=new NotificationDataVO(2,userVO.getUserId(),false,postVO);
+
+		//notificationRequestVO.setNotification(notification);
+		//notificationRequestVO.setData(notificationDataVO);
+		notificationRequestVO=notificationService.createNotificationObject(userVO.getGcmDeviceId(),notification, notificationDataVO);
+
+		if(userVO.getGcmDeviceId()==null||userVO.getGcmDeviceId().equals(""))
+			return null;
+		else
+			return notificationRequestVO;
+
 	}
 	
 

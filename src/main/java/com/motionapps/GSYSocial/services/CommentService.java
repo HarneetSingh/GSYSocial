@@ -10,15 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.motionapps.GSYSocial.dao.CommentDao;
 import com.motionapps.GSYSocial.dao.vo.CommentArrayVO;
 import com.motionapps.GSYSocial.dao.vo.CommentVO;
+import com.motionapps.GSYSocial.dao.vo.GroupAccountVO;
+import com.motionapps.GSYSocial.dao.vo.JointAccountVO;
 import com.motionapps.GSYSocial.dao.vo.Notification;
 import com.motionapps.GSYSocial.dao.vo.NotificationDataVO;
 import com.motionapps.GSYSocial.dao.vo.NotificationRequestVO;
 import com.motionapps.GSYSocial.dao.vo.PostVO;
 import com.motionapps.GSYSocial.dao.vo.UserVO;
+import com.motionapps.GSYSocial.util.Constants;
 
 public class CommentService {
 	
 	private NotificationRequestVO notificationRequestVO;
+	
+	private PostVO postVO;
+	
+	private JointAccountVO jointAccountVO;
+	
+	private GroupAccountVO groupAccountVO;
 	
 	@Autowired
 	private CommentDao commentDao;
@@ -31,6 +40,21 @@ public class CommentService {
 	
 	@Autowired
 	private NotificationService notificationService;
+	
+	@Autowired
+	private GroupAccountService groupAccountService;
+	@Autowired
+	private JointAccountService jointAccountService;
+	
+	public void setGroupAccountService(GroupAccountService groupAccountService) {
+		this.groupAccountService = groupAccountService;
+	}
+
+
+	public void setJointAccountService(JointAccountService jointAccountService) {
+		this.jointAccountService = jointAccountService;
+	}
+
 
 	public void setPostService(PostService postService) {
 		this.postService = postService;
@@ -56,7 +80,18 @@ public class CommentService {
 		commentVO.setCommentId(UUID.randomUUID().toString());
 		commentDao.addComment(commentVO);
 		postService.incrementCommentCount(commentVO.getPostId());
-		notificationRequestVO=createNotificationObject(commentVO," commented on your post");
+		postVO=postService.getPostById(commentVO.getPostId());
+		if(postVO.getAccountType()==0)
+		{
+			jointAccountVO=jointAccountService.getJointAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(commentVO," commented on your post in joint "+jointAccountVO.getJointAccountName());
+		}
+		else
+		{
+			groupAccountVO=groupAccountService.getGroupAccount(postVO.getAccountId());
+			notificationRequestVO=createNotificationObject(commentVO," commented on your post in group "+groupAccountVO.getGroupAccountName());
+
+		}
 		if(notificationRequestVO!=null)
 			notificationService.sendNotification(notificationRequestVO);
 		return 1L;
@@ -127,23 +162,29 @@ public class CommentService {
 
 	private NotificationRequestVO createNotificationObject(CommentVO commentVO,String notificationText)
 	{
-//		PostVO postVO=postService.getPostById(commentVO.getPostId());
-//		UserVO userVO=userService.getUser(postVO.getUserId());
+		PostVO postVO=postService.getPostById(commentVO.getPostId());
+		UserVO userVO=userService.getUser(postVO.getUserId());
 //		NotificationRequestVO notificationRequestVO=new NotificationRequestVO();
-//		//String gcmId=userVO.getGcmDeviceId();
+//		String gcmId=userVO.getGcmDeviceId();
 //		if(userVO.getGcmDeviceId()==null)
 //			return null;
 //		notificationRequestVO.setTo(userVO.getGcmDeviceId());
-//		Notification notification =new Notification();
-//		notification.setTitle("Intactyou");
-//		userVO=userService.getUser(commentVO.getUserId());
-//		notification.setText(userVO.getUserName()+notificationText);
-//		notification.setIcon(userVO.getProfilePicUrl());
-//		notificationRequestVO.setNotification(notification);
-//		NotificationDataVO notificationDataVO=new NotificationDataVO(1,postVO);
-//		notificationRequestVO.setData(notificationDataVO);
-//		return notificationRequestVO;
-		return null;
+		Notification notification =new Notification();
+		notification.setTitle(Constants.notificationTitle);
+		UserVO userVO2=userService.getUser(commentVO.getUserId());
+		notification.setText(userVO2.getUserName()+notificationText);
+		notification.setIcon(userVO2.getProfilePicUrl());
+		
+		NotificationDataVO notificationDataVO=new NotificationDataVO(2,userVO.getUserId(),false,postVO);
+
+		//notificationRequestVO.setNotification(notification);
+		//notificationRequestVO.setData(notificationDataVO);
+		notificationRequestVO=notificationService.createNotificationObject(userVO.getGcmDeviceId(),notification, notificationDataVO);
+
+		if(userVO.getGcmDeviceId()==null||userVO.getGcmDeviceId().equals(""))
+			return null;
+		else
+			return notificationRequestVO;
 	}
 
 	public CommentVO addUserData(CommentVO commentVO)

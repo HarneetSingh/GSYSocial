@@ -3,7 +3,6 @@ package com.motionapps.GSYSocial.dao.vo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 
 @XmlRootElement
@@ -31,17 +30,13 @@ public class UserVO{
 	private String profilePicUrl;
 	
 	private String gallery;
-	
-	private String jointAccountId;
-	
+		
 	private String gcmDeviceId;
 	
 	private int followCount;
 	
 	private int groupAccountStatus;
-	
-	private boolean inviteRequestPending;
-	
+		
 	private boolean emailVerified;
 	
 //	@JsonIgnore
@@ -73,13 +68,7 @@ public class UserVO{
 	}
 
 
-	public boolean isInviteRequestPending() {
-		return inviteRequestPending;
-	}
 
-	public void setInviteRequestPending(boolean inviteRequestPending) {
-		this.inviteRequestPending = inviteRequestPending;
-	}
 
 	public int getFollowCount() {
 		return followCount;
@@ -153,13 +142,6 @@ public class UserVO{
 		this.gallery = gallery;
 	}
 
-	public String getJointAccountId() {
-		return jointAccountId;
-	}
-
-	public void setJointAccountId(String jointAccountId) {
-		this.jointAccountId = jointAccountId;
-	}
 
 	public String getGcmDeviceId() {
 		return gcmDeviceId;
@@ -208,8 +190,7 @@ public class UserVO{
 
 	public UserVO(String userId, String userName, String oauthUid, String oauthProvider, String emailId,
 			String password, String dateOfBirth, String mobileNumber, String sessionId, String profilePicUrl,
-			String gallery, String jointAccountId, String gcmDeviceId, int followCount, int groupAccountStatus,
-			boolean inviteRequestPending, boolean emailVerified) {
+			String gallery, String gcmDeviceId, int followCount, int groupAccountStatus, boolean emailVerified) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
@@ -222,13 +203,13 @@ public class UserVO{
 		this.sessionId = sessionId;
 		this.profilePicUrl = profilePicUrl;
 		this.gallery = gallery;
-		this.jointAccountId = jointAccountId;
 		this.gcmDeviceId = gcmDeviceId;
 		this.followCount = followCount;
 		this.groupAccountStatus = groupAccountStatus;
-		this.inviteRequestPending = inviteRequestPending;
 		this.emailVerified = emailVerified;
 	}
+
+
 
 
 

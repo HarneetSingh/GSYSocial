@@ -1,6 +1,5 @@
 package com.motionapps.GSYSocial.dao;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
@@ -34,18 +33,26 @@ public interface GroupAccountDao {
 	public Long inviteAccepted(GroupMemberVO groupMemberVO);
 	
 	public Long removeMember(GroupMemberVO groupMemberVO);
+	
+	public Long deleteGroupAccount(String groupAccountId);
 
 	
 	public Long inviteRejected(GroupMemberVO groupMemberVO);
 
 	public Set<GroupMemberVO> getGroupMembers(String groupAccountId);
 	
+	public Set<GroupMemberVO> getAllGroupMembers(String groupAccountId);
+
+	
 	public Set<GroupAccountVO> getGroupAccountsByUserId(String userId);
 	
-	public int getGroupAccountsByAdminId(String userId);
+	public Set<GroupAccountVO> getGroupAccountsByAdminId(String userId);
 	
 	public GroupAccountVO getGroupAccountWithUserId(@Param("groupAccountId")String groupAccountId,@Param("userId")String userId);
 	
+	public Set<GroupAccountVO> getGroupAccountsFollowedByUser(String userId);
+	
+	public Long removeGroupMemberByUserId(String userId);
 	
 
 }

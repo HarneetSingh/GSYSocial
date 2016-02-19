@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.WritableByteChannel;
@@ -37,6 +38,7 @@ import com.motionapps.GSYSocial.dao.FileDao;
 import com.motionapps.GSYSocial.dao.vo.FileVO;
 import com.motionapps.GSYSocial.util.Constants;
 import com.motionapps.GSYSocial.util.MediaStreamer;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 
 @Controller
@@ -47,6 +49,7 @@ public class FileController {
 	FileDao fileDao;
 	
     final int chunk_size = 1024 * 1024 ; // 1MB chunks
+    Boolean status=false;
 	
 
 	public void setFileDao(FileDao fileDao) {
@@ -60,7 +63,7 @@ public class FileController {
 			@FormDataParam("file") FormDataContentDisposition fileDetail) 
 	{
 		String fileId=UUID.randomUUID().toString();
-		String newFileName=fileId+"-"+fileDetail.getFileName();
+		String newFileName=fileId+"-"+URLEncoder.encode(fileDetail.getFileName());
 		String uploadedFileLocation = Constants.fileLocation + newFileName;
 		try{
 		// save it
@@ -86,6 +89,27 @@ public class FileController {
 	    ResponseBuilder builder = Response.ok((Object)file);
 	    builder.header("Content-Disposition", "attachment; filename=" + fileName);
 	    return builder.build();
+		}
+		catch(Exception e)
+		{
+			return Response.status(404).build();
+		}
+		
+
+	}
+	
+	@GET
+	@Path("/delete/{fileName}")
+	public Response deleteFile(@PathParam("fileName") String fileName)
+	{
+		try
+		{
+		File file =new File(Constants.fileLocation+fileName);
+		status=file.delete();
+		if(status)
+			return Response.status(200).build();
+		else
+			return Response.status(404).build();
 		}
 		catch(Exception e)
 		{

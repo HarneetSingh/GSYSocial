@@ -41,9 +41,30 @@
 		joint_account_name = #{jointAccountName},
 		created_time=now();
 	</insert>
+	
+	
 
 
 	<!-- ************** READ ************** -->
+	
+	<select id="checkIfJointAccountAlreadyExists" parameterType="Map" resultType="Int">
+		SELECT
+			COUNT(joint_account_id)
+		FROM
+			joint_account
+		WHERE
+		(
+		first_user_id = #{inviteeUserId}
+		AND
+		second_user_id = #{inviterUserId}
+		)
+		OR
+		(
+		first_user_id = #{inviterUserId}
+		AND
+		second_user_id = #{inviteeUserId}
+		);
+	</select>
 	<select id="getJointAccounts" resultMap="jointAccountMap">
 		SELECT
 		joint_account_id,
@@ -161,6 +182,28 @@
 		);
 	</select>
 
+	<select id="getJointAccountsFollowedByUser" parameterType="String"
+		resultMap="jointAccountMap">
+		SELECT
+		joint_account.joint_account_id,
+		joint_account.first_user_id,
+		joint_account.second_user_id,
+		joint_account.joint_account_name,
+		joint_account.profile_pic,
+		joint_account.created_time
+		FROM
+		joint_account
+		INNER JOIN
+		follower
+		ON
+		joint_account.joint_account_id=follower.account_id
+		AND
+		follower.user_id=#{value}
+		AND
+		follower.account_type=0
+		ORDER BY
+		joint_account.joint_account_name;
+	</select>
 
 	<!-- ************** UPDATE ************** -->
 

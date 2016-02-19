@@ -77,7 +77,6 @@
 		user.date_of_birth,
 		user.mobile_number,
 		user.profile_pic,
-		user.joint_account_id,
 		user.gcm_device_id,
 		user.follow_count
 		FROM
@@ -113,43 +112,68 @@
 		WHERE
 		follow_request_id=#{value};
 	</select>
-
-
-	<select id="getJointAccountsFollowedByUser" parameterType="String"
-		resultMap="jointAccountMap">
+	
+	<select id="getFollowRequestByAcc" parameterType="String" resultMap="followerRequestMap">
 		SELECT
-		joint_account.joint_account_id,
-		joint_account.first_user_id,
-		joint_account.second_user_id,
-		joint_account.first_user_name,
-		joint_account.second_user_name,
-		joint_account.joint_account_name,
-		joint_account.joint_account_story,
-		joint_account.follower_count
+		follow_request_id,
+		user_id,
+		account_id
 		FROM
-		joint_account
-		INNER JOIN
-		follower
-		ON
-		joint_account.joint_account_id=follower.account_id
-		AND
-		follower.user_id=#{value}
-		ORDER BY
-		joint_account.joint_account_name;
+		follow_request
+		WHERE
+		account_id=#{value};
+	</select>
+	
+	<select id="getFollowRequestByUser" parameterType="String" resultMap="followerRequestMap">
+		SELECT
+		follow_request_id,
+		user_id,
+		account_id
+		FROM
+		follow_request
+		WHERE
+		user_id=#{value};
 	</select>
 
+	
 
-	<select id="getFollowersVOByJointAccount" parameterType="String"
+
+	<select id="getFollowersByAccountId" parameterType="String"
 		resultMap="followerMap">
 		SELECT
 		follow_id,
 		user_id,
-		account_id
+		account_id,
+		account_type
 		FROM
 		follower
 		WHERE
-		joint_account_id=#{value};
+		account_id=#{value};
 	</select>
+	
+	<select id="isFollowRequestPending" parameterType="Follower"
+		resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		follow_request
+		WHERE
+		account_id=#{accountId}
+		AND
+		user_id=#{userId};
+	</select>
+	
+	
+	<select id="getAllFollowers" resultMap="followerMap">
+		SELECT
+		follow_id,
+		user_id,
+		account_id,
+		account_type
+		FROM
+		follower;
+	</select>
+	
 
 	<!-- ************** DELETE ************** -->
 	<delete id="unfollowAccount" parameterType="Follower">

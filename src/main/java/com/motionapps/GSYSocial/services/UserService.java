@@ -51,6 +51,13 @@ public class UserService {
 	@Autowired
 	private EmailService emailService;
 	
+	@Autowired
+	private NotificationService notificationService;
+
+	public void setNotificationService(NotificationService notificationService) {
+		this.notificationService = notificationService;
+	}
+
 
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
@@ -97,7 +104,9 @@ public class UserService {
 
 			return new ErrorVO(401, "Email Id Already Exists");
 		}
-		
+		temp=userDao.checkIfMobileNoAlreadyExists(user.getMobileNumber());
+		if(temp>=1)
+			return new ErrorVO(401, "Mobile Number Already Exists");
 		String userId=UUID.randomUUID().toString();
 		user.setSessionId(userId);
 		user.setUserId(userId);
@@ -159,21 +168,32 @@ public class UserService {
 		
 	}	
 	
-	public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
-	{
-		UserVO userVO=new UserVO();
-		userVO.setUserId(jointAccountVO.getFirstUserId());
-		userVO.setJointAccountId(jointAccountVO.getJointAccountId());
-		userDao.updateUser(userVO);
-		userVO.setUserId(jointAccountVO.getSecondUserId());
-		userDao.updateUser(userVO);
-		return (long)1;
-	}
+//	public Long updateJointAccountDetails(JointAccountVO jointAccountVO)
+//	{
+//		UserVO userVO=new UserVO();
+//		userVO.setUserId(jointAccountVO.getFirstUserId());
+//		userVO.setJointAccountId(jointAccountVO.getJointAccountId());
+//		userDao.updateUser(userVO);
+//		userVO.setUserId(jointAccountVO.getSecondUserId());
+//		userDao.updateUser(userVO);
+//		return (long)1;
+//	}
 	
-	public Long deleteUser(String userId) {
+	public ErrorVO deleteUser(String userId) {
+		
+		Set<GroupAccountVO> groupAccountVOs=groupAccountService.getGroupAccountsByAdminId(userId);
+		
+		if(groupAccountVOs.size()>0)
+		{
+			return new ErrorVO(203, "Please assign some other person as admin or delete yours group account first");
+		}
 
 		//delete follower
 		followerService.deleteAllFollowersByUserId(userId);
+		followerService.deteteAllFollowerRequestByUserId(userId);
+		
+		//delete Group Member
+		groupAccountService.removeGroupMemberByUserId(userId);
 		
 		//delete invite request
 		
@@ -185,15 +205,15 @@ public class UserService {
 		
 		//deleting ratings
 		ratingService.deleteRatingsByUserId(userId);
-		UserVO userVO=getUser(userId);
+//		UserVO userVO=getUser(userId);
 		
 		//deleting joint acc will delete all posts automatically
-		if(userVO.getJointAccountId()!=null&userVO.getJointAccountId()!="")
-		{
-			
-			jointAccountService.deleteJointAccount(userVO.getJointAccountId());
-		}
-		return userDao.deleteUser(userId);
+		jointAccountService.deleteJointAccountOfUser(userId);
+		
+		notificationService.deleteNotificationsOfUserId(userId);
+		
+		userDao.deleteUser(userId);
+		return new ErrorVO(200, "User Deleted");
 	}
 	
 	public List<UserVO> getUsers() {
@@ -229,11 +249,7 @@ public class UserService {
 
 		
 	}	
-	public Long updateInviteRequestStatus(UserVO userVO) {
-		
-		return userDao.updateInviteRequestStatus(userVO);
-		
-	}
+
 	
 	public Object loginUser(UserVO user) {
 		String emailId=user.getEmailId();
@@ -342,32 +358,37 @@ public class UserService {
 	public void registrationEmail(String userId,String emailId,String name)
 	{
 		String subject="Intact You Verification Email";
-		String textBody="Dear "+name
-				+ "\n\nWe can't wait for you to join us!  We have received a request to authorize this email address to continue with Intactyou. "
-				+"\n\nPlease Click Below To verify your account:\n"
-				+ "\nhttp://api.intactyou.com/GFYSocial/user/verifyemailaddress?emailId="+emailId+"&userId="+userId
-				+"\n\nIf you have questions or concerns, please contact us at support@intactyou.com"
-				+"\n\nCheers\nTeam Intactyou";
+		String link="http://api.intactyou.com/GFYSocial/user/verifyemailaddress?emailId="+emailId+"&userId="+userId;
+		String textBody="<p>Dear "+name+"</p>"
+				+ "<br><p>We can't wait for you to join us!  We have received a request to authorize this email address to continue with Intactyou.</p>"
+				+"<br><p><h2><b>Please Click Below To verify your account:</b><h2></p>"
+				+ "<p><a href=\""+link+"\">"+link+"</a></p>"
+				+"<br><p>If you have questions or concerns, please contact us at support@intactyou.com"
+				+"<a href=\"mailto:support@intactyou.com\"></a></p>"
+				+"<br><br>Cheers<br>Team Intactyou";
 		
-		emailService.sendEmail(emailId, subject,textBody);
+		emailService.sendRawEmail(emailId, subject,textBody);
 	}
 	
 	public void welcomeEmail(String emailId,String name)
 	{
 		String subject="Welcome to Intactyou: Lets begin the ride";
-		String textBody="Dear "+name
-				+ "\n\nWe really appreciate you for taking a step forward to build your stories by signing up for Intactyou."
-				+"\n\nThere is a quote \"The best and most beautiful things in world cannot be seen or touched but are felt in heart\" by Helen Keller.\n"
-				+ "\n\nSo start sharing the most beautiful moments and events which should not be forgotten. We help you to build" 
+		String textBody="<p>Dear "+name+"</p>"
+				+ "<p>We really appreciate you for taking a step forward to build your stories by signing up for Intactyou.</p>"
+				+"<p>There is a quote \"The best and most beautiful things in world cannot be seen or touched but are felt in heart\" by Helen Keller.</p>"
+				+ "<p>So start sharing the most beautiful moments and events which should not be forgotten. We help you to build " 
 				+"your story in each and every step. Now start living your life in a changed way, and we promise you that this"
-				+"change will be beautiful and you will love it."
-				+"\n\nWhen you get bored just click here and explore more."
-				+"Let us know how you are enjoying and share your experience by sending us a mail at this support@intactyou.com"
-				+"Let's the fun begin!"
-				+"\n\nCheers\nTeam Intactyou";
+				+"change will be beautiful and you will love it.</p>"
+				+"<p>When you get bored just click "
+				+"<a href=\"http://www.intactyou.com\">here</a>"
+				+ " and explore more.</p>"
+				+"<p>Let us know how you are enjoying and share your experience by sending us a mail at this support@intactyou.com"
+				+"<a href=\"mailto:support@intactyou.com\"></a></p>"
+				+"<br>Let's the fun begin!"
+				+"<br><br>Cheers<br>Team Intactyou";
 
 		
-		emailService.sendEmail(emailId, subject,textBody);
+		emailService.sendRawEmail(emailId, subject,textBody);
 	}
 	
 	public Long verifyEmailAddress(String userId,String emailId)

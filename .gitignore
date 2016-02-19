@@ -13,6 +13,7 @@
 *.pages
 *.txt
 Constants.java
+context.xml
 .*
 
 

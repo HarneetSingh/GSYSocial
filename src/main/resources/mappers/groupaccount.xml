@@ -38,8 +38,9 @@
 		group_account_name = #{groupAccountName},
 		profile_pic=#{profilePic},
 		moments_pics=#{momentsPics},
-		relationship=#{relationship},
-		privacy_mode= #{privacyMode},
+<!-- 		relationship=#{relationship},
+ -->		
+ 		privacy_mode= #{privacyMode},
 		answer=#{answer},
 		created_time=now();
 
@@ -156,9 +157,25 @@
 		group_account;
 	</select>
 
-	<!-- <select id="getGroupAccountsByAdminId" resultMap="int" parameterType="String"> 
-		SELECT COUNT(group_account_id) FROM group_account WHERE group_admin_id=#{value}; 
-		</select> -->
+	<select id="getGroupAccountsByAdminId" resultMap="groupAccountMap"
+		parameterType="String">
+		SELECT
+		group_account_id,
+		group_admin_id,
+		group_account_name,
+		moments_pics,
+		follower_count,
+		post_count,
+		profile_pic,
+		relationship,
+		answer,
+		privacy_mode,
+		created_time
+		FROM
+		group_account
+		WHERE
+		group_admin_id=#{value};
+	</select>
 
 
 
@@ -189,6 +206,13 @@
 		group_admin_id,
 		group_account_name,
 		moments_pics,
+		(SELECT 
+		COUNT(*)
+		FROM  
+		follower
+		WHERE
+		account_id=#{groupAccountId})
+		AS 
 		follower_count,
 		post_count,
 		profile_pic,
@@ -213,7 +237,10 @@
 		group_account.group_admin_id,
 		group_account.group_account_name,
 		group_account.profile_pic,
-		group_account.privacy_mode
+		group_account.privacy_mode,
+		group_account.created_time,
+		group_account.follower_count,
+		group_account.post_count
 		FROM
 		group_account
 		INNER JOIN
@@ -238,6 +265,18 @@
 		AND
 		member_status=2;
 	</select>
+	<select id="getAllGroupMembers" resultMap="groupMemberMap"
+		parameterType="String">
+		SELECT
+		group_account_id,
+		user_id,
+		notification_mode,
+		member_status
+		FROM
+		group_member
+		WHERE
+		group_account_id=#{value};
+	</select>
 	<select id="searchGroupAccount" resultMap="groupAccountMap"
 		parameterType="String">
 		SELECT
@@ -257,8 +296,40 @@
 		WHERE
 		group_account_name LIKE #{value};
 	</select>
+	
+	<select id="getGroupAccountsFollowedByUser" parameterType="String"
+		resultMap="groupAccountMap">
+		SELECT
+		group_account.group_account_id ,
+		group_account.group_admin_id,
+		group_account.group_account_name,
+		group_account.profile_pic,
+		group_account.privacy_mode,
+		group_account.created_time,
+		group_account.follower_count,
+		group_account.post_count
+		FROM
+		group_account
+		INNER JOIN
+		follower
+		ON
+		group_account.group_account_id=follower.account_id
+		AND
+		follower.user_id=#{value}
+		AND
+		follower.account_type=1
+		ORDER BY
+		group_account.group_account_name;
+	</select>
 
 	<!-- ************** DELETE ************** -->
+	<delete id="removeGroupMemberByUserId" parameterType="String">
+		DELETE
+		FROM
+		group_member
+		WHERE
+		user_id=#{userId};
+	</delete>
 
 	<delete id="removeMember" parameterType="GroupMember">
 		DELETE
@@ -268,6 +339,14 @@
 		group_account_id=#{groupAccountId}
 		AND
 		user_id=#{userId};
+	</delete>
+	
+	<delete id="deleteGroupAccount" parameterType="String">
+		DELETE
+		FROM
+		group_account
+		WHERE
+		group_account_id=#{groupAccountId};
 	</delete>
 
 	<delete id="inviteRejected" parameterType="GroupMember">
