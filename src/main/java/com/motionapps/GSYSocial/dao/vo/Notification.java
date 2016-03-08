@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 			return icon;
 		}
 		public void setIcon(String icon) {
-			this.icon = icon;
+			this.icon = null;
 		}
 		public String getTitle() {
 			return title;

@@ -357,7 +357,7 @@ public class UserService {
 	
 	public void registrationEmail(String userId,String emailId,String name)
 	{
-		String subject="Intact You Verification Email";
+		String subject="Intactyou Verification Email";
 		String link="http://api.intactyou.com/GFYSocial/user/verifyemailaddress?emailId="+emailId+"&userId="+userId;
 		String textBody="<p>Dear "+name+"</p>"
 				+ "<br><p>We can't wait for you to join us!  We have received a request to authorize this email address to continue with Intactyou.</p>"
@@ -425,7 +425,7 @@ public class UserService {
 	
 	public void forgetPasswordEmail(String emailId,String tempPassword)
 	{
-		String subject="Intact You Temporary Password Email";
+		String subject="Intactyou Temporary Password Email";
 		String textBody="Hi "
 				+ "\n\nYour temporary password is \n\n\t"+tempPassword
 				+"\n\nPlease login in the app with the temporary password and change your password\n"

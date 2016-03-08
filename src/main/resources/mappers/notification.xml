@@ -7,8 +7,8 @@
 		<id column="notification_id" property="notificationId" />
 		<result column="is_request" property="isRequest" />
 		<result column="user_id" property="userId" />
-		<result column="notification" property="notification"/>
-		<result column="data" property="data"/>
+		<result column="notification" property="notification" />
+		<result column="data" property="data" />
 	</resultMap>
 
 
@@ -23,60 +23,69 @@
 		SET
 		notification_id=#{notificationId},
 		is_request=#{isRequest},
-		user_id =#{userId},
+		user_id
+		=#{userId},
 		notification = #{notification},
-		data=#{data};
+		data=#{data},
+		created_time=now();
 	</insert>
-	
-	<select id="getNotificationRequests" parameterType="String" resultMap="notificationMap">
-	    SELECT
-	    	notification_id,
-	    	is_request,
-	    	user_id,
-	    	notification,
-	    	data
-	    FROM
-	    	notification	
-	    WHERE
-	        user_id=#{value}
-	    AND
-	     	is_request=1;    	
-	    
+
+	<select id="getNotificationRequests" parameterType="String"
+		resultMap="notificationMap">
+		SELECT
+		notification_id,
+		is_request,
+		user_id,
+		notification,
+		data
+		FROM
+		notification
+		WHERE
+		user_id=#{value}
+		AND
+		is_request=1
+		ORDER BY
+		created_time desc;
+
 	</select>
-	
-		<select id="getNotifications" parameterType="String" resultMap="notificationMap">
-	    SELECT
-	    	notification_id,
-	    	is_request,
-	    	user_id,
-	    	notification,
-	    	data
-	    FROM
-	    	notification	
-	    WHERE
-	        user_id=#{value}
-	    AND
-	     	is_request=0;    	
-	    
+
+	<select id="getNotifications" parameterType="String" resultMap="notificationMap">
+		SELECT
+		notification_id,
+		is_request,
+		user_id,
+		notification,
+		data
+		FROM
+		notification
+		WHERE
+		user_id=#{value}
+		AND
+		is_request=0
+		ORDER BY
+		created_time desc
+		LIMIT
+		30;
+
 	</select>
-		<!-- ************** DELETE ************** -->
-		
+	<!-- ************** DELETE ************** -->
+
 	<delete id="removeNotificationRequest" parameterType="String">
 		DELETE
-	    FROM
-	    	notification	
-	    WHERE
-	        notification_id=#{value}
-	    AND
-	     	is_request=1; 
+		FROM
+		notification
+		WHERE
+		notification_id=#{value}
+		AND
+		is_request=1;
 	</delete>
-	
+
 	<delete id="deleteNotificationsOfUserId" parameterType="String">
 		DELETE
-	    FROM
-	    	notification	
-	    WHERE
-	        user_id=#{value};
+		FROM
+		notification
+		WHERE
+		user_id=#{value};
 	</delete>
 
 

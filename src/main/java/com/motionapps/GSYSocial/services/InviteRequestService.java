@@ -66,12 +66,12 @@ public class InviteRequestService {
 		int count=inviteRequestDao.checkIfInviteRequestAlreadyExists(inviteRequestVO);
 		if(count!=0)
 		{
-			return new ErrorVO(400, "Invite Request Already Pending");
+			return new ErrorVO(401, "Invite Request Already Pending");
 		}
 		count=jointAccountService.checkIfJointAccountAlreadyExists(inviteRequestVO.getInviteeUserId(), inviteRequestVO.getInviterUserId());
 		if(count!=0)
 		{
-			return new ErrorVO(400, "Joint Account Already Available");
+			return new ErrorVO(401, "Joint Account Already Available");
 		}
 		inviteRequestDao.inviteUser(inviteRequestVO);
 

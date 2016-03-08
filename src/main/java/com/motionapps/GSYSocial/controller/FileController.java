@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +64,12 @@ public class FileController {
 			@FormDataParam("file") FormDataContentDisposition fileDetail) 
 	{
 		String fileId=UUID.randomUUID().toString();
-		String newFileName=fileId+"-"+URLEncoder.encode(fileDetail.getFileName());
+		String newFileName=fileId+"."+FilenameUtils.getExtension(fileDetail.getFileName());;
+		System.out.println(newFileName);
 		String uploadedFileLocation = Constants.fileLocation + newFileName;
 		try{
 		// save it
-		writeToFile(uploadedInputStream, uploadedFileLocation);
+			writeToFile(uploadedInputStream, uploadedFileLocation);
 		
 
 			FileVO responseFileVO=new FileVO();
@@ -127,8 +129,8 @@ public class FileController {
 
 		try
 		{
-			String urldecodedfileName=URLDecoder.decode(fileName);
-			File file =new File(Constants.fileLocation+urldecodedfileName);
+			//String urldecodedfileName=URLDecoder.decode(fileName);
+			File file =new File(Constants.fileLocation+fileName);
 			return buildStream(file, range);
 		}
 		catch(Exception e)

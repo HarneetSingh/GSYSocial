@@ -39,7 +39,7 @@ import com.motionapps.GSYSocial.util.Constants;
 public class EmailService {
 
 
-	private static final String FROM = "IntactYou <support@intactyou.com>"; 
+	private static final String FROM = "Intactyou <support@intactyou.com>"; 
 	private static Regions AWS_REGION = Regions.US_WEST_2;  
     @Autowired
 	private ServletContext servletContext;

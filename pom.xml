@@ -10,7 +10,6 @@
 	<properties>
 		<spring.version>4.2.0.RELEASE</spring.version>
 		<jersey.version>1.19</jersey.version>
-		<jetty.version>9.0.7.v20131107</jetty.version>
 		<logback.version>1.1.1</logback.version>
 		<jcloverslf4j.version>1.7.6</jcloverslf4j.version>
 	</properties>
@@ -148,7 +147,7 @@
 	<build>
 		<finalName>GFYSocial</finalName>
 		<plugins>
-			<plugin>
+	<!-- 	<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.version}</version>
@@ -193,7 +192,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
